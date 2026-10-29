@@ -6,6 +6,7 @@
       "!dist",
       "!dist-site",
       "!coverage",
+      "!.github",
       "!preview.html",
       "!test/__snapshots__",
       "!test/fixtures",

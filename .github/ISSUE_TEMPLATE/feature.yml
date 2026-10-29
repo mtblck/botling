@@ -1,0 +1,16 @@
+name: Feature request
+description: Something botling should do or draw.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The job, not the feature. "Show a robot next to every comment at 20px" is more useful than "add a size option".
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help
+      description: Your idea, if you have one. New parts or palettes change existing robots, so they're batched into major versions.
