@@ -86,7 +86,9 @@ npm test          # vitest
 npm run lint      # biome
 npm run typecheck
 npm run build     # tsc to dist/
-npm run preview   # writes preview.html: a contact sheet at 24, 48 and 96px
+npm run preview   # writes preview.html: a contact sheet at 24, 32, 48 and 96px
+npm run site      # builds the playground site into dist-site/
+npm run serve     # serves it on localhost:4173 with the production headers
 ```
 
 Look at `preview.html` for any art change, at 24px especially.

@@ -25,3 +25,5 @@ jobs:
       - run: npm run typecheck
       - run: npx vitest run --coverage
       - run: npm run build
+      - run: npm run hosting:check
+      - run: node scripts/site.mjs
