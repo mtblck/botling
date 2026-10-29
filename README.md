@@ -89,6 +89,10 @@ npm run preview   # writes preview.html: a contact sheet at 24, 48 and 96px
 
 Look at `preview.html` for any art change, at 24px especially.
 
+## Support
+
+botling is free and MIT licensed. If it's useful to you, you can [buy me a coffee on Ko-fi](https://ko-fi.com/mtblck) or [sponsor on GitHub](https://github.com/sponsors/mtblck).
+
 ## License
 
 [MIT](LICENSE)
