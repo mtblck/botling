@@ -20,12 +20,14 @@ describe('botling', () => {
     const svg = botling('x', { size: 40, palette: 6, shape: 'circle' });
     expect(svg).toContain('width="40" height="40"');
     expect(svg).toContain(`fill="${PALETTES[6]?.bg}"`);
-    expect(svg).toContain('<circle');
-    expect(svg).not.toContain('<rect x="0');
+    expect(svg).toContain('stroke-linecap="round"');
+    expect(svg).not.toContain('stroke-linejoin');
   });
 
   it('hides the empty grid below 40px unless asked', () => {
-    const cells = (svg: string): number => (svg.match(/<(rect|circle|polygon) /g) ?? []).length;
+    // Each cell starts a subpath with `m`.
+    const cells = (svg: string): number =>
+      [...svg.matchAll(/ d="([^"]+)"/g)].reduce((n, [, d]) => n + (d?.match(/m/g) ?? []).length, 0);
     const opts = { shape: 'circle', detail: 'full' } as const;
     expect(cells(botling('g', { ...opts, size: 24 }))).toBeLessThan(cells(botling('g', { ...opts, size: 48 })));
     expect(cells(botling('g', { ...opts, size: 24, showGrid: true }))).toBe(cells(botling('g', { ...opts, size: 48 })));
@@ -82,9 +84,18 @@ describe('botling', () => {
     for (let i = 0; i < 100; i++) {
       const t = resolveTraits(`c-${i}`);
       const allowed = new Set(Object.values(PALETTES[t.palette] ?? {}));
-      for (const [, colour] of botling(`c-${i}`).matchAll(/fill="([^"]+)"/g)) expect(allowed).toContain(colour);
+      for (const [, colour] of botling(`c-${i}`).matchAll(/(?:fill|stroke)="(#[^"]+)"/g))
+        expect(allowed).toContain(colour);
     }
   });
+});
+
+it.each(SHAPES)('keeps %s robots within the size budget', (shape) => {
+  // About a third of the per-cell-element output; a jump means a cell got longer.
+  for (let i = 0; i < 100; i++) {
+    expect(botling(`b-${i}`, { shape }).length).toBeLessThan(7500);
+    expect(botling(`b-${i}`, { shape, size: 24 }).length).toBeLessThan(2500);
+  }
 });
 
 it('never writes the seed into the SVG', () => {
