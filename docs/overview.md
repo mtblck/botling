@@ -31,6 +31,6 @@ dependencies and is MIT, art included.
 
 ## Where it's going
 
-- First npm release (#6), then BotCollector profiles use it as the default
-  avatar with a picker.
+- 0.1.0 is on npm. Next, BotCollector profiles use it as the default avatar
+  with a picker.
 - An opt-in animated robot that blinks (#25).
