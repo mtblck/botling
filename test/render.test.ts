@@ -108,7 +108,7 @@ it('treats a numeric seed like its string form', () => {
 });
 
 it('normalises the seed, motion timing included', () => {
-  expect(botling('José', { animate: true })).toBe(botling('José', { animate: true }));
+  expect(botling('Jose\u0301', { animate: true })).toBe(botling('Jos\u00e9', { animate: true }));
 });
 
 describe('botlingDataUri', () => {
