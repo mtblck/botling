@@ -39,6 +39,8 @@ React:
 
 Use an opaque, stable id as the seed (a database id or UUID), not an email address or username. The seed never appears in the SVG, but anyone can render the robot for a guessed email and compare.
 
+The seed is used as given, apart from Unicode normalisation (NFC), so `José` draws the same robot however the é was typed. It isn't trimmed or lowercased: `Ada` and `ada` are different robots, so tidy the seed first if your ids vary like that.
+
 ### Options
 
 | Option | Type | Default | What it does |
@@ -100,6 +102,21 @@ traits(user.id); // { head: 'tv', eyes: 'visor', mouth: 'grille', top: 'antenna'
 ```
 
 Store the user's chosen `shape` and `palette` next to their seed, and pass them back in.
+
+### Advanced
+
+These are exported for drawing a robot some other way, such as onto a canvas or into a PNG (the playground's link preview does this). They follow the same versioning as the SVG: a seed's traits and grids only change in a major version.
+
+| Export | What it is |
+|---|---|
+| `traits(seed)` | Every choice that makes up the seed's robot (`Traits`). |
+| `resolveTraits(seed, options)` | `traits` with the `shape` and numeric `palette` options applied, checked the way `botling` checks them. |
+| `grid(traits)` | The detailed robot as a 15x15 array of `Role` values, indexed `[row][column]`. |
+| `smallGrid(traits)` | The simpler robot drawn below 40px, as a 9x9 array of `Role` values. |
+| `Role` | What a cell is part of: `Empty` (0), `Body` (1), `Screen` (2), `Glow` (3), `Accent` (4), `Shade` (5). Each maps to the palette colour of the same name. Without a screen (`traits.hasScreen` false), paint `Glow` cells in the screen colour, as `botling` does. |
+| `GRID_SIZE`, `SMALL_GRID_SIZE`, `CENTER` | 15, 9, and the detailed grid's centre column (7). |
+
+The grids are the robot before it's drawn: cell shape, padding and animation are left to you.
 
 ## How it works
 

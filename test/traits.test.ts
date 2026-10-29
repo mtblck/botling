@@ -20,6 +20,26 @@ describe('traits', () => {
     expect(traits('mtblck')).toEqual(traits('mtblck'));
   });
 
+  it('draws the same robot for composed and decomposed accents', () => {
+    expect(traits('Jos\u00e9')).toEqual(traits('Jose\u0301'));
+    expect(traits('Ame\u0301lie')).not.toEqual(traits('Amelie'));
+  });
+
+  it.each([
+    ['HEADS', HEADS],
+    ['EYES', EYES],
+    ['MOUTHS', MOUTHS],
+    ['TOPS', TOPS],
+    ['SIDES', SIDES],
+    ['SHAPES', SHAPES],
+    ['PATTERNS', PATTERNS],
+    ['QUIRKS', QUIRKS],
+    ['ACCESSORIES', ACCESSORIES],
+    ['PALETTES', PALETTES],
+  ] as const)('freezes %s, so an app cannot redraw every robot', (_, list) => {
+    expect(Object.isFrozen(list)).toBe(true);
+  });
+
   it('pins the traits for a known seed', () => {
     // Changing this means existing users get a different robot: a major version.
     expect(traits('botling')).toMatchSnapshot();
