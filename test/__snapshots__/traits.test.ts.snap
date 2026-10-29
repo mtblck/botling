@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`traits > pins the traits for a known seed 1`] = `
+{
+  "bottomRow": 12,
+  "eyeGap": 1,
+  "eyes": "block",
+  "halfWidth": 3,
+  "hasCheeks": true,
+  "hasScreen": true,
+  "hasShoulders": false,
+  "head": "rounded",
+  "mouth": "smile",
+  "palette": 0,
+  "shape": "triangle",
+  "sides": "bolts",
+  "top": "dish",
+  "topRow": 5,
+}
+`;

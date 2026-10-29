@@ -1,0 +1,97 @@
+import { describe, expect, it } from 'vitest';
+import {
+  CENTER,
+  EYES,
+  GRID_SIZE,
+  grid,
+  HEADS,
+  MOUTHS,
+  Role,
+  type Role as RoleT,
+  SIDES,
+  TOPS,
+  type Traits,
+  traits,
+} from '../src/index.js';
+
+const count = (g: RoleT[][], role: RoleT): number => g.flat().filter((r) => r === role).length;
+
+/**
+ * Every head, eye and mouth combination at the narrowest and widest head,
+ * with and without a screen and shoulders. Tops and sides rotate through
+ * the list so each one meets many faces without a full cross product.
+ */
+function* combinations(): Generator<Traits> {
+  const base = traits('combinations');
+  let i = 0;
+  for (const head of HEADS)
+    for (const eyes of EYES)
+      for (const mouth of MOUTHS)
+        for (const halfWidth of [3, 5])
+          for (const hasScreen of [true, false])
+            for (const hasShoulders of [true, false]) {
+              const top = TOPS[i % TOPS.length] ?? 'none';
+              const sides = SIDES[i % SIDES.length] ?? 'none';
+              i++;
+              yield {
+                ...base,
+                head,
+                eyes,
+                mouth,
+                top,
+                sides,
+                halfWidth,
+                hasScreen,
+                hasShoulders,
+                topRow: 3,
+                bottomRow: 12,
+              };
+            }
+}
+
+describe('grid', () => {
+  it('is GRID_SIZE square with an odd centre column', () => {
+    const g = grid(traits('size'));
+    expect(g).toHaveLength(GRID_SIZE);
+    for (const row of g) expect(row).toHaveLength(GRID_SIZE);
+    expect(CENTER).toBe((GRID_SIZE - 1) / 2);
+  });
+
+  it('is mirror-symmetric for every part except mismatched eyes', () => {
+    for (const t of combinations()) {
+      if (t.eyes === 'mismatch') continue;
+      for (const row of grid(t)) expect(row).toEqual([...row].reverse());
+    }
+  });
+
+  it('gives mismatched eyes one glowing and one accent eye', () => {
+    const t: Traits = {
+      ...traits('mismatch'),
+      eyes: 'mismatch',
+      mouth: 'none',
+      hasCheeks: false,
+      top: 'none',
+      sides: 'none',
+    };
+    const g = grid(t);
+    const left = g.map((row) => row.slice(0, CENTER));
+    const right = g.map((row) => row.slice(CENTER + 1));
+    expect(count(left, Role.Glow)).toBe(2);
+    expect(count(right, Role.Glow)).toBe(0);
+    expect(count(right, Role.Accent)).toBe(1);
+  });
+
+  it('always draws a body and keeps both eyes visible', () => {
+    for (const t of combinations()) {
+      const g = grid(t);
+      expect(count(g, Role.Body) + count(g, Role.Shade)).toBeGreaterThan(10);
+      expect(count(g, Role.Glow) + count(g, Role.Accent)).toBeGreaterThanOrEqual(2);
+    }
+  });
+
+  it('leaves the shoulder rows empty without shoulders', () => {
+    const g = grid({ ...traits('bare'), hasShoulders: false, bottomRow: 12 });
+    expect(g[13]?.every((r) => r === Role.Empty)).toBe(true);
+    expect(g[14]?.every((r) => r === Role.Empty)).toBe(true);
+  });
+});

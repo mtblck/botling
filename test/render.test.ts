@@ -1,0 +1,73 @@
+import { describe, expect, it } from 'vitest';
+import { botling, botlingDataUri, PALETTES, resolveTraits, SHAPES } from '../src/index.js';
+
+describe('botling', () => {
+  it('is stable for a seed', () => {
+    expect(botling('mtblck')).toBe(botling('mtblck'));
+  });
+
+  it.each(SHAPES)('pins the %s output for a known seed', (shape) => {
+    // Changing these means existing users get a different robot: a major version.
+    expect(botling('botling', { shape })).toMatchSnapshot();
+  });
+
+  it('differs between seeds', () => {
+    const svgs = new Set(Array.from({ length: 200 }, (_, i) => botling(`user-${i}`)));
+    expect(svgs.size).toBe(200);
+  });
+
+  it('applies size, palette and shape overrides', () => {
+    const svg = botling('x', { size: 40, palette: 6, shape: 'circle' });
+    expect(svg).toContain('width="40" height="40"');
+    expect(svg).toContain(`fill="${PALETTES[6]?.bg}"`);
+    expect(svg).toContain('<circle');
+    expect(svg).not.toContain('<rect x="0');
+  });
+
+  it('hides the empty grid below 40px unless asked', () => {
+    const cells = (svg: string): number => (svg.match(/<(rect|circle|polygon) /g) ?? []).length;
+    const opts = { shape: 'circle' } as const;
+    expect(cells(botling('g', { ...opts, size: 24 }))).toBeLessThan(cells(botling('g', { ...opts, size: 48 })));
+    expect(cells(botling('g', { ...opts, size: 24, showGrid: true }))).toBe(cells(botling('g', { ...opts, size: 48 })));
+    expect(cells(botling('g', { ...opts, size: 96, showGrid: false }))).toBe(
+      cells(botling('g', { ...opts, size: 24 })),
+    );
+  });
+
+  it('drops the background when asked', () => {
+    const p = PALETTES[resolveTraits('bg').palette];
+    expect(botling('bg')).toContain(`fill="${p?.bg}"`);
+    expect(botling('bg', { background: false })).not.toContain(`fill="${p?.bg}"`);
+  });
+
+  it('escapes the title and supports decorative images', () => {
+    expect(botling('t', { title: 'Tom & "Jerry" <3' })).toContain('aria-label="Tom &#38; &#34;Jerry&#34; &#60;3"');
+    const hidden = botling('t', { title: null });
+    expect(hidden).toContain('aria-hidden="true"');
+    expect(hidden).not.toContain('role="img"');
+  });
+
+  it('rejects bad options instead of drawing nothing', () => {
+    expect(() => botling('x', { palette: PALETTES.length })).toThrow(RangeError);
+    expect(() => botling('x', { palette: 1.5 })).toThrow(RangeError);
+    // @ts-expect-error: checking the runtime guard for untyped callers
+    expect(() => botling('x', { shape: 'hexagon' })).toThrow(RangeError);
+    expect(() => botling('x', { size: 0 })).toThrow(RangeError);
+  });
+
+  it('only draws colours from the chosen palette', () => {
+    for (let i = 0; i < 100; i++) {
+      const t = resolveTraits(`c-${i}`);
+      const allowed = new Set(Object.values(PALETTES[t.palette] ?? {}));
+      for (const [, colour] of botling(`c-${i}`).matchAll(/fill="([^"]+)"/g)) expect(allowed).toContain(colour);
+    }
+  });
+});
+
+describe('botlingDataUri', () => {
+  it('encodes the same SVG as botling', () => {
+    const uri = botlingDataUri('uri', { size: 32 });
+    expect(uri.startsWith('data:image/svg+xml;charset=utf-8,')).toBe(true);
+    expect(decodeURIComponent(uri.split(',')[1] ?? '')).toBe(botling('uri', { size: 32 }));
+  });
+});
