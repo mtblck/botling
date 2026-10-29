@@ -25,8 +25,11 @@ interface Spec {
   rule?: string;
   timing?: string;
 }
+/** A motion, or a second take on one: a double blink, or a wobble mirrored for the right side. */
+type Variant = Motion | 'blink2' | 'wobbler';
 const ORIGIN = 'transform-box:fill-box;transform-origin:center;';
-const SPECS: Record<Motion | 'blink2', Spec> = {
+const BASE = 'transform-box:fill-box;transform-origin:50% 100%;';
+const SPECS: Record<Variant, Spec> = {
   blink: { keyframes: '0%,96%,100%{transform:none}98%{transform:scaleY(.1)}', period: [20, 45], rule: ORIGIN },
   blink2: {
     keyframes: '0%,90%,94%,100%{transform:none}92%,97%{transform:scaleY(.1)}',
@@ -37,7 +40,14 @@ const SPECS: Record<Motion | 'blink2', Spec> = {
     keyframes:
       '0%,50%,100%{transform:none}12%{transform:rotate(-18deg)}28%{transform:rotate(13deg)}40%{transform:rotate(-5deg)}',
     period: [28, 40],
-    rule: 'transform-box:fill-box;transform-origin:50% 100%;',
+    rule: BASE,
+    timing: ' ease-in-out',
+  },
+  wobbler: {
+    keyframes:
+      '0%,50%,100%{transform:none}12%{transform:rotate(18deg)}28%{transform:rotate(-13deg)}40%{transform:rotate(5deg)}',
+    period: [28, 40],
+    rule: BASE,
     timing: ' ease-in-out',
   },
   twitch: {
@@ -56,7 +66,7 @@ const SPECS: Record<Motion | 'blink2', Spec> = {
 
 /** One motion's seeded timing, in tenths of a second. */
 interface Clock {
-  name: Motion | 'blink2';
+  name: Variant;
   period: number;
   offset: number;
 }
@@ -113,16 +123,16 @@ export function animation(seed: string, t: Traits, isSmall: boolean): Animation 
   const clock = clocks(createRng(`${String(seed)}\u0000animate`));
   const on = (m: Motion): boolean => !isSmall || SMALL_MOTIONS.includes(m);
   const rules = new Map<string, string>();
-  /** A class for a motion, `lag` tenths behind its clock, optionally run backwards. */
-  const cls = (m: Motion, lag = 0, reverse = false): string => {
-    const { name, period, offset } = clock[m];
+  /** A class for a motion, `lag` tenths behind its clock, optionally as another variant. */
+  const cls = (m: Motion, lag = 0, as?: Variant): string => {
+    const { period, offset } = clock[m];
+    const name = as ?? clock[m].name;
     const start = (offset + lag) % period;
-    const id = `botling-${name}-${period}-${start}${reverse ? 'r' : ''}`;
+    const id = `botling-${name}-${period}-${start}`;
     const s = SPECS[name];
-    const dir = reverse ? ' reverse' : '';
     rules.set(
       id,
-      `.${id}{${s.rule ?? ''}animation:botling-${name} ${period / 10}s ${-start / 10}s${s.timing ?? ''}${dir} infinite}`,
+      `.${id}{${s.rule ?? ''}animation:botling-${name} ${period / 10}s ${-start / 10}s${s.timing ?? ''} infinite}`,
     );
     return id;
   };
@@ -133,7 +143,7 @@ export function animation(seed: string, t: Traits, isSmall: boolean): Animation 
     if (part === 'eyes') return blinks && on('blink') ? cls('blink') : null;
     // Each side's piece moves on its own, the right one mirroring the left.
     const side = Math.sign(x - center);
-    if (part === 'top' && on('wobble')) return cls('wobble', 0, side > 0);
+    if (part === 'top' && on('wobble')) return cls('wobble', 0, side > 0 ? 'wobbler' : undefined);
     if (part === 'sides' && on('twitch')) return cls('twitch', side > 0 ? 2 : 0);
     if (part === 'mouth' && role === Role.Glow && on('talk')) return cls('talk');
     return null;
@@ -154,7 +164,7 @@ export function animation(seed: string, t: Traits, isSmall: boolean): Animation 
       const names = new Set<string>();
       let body = '';
       for (const id of used) {
-        const name = id.split('-')[1] as Motion | 'blink2';
+        const name = id.split('-')[1] as Variant;
         if (!names.has(name)) body += `@keyframes botling-${name}{${SPECS[name].keyframes}}`;
         names.add(name);
         body += rules.get(id) ?? '';

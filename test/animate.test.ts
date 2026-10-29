@@ -86,7 +86,7 @@ describe('animate', () => {
         .flat()
         .map((c) => c.split('-')[1]),
     );
-    expect([...seen].sort()).toEqual(['blink', 'blink2', 'hover', 'scan', 'talk', 'twitch', 'wobble']);
+    expect([...seen].sort()).toEqual(['blink', 'blink2', 'hover', 'scan', 'talk', 'twitch', 'wobble', 'wobbler']);
   });
 
   it('moves every robot, screen or not', () => {
