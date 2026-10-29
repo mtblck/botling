@@ -19,10 +19,21 @@ const LOGO_SEED = 'botling';
 const logo = botling(LOGO_SEED, { size: 32, palette: 1, shape: 'square', title: null });
 const icon = botling(LOGO_SEED, { size: 64, palette: 1, shape: 'square', detail: 'small', title: null });
 
-const page = fs.readFileSync(path.join(ROOT, 'site/index.html'), 'utf8').replace('{{logo}}', logo);
+// Preload every module of the package, so the browser fetches them together rather than
+// finding each import only after the one before it has loaded.
+const preloads = fs
+  .readdirSync(dist, { recursive: true })
+  .filter((f) => f.endsWith('.js'))
+  .sort()
+  .map((f) => `<link rel="modulepreload" href="/lib/${f.split(path.sep).join('/')}" />`)
+  .join('\n  ');
+const page = fs
+  .readFileSync(path.join(ROOT, 'site/index.html'), 'utf8')
+  .replace('{{logo}}', logo)
+  .replace('{{preloads}}', preloads);
 fs.writeFileSync(path.join(out, 'index.html'), page);
 fs.writeFileSync(path.join(out, 'icon.svg'), icon);
-for (const f of ['site.css', 'site.js', 'words.js', 'theme.js', 'analytics.js']) {
+for (const f of ['site.css', 'site.js', 'snippet.js', 'words.js', 'theme.js', 'analytics.js']) {
   fs.copyFileSync(path.join(ROOT, 'site', f), path.join(out, f));
 }
 fs.cpSync(dist, path.join(out, 'lib'), { recursive: true, filter: (f) => !f.endsWith('.d.ts') && !f.endsWith('.map') });
@@ -35,6 +46,5 @@ const font = (pkg, file, as) =>
     path.join(out, 'fonts', as),
   );
 font('@fontsource-variable/pixelify-sans', 'pixelify-sans-latin-wght-normal.woff2', 'pixelify.woff2');
-font('@fontsource-variable/jetbrains-mono', 'jetbrains-mono-latin-wght-normal.woff2', 'jetbrains-mono.woff2');
 
 console.log(`built ${path.relative(ROOT, out)}/`);

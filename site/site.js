@@ -1,40 +1,51 @@
 // The playground. Imports botling straight from the package build (copied to /lib by
 // scripts/site.mjs), so the page always shows what npm ships. State lives in the URL
 // hash, which never reaches the server or analytics: seeds stay in the browser.
-import { botling, PALETTES, SHAPES } from '/lib/index.js';
+import { botling, botlingDataUri, PALETTES, resolveTraits, SHAPES } from '/lib/index.js';
+import { options as optionsFor, snippet as snippetFor } from '/snippet.js';
 import { randomSeed } from '/words.js';
 
 const $ = (id) => document.getElementById(id);
 const state = { seed: '', shape: 'auto', palette: 'auto', grid: 'auto' };
 
-/** Options for botling() from the current state, leaving out anything on auto. */
-function options(extra = {}) {
-  const o = { ...extra };
-  if (state.shape !== 'auto') o.shape = state.shape;
-  if (state.palette !== 'auto') o.palette = Number(state.palette);
-  if (state.grid !== 'auto') o.showGrid = state.grid === 'on';
-  return o;
+const options = (extra) => optionsFor(state, extra);
+const snippet = () => snippetFor(state);
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+/** Names the big robot for screen readers, so a change of seed or option is heard. */
+function describe() {
+  const t = resolveTraits(state.seed, options());
+  const parts = [`${t.shape} cells`, `${PALETTES[t.palette].name} palette`, `${t.head} head`, `${t.eyes} eyes`];
+  if (t.mouth !== 'none') parts.push(`${t.mouth === 'o' ? 'O-shaped' : t.mouth} mouth`);
+  if (t.top !== 'none') parts.push(`${t.top} on top`);
+  return `Robot for "${state.seed}": ${parts.join(', ')}`;
 }
 
-/** The call a developer would write for the robot on screen. */
-function snippet() {
-  const o = options();
-  const args = Object.entries(o).map(([k, v]) => `${k}: ${JSON.stringify(v).replaceAll('"', "'")}`);
-  const seed = JSON.stringify(state.seed).replaceAll("'", "\\'").replace(/^"|"$/g, "'");
-  return `botling(${seed}${args.length ? `, { ${args.join(', ')} }` : ''})`;
+// Safari throttles history calls (about 100 per 30s), so typing updates the hash in a debounce.
+let hashTimer;
+function saveHash() {
+  clearTimeout(hashTimer);
+  hashTimer = setTimeout(() => {
+    const hash = new URLSearchParams();
+    hash.set('seed', state.seed);
+    for (const k of ['shape', 'palette', 'grid']) if (state[k] !== 'auto') hash.set(k, state[k]);
+    try {
+      history.replaceState(null, '', `#${hash}`);
+    } catch {
+      /* throttled or blocked: the robot still draws, only the link lags */
+    }
+  }, 300);
 }
 
 function draw() {
   $('big').innerHTML = botling(state.seed, options({ size: 240, title: null }));
+  $('big').setAttribute('aria-label', describe());
   $('sizes').innerHTML = [96, 48, 32, 24]
     .map((size) => `<li>${botling(state.seed, options({ size, title: null }))}<span>${size}px</span></li>`)
     .join('');
   $('code').textContent = snippet();
   for (const input of document.querySelectorAll('.choices input')) input.checked = state[input.name] === input.value;
-  const hash = new URLSearchParams();
-  hash.set('seed', state.seed);
-  for (const k of ['shape', 'palette', 'grid']) if (state[k] !== 'auto') hash.set(k, state[k]);
-  history.replaceState(null, '', `#${hash}`);
+  saveHash();
 }
 
 /** Builds a radio group. Each choice is [value, label, extra HTML inside the label]. */
@@ -85,7 +96,7 @@ function gallery() {
   $('gallery').innerHTML = seeds
     .map(
       (s) =>
-        `<li><button type="button" data-seed="${s}" aria-label="Try ${s}">${botling(s, { size: 64, title: null })}</button></li>`,
+        `<li><button type="button" data-seed="${s}" aria-label="Try ${s}"><img src="${botlingDataUri(s, { size: 64, title: null })}" alt="" width="64" height="64"></button></li>`,
     )
     .join('');
 }
@@ -105,7 +116,10 @@ $('gallery').addEventListener('click', (e) => {
   if (!button) return;
   state.seed = $('seed').value = button.dataset.seed;
   draw();
-  $('seed').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Move focus with the view, so keyboard and screen-reader users land on the new robot too.
+  $('seed').focus({ preventScroll: true });
+  $('seed').scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'center' });
+  say(`Showing ${button.dataset.seed}`);
 });
 $('copy-code').addEventListener('click', () => copy(snippet(), 'Code'));
 $('copy-svg').addEventListener('click', () => copy(botling(state.seed, options()), 'SVG'));
@@ -128,12 +142,19 @@ document.querySelector('.theme').addEventListener('click', () => {
   }
 });
 
-const fromHash = new URLSearchParams(location.hash.slice(1));
-state.seed = fromHash.get('seed') ?? randomSeed();
-for (const k of ['shape', 'palette', 'grid']) {
-  const v = fromHash.get(k);
-  if (v && document.querySelector(`.choices input[name="${k}"][value="${CSS.escape(v)}"]`)) state[k] = v;
+/** Loads the state from the URL hash: on load, and when a shared link is opened in this tab. */
+function readHash() {
+  const fromHash = new URLSearchParams(location.hash.slice(1));
+  // A text input can't hold a line break, so drop them rather than draw a robot the box can't show.
+  state.seed = fromHash.get('seed')?.replace(/[\r\n]+/g, '') ?? randomSeed();
+  for (const k of ['shape', 'palette', 'grid']) {
+    const v = fromHash.get(k);
+    state[k] = v && document.querySelector(`.choices input[name="${k}"][value="${CSS.escape(v)}"]`) ? v : 'auto';
+  }
+  $('seed').value = state.seed;
+  draw();
 }
-$('seed').value = state.seed;
-draw();
+// replaceState doesn't fire hashchange, so this only runs for real navigations.
+window.addEventListener('hashchange', readHash);
+readHash();
 gallery();

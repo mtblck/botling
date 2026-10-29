@@ -18,8 +18,13 @@ const port = Number(process.env.PORT ?? 4173);
 http
   .createServer((req, res) => {
     const url = new URL(req.url ?? '/', 'http://localhost');
-    let file = path.join(root, decodeURIComponent(url.pathname));
-    if (!file.startsWith(root)) return res.writeHead(403).end();
+    let file;
+    try {
+      file = path.join(root, decodeURIComponent(url.pathname));
+    } catch {
+      return res.writeHead(400).end('bad path');
+    }
+    if (file !== root && !file.startsWith(root + path.sep)) return res.writeHead(403).end();
     if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
     if (!fs.existsSync(file)) return res.writeHead(404).end('not found');
     for (const rule of config.headers) {

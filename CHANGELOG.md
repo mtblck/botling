@@ -16,3 +16,5 @@ any change to the robot a seed draws is a major version.
 - `traits`, `grid`, `resolveTraits` and the part lists for building pickers.
 - `showGrid: 'auto'` hides the empty grid below 40px.
 - `detail` option and `smallGrid()`: below 40px (`detail: 'auto'`), a simpler 9x9 robot from the same traits with touching cells, so 24px avatars stay readable.
+
+The playground site (`site/`, not part of the npm package) lets you try seeds, shapes and palettes and copy the code.
