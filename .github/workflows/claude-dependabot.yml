@@ -52,6 +52,7 @@ jobs:
       - if: env.HAS_TOKEN == 'true'
         uses: actions/checkout@v7
         with:
+          persist-credentials: false
           ref: ${{ github.event.repository.default_branch }}
           fetch-depth: 0
       # Then the PR's files, to read. Nothing is installed or run from them.
@@ -63,7 +64,7 @@ jobs:
           rm -rf .claude
           if [ -d "$RUNNER_TEMP/repo-claude" ]; then cp -r "$RUNNER_TEMP/repo-claude" .claude; fi
       - if: env.HAS_TOKEN == 'true'
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@d70510b174a1244958df0b03166a54912811f3e6 # v1.0.264
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -72,5 +73,5 @@ jobs:
           plugins: dependency-review@mtblck
           prompt: "/dependency-review:dependabot --comment ${{ github.repository }}/pull/${{ env.PR }}"
           claude_args: >-
-            --allowedTools "Read,Grep,Glob,Agent,Bash(gh api:*),Bash(git fetch:*),Bash(git diff:*),Bash(git log:*),Bash(git show:*),Bash(git rev-parse:*),Bash(git cat-file:*),Bash(npm view:*),Bash(npm diff:*),Bash(npm pack:*),Bash(jq:*),Bash(mkdir -p /tmp/depreview/:*),Bash(tar -xzf:*),Bash(unzip -q:*),Bash(diff -r:*),Bash(curl -sSf https://api.osv.dev/:*),Bash(curl -sSf https://pypi.org/:*),Bash(curl -sSfL https://files.pythonhosted.org/:*),Bash(curl -sSf https://crates.io/:*),Bash(curl -sSfL https://static.crates.io/:*)"
+            --allowedTools "Read,Grep,Glob,Agent,Bash(gh api:*),Bash(git fetch:*),Bash(git diff:*),Bash(git log:*),Bash(git show:*),Bash(git rev-parse:*),Bash(git cat-file:*),Bash(npm view:*),Bash(npm diff:*),Bash(jq:*),Bash(mkdir -p /tmp/depreview/:*),Bash(tar -xzf:*),Bash(unzip -q:*),Bash(diff -r:*)"
           show_full_output: true
