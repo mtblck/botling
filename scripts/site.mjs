@@ -14,10 +14,11 @@ fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(path.join(out, 'fonts'), { recursive: true });
 
 const { botling } = await import(path.join(dist, 'index.js'));
-// The mark and favicon are a botling: this seed, square cells, Indigo palette.
-const LOGO_SEED = 'botling';
-const logo = botling(LOGO_SEED, { size: 32, palette: 1, shape: 'square', title: null });
-const icon = botling(LOGO_SEED, { size: 64, palette: 1, shape: 'square', detail: 'small', title: null });
+// The mark and favicon are a botling: this seed (Indigo on its own), with square cells,
+// which stay solid at 32px where the seed's own circles thin out.
+const LOGO_SEED = 'botcollector';
+const logo = botling(LOGO_SEED, { size: 32, shape: 'square', title: null });
+const icon = botling(LOGO_SEED, { size: 64, shape: 'square', detail: 'small', title: null });
 
 // Preload every module of the package, so the browser fetches them together rather than
 // finding each import only after the one before it has loaded.
