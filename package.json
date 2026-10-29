@@ -11,12 +11,13 @@
     "pixel-art"
   ],
   "license": "MIT",
-  "author": "mtblck (https://github.com/mtblck)",
+  "author": "Matt Black (https://mattblack.space)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mtblck/botling.git"
   },
   "bugs": "https://github.com/mtblck/botling/issues",
+  "funding": "https://ko-fi.com/mtblck",
   "homepage": "https://github.com/mtblck/botling#readme",
   "type": "module",
   "sideEffects": false,
