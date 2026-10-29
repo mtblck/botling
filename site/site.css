@@ -262,6 +262,17 @@ input[type="text"]:focus-visible {
 .seed-row input {
   flex: 1 1 14rem;
 }
+/* On a phone the three buttons share one row beneath it. */
+@media (max-width: 480px) {
+  .seed-row input {
+    flex-basis: 100%;
+  }
+  .seed-row .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding-inline: 10px;
+  }
+}
 .stage {
   display: grid;
   justify-items: center;
