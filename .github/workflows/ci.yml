@@ -73,14 +73,14 @@ jobs:
           retention-days: 14
           if-no-files-found: ignore
 
-  # The package supports Node 20 and up; the main job runs on 22.
+  # The package supports Node 22 and up; the main job runs on 22.
   compat:
     name: Test on Node ${{ matrix.node }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
       matrix:
-        node: [20, 24]
+        node: [24, 26]
     steps:
       - uses: actions/checkout@v7
         with:
