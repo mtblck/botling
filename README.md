@@ -1,6 +1,7 @@
 # botling
 
 Seeded robot avatars drawn on a grid of squares, circles or triangles.
+Try it at **[botling.me](https://botling.me)**.
 
 ![Rows of botling robots in square, circle and triangle cells](docs/hero.svg)
 

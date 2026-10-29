@@ -18,7 +18,7 @@
   },
   "bugs": "https://github.com/mtblck/botling/issues",
   "funding": "https://ko-fi.com/mtblck",
-  "homepage": "https://github.com/mtblck/botling#readme",
+  "homepage": "https://botling.me",
   "type": "module",
   "sideEffects": false,
   "exports": {
