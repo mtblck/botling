@@ -1,4 +1,5 @@
 import type { Shape } from '../types.js';
+import { num } from './path.js';
 
 /** Fraction of a triangle kept after shrinking it toward its centre, leaving a gap. */
 const TRIANGLE_SCALE = 0.94;
@@ -14,36 +15,75 @@ const DIAMOND_RADIUS = 0.47;
  * the cell, so small robots keep their weight and the edges zigzag.
  */
 const SOLID_DIAMOND_RADIUS = Math.SQRT1_2;
+/** Inset of a gapped square cell, and the radius of its rounded corners. */
+const SQUARE_INSET = 0.06;
+const SQUARE_RADIUS = 0.12;
+const CIRCLE_RADIUS = 0.44;
 
-const fmt = (n: number): string => String(Math.round(n * 1000) / 1000);
+/** A point in thousandths of a grid unit, so path data can be built from exact integers. */
+export type Point = readonly [number, number];
+/** One cell: the corners of a polygon, or a single point for a round dot. */
+export type Outline = readonly Point[];
 
 /**
- * Draws one grid cell as an SVG element in grid units (one cell = 1 unit).
+ * How a shape's cells are painted. `fill` fills the polygons; `stroke` draws
+ * each single point as a round dot; `both` fills and strokes with round
+ * joins, which grows a square into a rounded one with fewer bytes than arcs.
+ */
+export interface CellStyle {
+  paint: 'fill' | 'stroke' | 'both';
+  /** Attributes shared by every colour, for one wrapping `<g>`; empty when there are none. */
+  attrs: string;
+}
+
+const milli = (n: number): number => Math.round(n * 1000);
+const pt = (x: number, y: number): Point => [milli(x), milli(y)];
+
+/**
+ * How cells of a shape are painted.
+ *
+ * @param shape - Cell shape
+ * @param isSolid - Cells fill the whole grid square, with no gap to their neighbours
+ * @returns Paint mode and shared attributes
+ */
+export function cellStyle(shape: Shape, isSolid: boolean): CellStyle {
+  if (shape === 'circle') {
+    const width = isSolid ? 1 : 2 * CIRCLE_RADIUS;
+    return { paint: 'stroke', attrs: `fill="none" stroke-width="${num(milli(width))}" stroke-linecap="round"` };
+  }
+  if (shape === 'square' && !isSolid) {
+    return { paint: 'both', attrs: `stroke-width="${num(milli(2 * SQUARE_RADIUS))}" stroke-linejoin="round"` };
+  }
+  return { paint: 'fill', attrs: '' };
+}
+
+/**
+ * The outline of one grid cell, in grid units (one cell = 1 unit) scaled to
+ * thousandths and paired with {@link cellStyle} for how to paint it.
  *
  * Triangle cells alternate up and down like a chessboard and are twice as
  * wide as they are tall, so neighbours interlock into a triangular lattice.
- * Diamond cells are squares turned 45 degrees, centred on the cell.
+ * Diamond cells are squares turned 45 degrees, centred on the cell. A gapped
+ * square is the inner square that a round-joined stroke grows to 0.88 cells
+ * with 0.12 corners; a circle is its centre, drawn as a round-capped dot.
  *
  * @param shape - Cell shape
  * @param x - Column
  * @param y - Row
  * @param isSolid - Fill the whole cell, with no gap to its neighbours
- * @returns An SVG element string with no fill, for the caller to group by colour
+ * @returns The cell's points, clockwise
  */
-export function cell(shape: Shape, x: number, y: number, isSolid = false): string {
-  if (shape === 'circle') {
-    return `<circle cx="${x + 0.5}" cy="${y + 0.5}" r="${isSolid ? 0.5 : 0.44}"/>`;
-  }
+export function outline(shape: Shape, x: number, y: number, isSolid = false): Outline {
+  const cx = x + 0.5;
+  const cy = y + 0.5;
+  if (shape === 'circle') return [pt(cx, cy)];
   if (shape === 'diamond') {
     const r = isSolid ? SOLID_DIAMOND_RADIUS : DIAMOND_RADIUS;
-    const cx = x + 0.5;
-    const cy = y + 0.5;
-    return `<polygon points="${fmt(cx)},${fmt(cy - r)} ${fmt(cx + r)},${fmt(cy)} ${fmt(cx)},${fmt(cy + r)} ${fmt(cx - r)},${fmt(cy)}"/>`;
+    return [pt(cx, cy - r), pt(cx + r, cy), pt(cx, cy + r), pt(cx - r, cy)];
   }
   if (shape === 'triangle') {
     const isUp = (x + y) % 2 === 0;
-    const cx = x + 0.5;
-    const points: [number, number][] = isUp
+    const corners: Point[] = isUp
       ? [
           [cx, y],
           [cx + 1, y + 1],
@@ -56,14 +96,11 @@ export function cell(shape: Shape, x: number, y: number, isSolid = false): strin
         ];
     const my = y + (isUp ? 2 / 3 : 1 / 3);
     const k = isSolid ? 1 + 2 * SOLID_BLEED : TRIANGLE_SCALE;
-    const shrunk = points.map(([px, py]) => `${fmt(cx + (px - cx) * k)},${fmt(my + (py - my) * k)}`);
-    return `<polygon points="${shrunk.join(' ')}"/>`;
+    return corners.map(([px, py]) => pt(cx + (px - cx) * k, my + (py - my) * k));
   }
-  if (isSolid) {
-    const side = 1 + 2 * SOLID_BLEED;
-    return `<rect x="${fmt(x - SOLID_BLEED)}" y="${fmt(y - SOLID_BLEED)}" width="${side}" height="${side}"/>`;
-  }
-  return `<rect x="${fmt(x + 0.06)}" y="${fmt(y + 0.06)}" width="0.88" height="0.88" rx="0.12"/>`;
+  const a = isSolid ? -SOLID_BLEED : SQUARE_INSET + SQUARE_RADIUS;
+  const b = isSolid ? 1 + SOLID_BLEED : 1 - SQUARE_INSET - SQUARE_RADIUS;
+  return [pt(x + a, y + a), pt(x + b, y + a), pt(x + b, y + b), pt(x + a, y + b)];
 }
 
 /**

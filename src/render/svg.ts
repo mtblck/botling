@@ -3,7 +3,8 @@ import { PALETTES } from '../palettes.js';
 import { SHAPES } from '../parts.js';
 import { traits } from '../traits.js';
 import { type BotlingOptions, type Detail, type Palette, Role, type Traits } from '../types.js';
-import { cell, padding } from './cell.js';
+import { cellStyle, type Outline, outline, padding } from './cell.js';
+import { paintAttrs, pathData } from './path.js';
 
 /**
  * Below this size the 15x15 robot reads as noise, so `detail: 'auto'` draws
@@ -101,21 +102,26 @@ export function botling(seed: string, opts: BotlingOptions = {}): string {
   const showGrid =
     !isSmall && (opts.showGrid === 'auto' || opts.showGrid === undefined ? size >= AUTO_FULL_MIN_SIZE : opts.showGrid);
 
-  // Grouping cells by colour keeps the picture (cells don't overlap, bar the
-  // hairline bleed on solid cells) and saves a fill attribute per cell.
+  // One path per colour keeps the picture (cells don't overlap, bar the
+  // hairline bleed on solid cells) and saves an element per cell.
   const roles = isSmall ? smallGrid(t) : grid(t);
   const n = isSmall ? SMALL_GRID_SIZE : GRID_SIZE;
-  const byColour = new Map<string, string>();
+  const byColour = new Map<string, Outline[]>();
   for (let y = 0; y < n; y++) {
     for (let x = 0; x < n; x++) {
       const role = roles[y]?.[x] ?? Role.Empty;
       if (role === Role.Empty && !showGrid) continue;
       const fill = role === Role.Empty ? p.grid : colours[role];
-      byColour.set(fill, (byColour.get(fill) ?? '') + cell(t.shape, x, y, isSmall));
+      const outlines = byColour.get(fill) ?? [];
+      outlines.push(outline(t.shape, x, y, isSmall));
+      byColour.set(fill, outlines);
     }
   }
+  const style = cellStyle(t.shape, isSmall);
   let cells = '';
-  for (const [fill, els] of byColour) cells += `<g fill="${fill}">${els}</g>`;
+  for (const [colour, outlines] of byColour)
+    cells += `<path ${paintAttrs(colour, style.paint)} d="${pathData(outlines)}"/>`;
+  if (style.attrs && cells) cells = `<g ${style.attrs}>${cells}</g>`;
 
   const pad = padding(t.shape);
   const span = n + 2 * pad;

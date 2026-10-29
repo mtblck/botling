@@ -13,7 +13,7 @@ Read by the `pr-review` skill (from the base branch) on top of CLAUDE.md.
 ## Performance
 
 - The package has zero runtime dependencies; keep it that way.
-- A 96px robot with the grid shown is about 9-14 KB of SVG; flag changes that
+- A 96px robot with the grid shown is about 2-7 KB of SVG (ADR 0002); flag changes that
   grow it by more than 10%.
 
 ## Don't flag
