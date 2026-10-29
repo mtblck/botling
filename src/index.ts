@@ -1,5 +1,5 @@
 /**
- * botling: seeded robot avatars drawn on a grid of squares, circles or triangles.
+ * botling: seeded robot avatars drawn on a grid of squares, circles, triangles or diamonds.
  *
  * @packageDocumentation
  */
