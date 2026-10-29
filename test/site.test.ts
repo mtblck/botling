@@ -1,6 +1,7 @@
 import { spawnSync } from 'node:child_process';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { options, type PlaygroundState, snippet } from '../site/snippet.js';
+import { arrival, body, HOST, track } from '../site/track.js';
 import { botling, HOLIDAY_PALETTES } from '../src/index.js';
 
 const auto = { shape: 'auto', palette: 'auto', grid: 'auto' };
@@ -46,7 +47,7 @@ describe('hosting:check', () => {
     expect(check('.').status).toBe(0);
   });
 
-  it('fails on inline scripts, handlers, style attributes and unsafe-inline', () => {
+  it('fails on inline scripts, handlers, style attributes, unsafe-inline and a missing events rewrite', () => {
     const result = check('test/fixtures/bad-hosting');
     expect(result.status).toBe(1);
     for (const problem of [
@@ -54,8 +55,53 @@ describe('hosting:check', () => {
       'inline script',
       'inline event handler',
       'style attribute in site/app.js',
+      'rewrite /_mb/events',
     ]) {
       expect(result.stderr).toContain(problem);
+    }
+  });
+});
+
+describe('playground analytics', () => {
+  it('counts an arrival from another site as a visit, with only its hostname', () => {
+    expect(arrival('https://www.google.com/search?q=robot+avatars', HOST)).toEqual({
+      visit: true,
+      ref: 'www.google.com',
+    });
+    expect(arrival('', HOST)).toEqual({ visit: true, ref: '' });
+    expect(arrival('not a url', HOST)).toEqual({ visit: true, ref: '' });
+    expect(arrival(`https://${HOST}/#seed=matt`, HOST)).toEqual({});
+  });
+
+  it('sends the project and event name, and never a seed', () => {
+    expect(JSON.parse(body('copied'))).toEqual({ project: 'botling', event: 'copied' });
+    const view = body('pageview', arrival('https://news.ycombinator.com/item?id=1#seed=x', HOST));
+    expect(JSON.parse(view)).toEqual({
+      visit: true,
+      ref: 'news.ycombinator.com',
+      project: 'botling',
+      event: 'pageview',
+    });
+    expect(view).not.toContain('seed');
+    // Extra fields can't relabel the beacon.
+    expect(JSON.parse(body('copied', { project: 'other', event: 'x' }))).toMatchObject({
+      project: 'botling',
+      event: 'copied',
+    });
+  });
+
+  it('sends beacons only from botling.me', () => {
+    const sendBeacon = vi.fn(() => true);
+    vi.stubGlobal('navigator', { sendBeacon });
+    try {
+      vi.stubGlobal('location', { hostname: 'localhost' });
+      track('copied');
+      expect(sendBeacon).not.toHaveBeenCalled();
+      vi.stubGlobal('location', { hostname: HOST });
+      track('downloaded');
+      expect(sendBeacon).toHaveBeenCalledWith('/_mb/events', '{"project":"botling","event":"downloaded"}');
+    } finally {
+      vi.unstubAllGlobals();
     }
   });
 });

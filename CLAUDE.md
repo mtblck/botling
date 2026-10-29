@@ -30,7 +30,9 @@ session. Marking it ready also triggers `.github/workflows/claude-review.yml`.
   `style-src 'self'`: no inline scripts, handlers or style attributes (`hosting:check`
   guards it). Seeds live in the URL hash, never the query, so they don't reach the
   server, and `site/analytics.js` strips the hash before Vercel Analytics sends a page
-  view. Site JS isn't type-checked: keep logic worth testing in pure modules like
+  view. `site/track.js` beacons page views, `copied` and `downloaded` to Boards' counter
+  (`/_mb/events`, rewritten in `vercel.json`) with only the event name and referrer
+  hostname. Site JS isn't type-checked: keep logic worth testing in pure modules like
   `site/snippet.js` (tested in `test/site.test.ts`).
 
 The full reasoning behind these, and every other decision worth keeping, is in

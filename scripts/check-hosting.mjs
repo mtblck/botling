@@ -31,6 +31,11 @@ for (const key of ['X-Content-Type-Options', 'Referrer-Policy', 'Strict-Transpor
 }
 for (const key of ['cleanUrls', 'trailingSlash', 'routes']) if (key in config) fail(`vercel.json must not set ${key}`);
 
+// "Used it" beacons stay same-origin (connect-src 'self') through this one rewrite to Boards.
+const events = config.rewrites?.find((r) => r.source === '/_mb/events');
+if (events?.destination !== 'https://mattblack.space/boards/api/events')
+  fail('vercel.json must rewrite /_mb/events to https://mattblack.space/boards/api/events');
+
 const html = read('site/index.html');
 for (const tag of html.match(/<script\b[^>]*>/g) ?? [])
   if (!/\bsrc=/.test(tag)) fail(`inline script in site/index.html: ${tag}`);

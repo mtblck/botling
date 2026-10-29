@@ -34,7 +34,7 @@ const page = fs
   .replace('{{preloads}}', preloads);
 fs.writeFileSync(path.join(out, 'index.html'), page);
 fs.writeFileSync(path.join(out, 'icon.svg'), icon);
-for (const f of ['site.css', 'site.js', 'snippet.js', 'words.js', 'theme.js', 'analytics.js']) {
+for (const f of ['site.css', 'site.js', 'snippet.js', 'words.js', 'theme.js', 'analytics.js', 'track.js']) {
   fs.copyFileSync(path.join(ROOT, 'site', f), path.join(out, f));
 }
 fs.cpSync(dist, path.join(out, 'lib'), { recursive: true, filter: (f) => !f.endsWith('.d.ts') && !f.endsWith('.map') });
