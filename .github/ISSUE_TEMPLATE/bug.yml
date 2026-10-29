@@ -1,6 +1,6 @@
 name: Bug report
 description: botling threw, drew something broken, or the playground misbehaved.
-labels: [type:bug]
+labels: [bug]
 body:
   - type: textarea
     id: what

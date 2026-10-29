@@ -1,6 +1,6 @@
 name: Feature request
 description: Something botling should do or draw.
-labels: [type:feature]
+labels: [enhancement]
 body:
   - type: textarea
     id: problem
