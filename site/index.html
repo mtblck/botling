@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>botling: robot avatars from any string</title>
+  <meta name="description" content="botling turns any string, like a user id, into a robot avatar. Square, circle or triangle cells, readable at 24px, zero dependencies, MIT licensed." />
+  <meta property="og:title" content="botling" />
+  <meta property="og:description" content="Robot avatars from any string. Same seed, same robot." />
+  <meta name="theme-color" content="#f3f2f8" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#14121c" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/pixelify.woff2" />
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/site.css" />
+  <script type="module" src="/site.js"></script>
+  <link rel="modulepreload" href="/snippet.js" />
+  <link rel="modulepreload" href="/words.js" />
+  {{preloads}}
+  <script defer src="/analytics.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the playground</a>
+  <header class="top"><div class="wrap">
+    <a class="mark" href="/" translate="no"><span class="mark-bot" aria-hidden="true">{{logo}}</span>botling</a>
+    <nav aria-label="Site">
+      <a href="#use">Use it</a>
+      <a href="https://github.com/mtblck/botling">GitHub</a>
+    </nav>
+    <button class="theme" type="button" aria-label="Switch between light and dark">
+      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="currentColor"/></svg>
+    </button>
+  </div></header>
+
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="hero-h">
+      <div class="intro">
+        <h1 id="hero-h">Robot avatars from any&nbsp;string.</h1>
+        <p class="lede">Give botling a user id and it draws the same robot every time, on any machine, with nothing stored. Type anything to meet yours.</p>
+        <form class="seed" id="seed-form">
+          <label for="seed">Seed</label>
+          <div class="seed-row">
+            <input id="seed" name="seed" type="text" autocomplete="off" spellcheck="false" maxlength="200" placeholder="Try your name…" />
+            <button class="btn" type="button" id="random">Random</button>
+          </div>
+        </form>
+      </div>
+      <div class="stage">
+        <div class="big" id="big" role="img" aria-label="Your robot"></div>
+        <ul class="sizes" id="sizes" aria-label="The same robot at 96, 48, 32 and 24 pixels"></ul>
+        <p class="note">Below 40px it switches to a simpler version of the same robot.</p>
+      </div>
+    </section>
+
+    <section class="controls wrap" aria-label="Options">
+      <fieldset>
+        <legend>Cells</legend>
+        <div class="choices" id="shapes"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Palette</legend>
+        <div class="choices swatches" id="palettes"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Background grid</legend>
+        <div class="choices" id="grids"></div>
+      </fieldset>
+      <div class="actions">
+        <button class="btn" type="button" id="copy-code">Copy code</button>
+        <button class="btn" type="button" id="copy-svg">Copy SVG</button>
+        <button class="btn" type="button" id="download">Download SVG</button>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+      </div>
+      <pre class="code"><code id="code"></code></pre>
+    </section>
+
+    <section class="crowd wrap" aria-labelledby="crowd-h">
+      <div class="head">
+        <h2 id="crowd-h">Meet a few more</h2>
+        <button class="btn" type="button" id="shuffle">Shuffle</button>
+      </div>
+      <ul class="gallery" id="gallery"></ul>
+    </section>
+
+    <section class="use wrap" id="use" aria-labelledby="use-h">
+      <h2 id="use-h">Use it</h2>
+      <div class="cols">
+        <div>
+          <h3>Install</h3>
+          <pre class="code"><code>npm install botling</code></pre>
+          <h3>Draw one</h3>
+          <pre class="code"><code>import { botling, botlingDataUri } from 'botling';
+
+// An SVG string, to inline
+const svg = botling(user.id);
+
+// A data: URI, for an img src or CSS url()
+const src = botlingDataUri(user.id, { size: 40 });</code></pre>
+        </div>
+        <div>
+          <h3>Good to know</h3>
+          <ul class="facts">
+            <li><strong>Same seed, same robot.</strong> Nothing to store; the robot is computed from the string.</li>
+            <li><strong>Seed with an opaque id</strong>, like a database id, not an email: anyone can draw the robot for a guessed email and compare.</li>
+            <li><strong>No dependencies, no requests.</strong> It returns SVG, so it works in the browser, on the server and on the edge, under a strict CSP.</li>
+            <li><strong>Picker-ready.</strong> <code>SHAPES</code>, <code>PALETTES</code> and <code>traits()</code> are exported, so people can choose their own look.</li>
+          </ul>
+          <p><a href="https://github.com/mtblck/botling#readme">Every option, in the README</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>Made by <a href="https://mattblack.space">Matt Black</a>. MIT licensed, art included. <a href="https://github.com/mtblck/botling">Source on GitHub</a>.</p>
+      <p><a href="https://ko-fi.com/mtblck">☕ Support future projects</a></p>
+      <p class="fine">No cookies. This page counts visits and nothing else, and seeds you type never leave your browser.</p>
+    </div>
+  </footer>
+</body>
+</html>

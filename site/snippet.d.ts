@@ -1,0 +1,11 @@
+// Types for snippet.js, so test/site.test.ts type-checks against the plain-JS site module.
+import type { BotlingOptions } from '../src/index.js';
+
+export interface PlaygroundState {
+  seed: string;
+  shape: string;
+  palette: string;
+  grid: string;
+}
+export function options(state: Omit<PlaygroundState, 'seed'>, extra?: BotlingOptions): BotlingOptions;
+export function snippet(state: PlaygroundState): string;
