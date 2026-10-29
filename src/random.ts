@@ -18,13 +18,15 @@ export function hash(input: string): number {
 
 /**
  * Seeded mulberry32 generator. The same seed always yields the same sequence,
- * which is what makes a robot stable for a given user id.
+ * which is what makes a robot stable for a given user id. The seed is
+ * normalised to NFC first, so an accented letter draws the same robot
+ * whether it was typed as one character or as a letter plus an accent.
  *
  * @param seed - Any string
  * @returns A generator of floats in [0, 1)
  */
 export function createRng(seed: string): Rng {
-  let a = hash(seed);
+  let a = hash(seed.normalize('NFC'));
   return () => {
     a = (a + 0x6d2b79f5) | 0;
     let t = Math.imul(a ^ (a >>> 15), 1 | a);

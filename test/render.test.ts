@@ -107,6 +107,10 @@ it('treats a numeric seed like its string form', () => {
   expect(botling(42)).toBe(botling('42'));
 });
 
+it('normalises the seed, motion timing included', () => {
+  expect(botling('Jose\u0301', { animate: true })).toBe(botling('Jos\u00e9', { animate: true }));
+});
+
 describe('botlingDataUri', () => {
   it('encodes the same SVG as botling', () => {
     const uri = botlingDataUri('uri', { size: 32 });

@@ -7,6 +7,15 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+### Changed
+
+- Seeds are normalised to Unicode NFC before hashing, so an accented letter draws the same robot whether it was typed as one character or as a letter plus a combining accent. ASCII seeds, and any seed already in NFC (what keyboards normally produce), keep their robot.
+- `HEADS`, `EYES` and the other parts lists are frozen at runtime, like `PALETTES`, so an app can't change them and redraw every robot.
+
+### Added
+
+- README: an Advanced section documenting `resolveTraits`, `grid`, `smallGrid`, `Role` and the grid sizes, and a note on how seeds are used.
+
 ## [0.2.0] - 2026-10-29
 
 ### Added
