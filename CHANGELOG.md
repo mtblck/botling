@@ -10,12 +10,14 @@ any change to the robot a seed draws is a major version.
 ### Changed
 
 - Seeds are normalised to Unicode NFC before hashing, so an accented letter draws the same robot whether it was typed as one character or as a letter plus a combining accent. ASCII seeds, and any seed already in NFC (what keyboards normally produce), keep their robot.
+- Three palettes stand out more from their tiles, chosen side by side before 1.0: Night shift and Lemon have a stronger head edge, ears and neck, and Indigo's body is lighter, which also lifts the face on robots without a screen. This recolours robots in those palettes, about 19% of seeds.
 - `HEADS`, `EYES` and the other parts lists are frozen at runtime, like `PALETTES`, so an app can't change them and redraw every robot.
 
 ### Added
 
 - ADR 0006 and a README Versioning section: what 1.0 freezes, and what a minor version may still change.
 - README: an Advanced section documenting `resolveTraits`, `grid`, `smallGrid`, `Role` and the grid sizes, and a note on how seeds are used.
+- A contrast test holds every built-in and holiday palette to the weakest pair kept at 1.0.
 - A golden corpus test pins 500 seeds in every shape, at full and small size, still and animated.
 
 ### Fixed
