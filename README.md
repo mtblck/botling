@@ -6,6 +6,7 @@ Seeded robot avatars drawn on a grid of squares, circles or triangles.
 
 - **Same seed, same robot.** Pass a user id and you get the same robot every time, on any machine, with no storage.
 - **Three grids.** Every robot can be drawn with square, circle or triangle cells.
+- **Reads at any size.** Below 40px it switches to a simpler version of the same robot, so a 24px avatar still has a face.
 - **Small and self-contained.** Zero dependencies, returns an SVG string, no network requests, works in the browser, Node and edge runtimes.
 - **MIT licensed**, art included.
 
@@ -44,7 +45,8 @@ Use an opaque, stable id as the seed (a database id or UUID), not an email addre
 | `shape` | `'square' \| 'circle' \| 'triangle'` | picked by the seed | Cell shape. |
 | `palette` | `number` | picked by the seed | Index into `PALETTES` (0-11). |
 | `size` | `number` | `96` | Width and height in pixels. The SVG scales cleanly to any size. |
-| `showGrid` | `boolean \| 'auto'` | `'auto'` | Draw the empty grid cells. `'auto'` draws them from 40px up; below that they read as noise. |
+| `detail` | `'auto' \| 'full' \| 'small'` | `'auto'` | `'full'` is the detailed 15x15 robot. `'small'` is a simpler 9x9 robot from the same traits, with touching cells, made to read at 24px. `'auto'` draws `'small'` below 40px. |
+| `showGrid` | `boolean \| 'auto'` | `'auto'` | Draw the empty grid cells. `'auto'` draws them from 40px up; below that they read as noise. The small robot never draws them. |
 | `background` | `boolean` | `true` | Draw the palette's background square. |
 | `title` | `string \| null` | `'Robot avatar'` | Accessible name. `null` marks the image decorative (`aria-hidden`). |
 
@@ -68,7 +70,7 @@ Store the user's chosen `shape` and `palette` next to their seed, and pass them 
 
 ## How it works
 
-The seed is hashed (FNV-1a) into a small seeded generator (mulberry32), which picks a palette, head, eyes, mouth, top, side pieces and a few sizes. Those are drawn as roles (body, shade, screen, glow, accent) onto a 15x15 grid, mirrored down the centre column. The renderer then draws each cell in the chosen shape and colours each role from the palette.
+The seed is hashed (FNV-1a) into a small seeded generator (mulberry32), which picks a palette, head, eyes, mouth, top, side pieces and a few sizes. Those are drawn as roles (body, shade, screen, glow, accent) onto a 15x15 grid, mirrored down the centre column. Small avatars use a 9x9 grid drawn from the same traits. The renderer then draws each cell in the chosen shape and colours each role from the palette.
 
 Today that's 12 palettes, 7 heads, 10 eyes, 8 mouths, 7 tops, 4 side pieces, 3 shapes and a few size and on/off traits: well over 10 million distinct robots.
 

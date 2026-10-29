@@ -1,6 +1,9 @@
 /** The cell shape a robot is drawn with. */
 export type Shape = 'square' | 'circle' | 'triangle';
 
+/** How much detail a robot is drawn with. See {@link BotlingOptions.detail}. */
+export type Detail = 'auto' | 'full' | 'small';
+
 /**
  * What a grid cell is part of. Each role maps to one palette colour, so a
  * palette can restyle a robot without touching its layout.
@@ -70,9 +73,16 @@ export interface BotlingOptions {
   palette?: number;
   /**
    * Draw the empty grid cells behind the robot. `'auto'` (the default) draws
-   * them at 40px and up, where they read as texture rather than noise.
+   * them at 40px and up, where they read as texture rather than noise. The
+   * small robot never draws them.
    */
   showGrid?: boolean | 'auto';
+  /**
+   * How much detail to draw. `'full'` is the 15x15 robot. `'small'` is a
+   * simpler 9x9 robot from the same traits, with cells that touch, which
+   * reads at 24px. `'auto'` (the default) picks `'small'` below 40px.
+   */
+  detail?: Detail;
   /** Draw the background square. Defaults to true. */
   background?: boolean;
   /** Width and height in pixels. Defaults to 96. */

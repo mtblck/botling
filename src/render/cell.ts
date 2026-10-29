@@ -2,6 +2,11 @@ import type { Shape } from '../types.js';
 
 /** Fraction of a triangle kept after shrinking it toward its centre, leaving a gap. */
 const TRIANGLE_SCALE = 0.94;
+/**
+ * Solid cells overlap their neighbours by this much on each side, so
+ * anti-aliasing doesn't leave hairline seams between them.
+ */
+const SOLID_BLEED = 0.01;
 
 const fmt = (n: number): string => String(Math.round(n * 1000) / 1000);
 
@@ -14,11 +19,12 @@ const fmt = (n: number): string => String(Math.round(n * 1000) / 1000);
  * @param shape - Cell shape
  * @param x - Column
  * @param y - Row
+ * @param isSolid - Fill the whole cell, with no gap to its neighbours
  * @returns An SVG element string with no fill, for the caller to group by colour
  */
-export function cell(shape: Shape, x: number, y: number): string {
+export function cell(shape: Shape, x: number, y: number, isSolid = false): string {
   if (shape === 'circle') {
-    return `<circle cx="${x + 0.5}" cy="${y + 0.5}" r="0.44"/>`;
+    return `<circle cx="${x + 0.5}" cy="${y + 0.5}" r="${isSolid ? 0.5 : 0.44}"/>`;
   }
   if (shape === 'triangle') {
     const isUp = (x + y) % 2 === 0;
@@ -35,10 +41,13 @@ export function cell(shape: Shape, x: number, y: number): string {
           [cx, y + 1],
         ];
     const my = y + (isUp ? 2 / 3 : 1 / 3);
-    const shrunk = points.map(
-      ([px, py]) => `${fmt(cx + (px - cx) * TRIANGLE_SCALE)},${fmt(my + (py - my) * TRIANGLE_SCALE)}`,
-    );
+    const k = isSolid ? 1 + 2 * SOLID_BLEED : TRIANGLE_SCALE;
+    const shrunk = points.map(([px, py]) => `${fmt(cx + (px - cx) * k)},${fmt(my + (py - my) * k)}`);
     return `<polygon points="${shrunk.join(' ')}"/>`;
+  }
+  if (isSolid) {
+    const side = 1 + 2 * SOLID_BLEED;
+    return `<rect x="${fmt(x - SOLID_BLEED)}" y="${fmt(y - SOLID_BLEED)}" width="${side}" height="${side}"/>`;
   }
   return `<rect x="${fmt(x + 0.06)}" y="${fmt(y + 0.06)}" width="0.88" height="0.88" rx="0.12"/>`;
 }
