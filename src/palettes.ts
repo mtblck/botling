@@ -1,7 +1,8 @@
 import type { Palette } from './types.js';
 
 /**
- * Built-in palettes: six dark, six light. A seed picks one by index over the
+ * Built-in palettes: eight dark, eight light; the last four are two-tone, with
+ * the shade (head edge, ears, neck) in a colour of its own. A seed picks one by index over the
  * list length, so adding, removing, reordering or recolouring any palette
  * changes existing robots and is a major version.
  */
@@ -127,6 +128,46 @@ export const PALETTES: readonly Palette[] = Object.freeze(
         screen: '#1a0d3a',
         glow: '#a6ff4d',
         accent: '#ff8a5c',
+      },
+      {
+        name: 'Cream soda',
+        bg: '#fdf3e1',
+        grid: '#f4e6cb',
+        body: '#e8574a',
+        shade: '#f2c14e',
+        screen: '#2b1d2f',
+        glow: '#9ef0d8',
+        accent: '#2b6cb0',
+      },
+      {
+        name: 'Mint chip',
+        bg: '#e9f7f1',
+        grid: '#d6efe4',
+        body: '#3bb38a',
+        shade: '#5b3a29',
+        screen: '#1d2b26',
+        glow: '#ffe28a',
+        accent: '#f27a9b',
+      },
+      {
+        name: 'Deep sea',
+        bg: '#0a1626',
+        grid: '#132439',
+        body: '#1f6fb2',
+        shade: '#f2a541',
+        screen: '#05101c',
+        glow: '#7ef9ff',
+        accent: '#ff6b6b',
+      },
+      {
+        name: 'Plum & lime',
+        bg: '#1b1022',
+        grid: '#2a1a33',
+        body: '#7b3fa0',
+        shade: '#b8e04a',
+        screen: '#0d0711',
+        glow: '#ffd36e',
+        accent: '#b8e04a',
       },
     ] as Palette[]
   ).map((p) => Object.freeze(p)),

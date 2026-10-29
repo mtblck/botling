@@ -21,8 +21,9 @@ dependencies and is MIT, art included.
 
 - `botling(seed, options)` returns an SVG string; `botlingDataUri()` the same
   as a `data:` URI. Same seed, same robot.
-- Square, circle, triangle or diamond cells; 12 palettes; 7 heads, 10 eyes, 8 mouths,
-  7 tops, 4 side pieces.
+- Square, circle, triangle or diamond cells; 16 palettes; 7 heads, 14 eyes, 11 mouths,
+  7 tops, 4 side pieces, plus occasional head markings, one-sided quirks and
+  accessories, and parts drawn for circle and triangle cells.
 - Below 40px it draws a simpler 9x9 robot from the same traits, so 24px
   avatars stay readable.
 - `traits`, `grid`, `smallGrid`, `PALETTES` and the parts lists are exported
@@ -32,5 +33,4 @@ dependencies and is MIT, art included.
 
 - First npm release (#6), then BotCollector profiles use it as the default
   avatar with a picker.
-- More range (#4), parts designed for each cell shape (#3), smaller SVGs (#5).
-- The playground site on its own domain (#7).
+- An opt-in animated robot that blinks (#25).

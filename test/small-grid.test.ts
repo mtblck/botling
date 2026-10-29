@@ -18,7 +18,7 @@ const CENTER = (SMALL_GRID_SIZE - 1) / 2;
 
 /** Every head, eye and mouth at both small widths, with tops and sides rotating through. */
 function* combinations(): Generator<Traits> {
-  const base = traits('small-combinations');
+  const base: Traits = { ...traits('small-combinations'), quirk: 'none', accessory: 'none' };
   let i = 0;
   for (const head of HEADS)
     for (const eyes of EYES)
@@ -41,15 +41,23 @@ describe('smallGrid', () => {
     for (const row of g) expect(row).toHaveLength(SMALL_GRID_SIZE);
   });
 
-  it('is mirror-symmetric for every part except mismatched eyes', () => {
+  it('is mirror-symmetric for every part except mismatched eyes and winks', () => {
     for (const t of combinations()) {
-      if (t.eyes === 'mismatch') continue;
+      if (t.eyes === 'mismatch' || t.eyes === 'wink') continue;
       for (const row of smallGrid(t)) expect(row).toEqual([...row].reverse());
     }
   });
 
   it('gives mismatched eyes one glowing and one accent eye', () => {
-    const t: Traits = { ...traits('m'), eyes: 'mismatch', mouth: 'none', top: 'none', sides: 'none' };
+    const t: Traits = {
+      ...traits('m'),
+      eyes: 'mismatch',
+      mouth: 'none',
+      top: 'none',
+      sides: 'none',
+      quirk: 'none',
+      accessory: 'none',
+    };
     const g = smallGrid(t);
     expect(
       count(

@@ -57,13 +57,49 @@ export interface Traits {
   /** Cells between the centre column and each eye. */
   eyeGap: number;
   shape: Shape;
+  /** Markings on the head around the face. */
+  pattern: Pattern;
+  /** A one-sided touch, so the robot isn't perfectly mirrored. */
+  quirk: Quirk;
+  /** Something worn on the head. It takes the place of the top piece, the sides, or both. */
+  accessory: Accessory;
+  /** A light in the middle of the chest; drawn only with shoulders. */
+  hasChestLight: boolean;
 }
 
 export type Head = 'box' | 'rounded' | 'dome' | 'tv' | 'capsule' | 'bucket' | 'wedge';
-export type Eyes = 'dot' | 'block' | 'tall' | 'slit' | 'visor' | 'cyclops' | 'ring' | 'cross' | 'sleepy' | 'mismatch';
-export type Mouth = 'line' | 'grille' | 'smile' | 'teeth' | 'dots' | 'speaker' | 'none' | 'o';
+export type Eyes =
+  | 'dot'
+  | 'block'
+  | 'tall'
+  | 'slit'
+  | 'visor'
+  | 'cyclops'
+  | 'ring'
+  | 'cross'
+  | 'sleepy'
+  | 'mismatch'
+  | 'happy'
+  | 'wink'
+  | 'angry'
+  | 'surprised';
+export type Mouth =
+  | 'line'
+  | 'grille'
+  | 'smile'
+  | 'teeth'
+  | 'dots'
+  | 'speaker'
+  | 'none'
+  | 'o'
+  | 'frown'
+  | 'grin'
+  | 'zigzag';
 export type Top = 'none' | 'antenna' | 'twin' | 'horns' | 'fin' | 'bolt' | 'dish';
 export type Sides = 'none' | 'bolts' | 'ears' | 'handles';
+export type Pattern = 'none' | 'stripe' | 'rivets' | 'chin';
+export type Quirk = 'none' | 'ear' | 'dent' | 'patch' | 'antenna';
+export type Accessory = 'none' | 'headphones' | 'visor' | 'bow' | 'cap';
 
 /** Options for {@link botling}. */
 export interface BotlingOptions {

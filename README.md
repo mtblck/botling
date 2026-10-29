@@ -81,9 +81,11 @@ Store the user's chosen `shape` and `palette` next to their seed, and pass them 
 
 ## How it works
 
-The seed is hashed (FNV-1a) into a small seeded generator (mulberry32), which picks a palette, head, eyes, mouth, top, side pieces and a few sizes. Those are drawn as roles (body, shade, screen, glow, accent) onto a 15x15 grid, mirrored down the centre column. Small avatars use a 9x9 grid drawn from the same traits. The renderer then draws each cell in the chosen shape and colours each role from the palette.
+The seed is hashed (FNV-1a) into a small seeded generator (mulberry32), which picks a palette, head, eyes, mouth, top, side pieces, a few sizes and, now and then, a head marking, a one-sided quirk or an accessory. Those are drawn as roles (body, shade, screen, glow, accent) onto a 15x15 grid, mirrored down the centre column. Small avatars use a 9x9 grid drawn from the same traits. The renderer then draws each cell in the chosen shape and colours each role from the palette.
 
-Today that's 12 palettes, 7 heads, 10 eyes, 8 mouths, 7 tops, 4 side pieces, 4 shapes and a few size and on/off traits: well over 10 million distinct robots.
+Today that's 16 palettes, 7 heads, 14 eyes, 11 mouths, 7 tops, 4 side pieces, 4 shapes, 3 head markings, 4 quirks, 4 accessories and a few size and on/off traits: well over 100 million distinct robots. Some parts are drawn for one cell shape: rounded and capsule heads become circles on circle cells, block eyes become rings, domes step by half a cell on triangles and cross eyes become chevrons.
+
+An accessory takes the place of what it covers: headphones replace the top piece and sides, a bow or cap the top piece. A one-sided ear or antenna does the same, unless an accessory already has that spot.
 
 ## Versioning
 

@@ -2,16 +2,20 @@
 
 exports[`traits > pins the traits for a known seed 1`] = `
 {
+  "accessory": "none",
   "bottomRow": 12,
   "eyeGap": 1,
   "eyes": "block",
   "halfWidth": 3,
   "hasCheeks": true,
+  "hasChestLight": false,
   "hasScreen": true,
   "hasShoulders": false,
   "head": "rounded",
-  "mouth": "smile",
+  "mouth": "teeth",
   "palette": 0,
+  "pattern": "chin",
+  "quirk": "none",
   "shape": "diamond",
   "sides": "bolts",
   "top": "dish",

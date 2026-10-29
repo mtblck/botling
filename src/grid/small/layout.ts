@@ -1,4 +1,5 @@
 import type { Traits } from '../../types.js';
+import { slots } from '../slots.js';
 
 /** Rows and columns of the small grid that several part builders share. */
 export interface SmallLayout {
@@ -22,7 +23,7 @@ export interface SmallLayout {
 export function smallLayout(t: Traits): SmallLayout {
   const halfWidth = t.halfWidth >= 4 ? 3 : 2;
   // Leave row 0-1 for the top piece when there is one; otherwise grow the head up.
-  const top = t.top === 'none' ? 1 : 2;
+  const top = slots(t).isTopped ? 2 : 1;
   const bottom = 7;
   return {
     halfWidth,
