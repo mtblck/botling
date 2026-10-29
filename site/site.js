@@ -3,6 +3,7 @@
 // hash, which never reaches the server or analytics: seeds stay in the browser.
 import { botling, botlingDataUri, HOLIDAY_PALETTES, PALETTES, resolveTraits, SHAPES } from '/lib/index.js';
 import { options as optionsFor, snippet as snippetFor } from '/snippet.js';
+import { arrival, track } from '/track.js';
 import { randomSeed } from '/words.js';
 
 const $ = (id) => document.getElementById(id);
@@ -93,6 +94,7 @@ async function copy(text, what) {
   try {
     await navigator.clipboard.writeText(text);
     say(`${what} copied`);
+    track('copied');
   } catch {
     say(`Couldn't copy the ${what.toLowerCase()}; select it and copy instead`);
   }
@@ -138,6 +140,7 @@ $('download').addEventListener('click', () => {
   });
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+  track('downloaded');
 });
 document.querySelector('.theme').addEventListener('click', () => {
   const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
@@ -165,3 +168,4 @@ function readHash() {
 window.addEventListener('hashchange', readHash);
 readHash();
 gallery();
+track('pageview', arrival(document.referrer, location.hostname));

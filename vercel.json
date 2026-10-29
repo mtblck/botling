@@ -4,6 +4,7 @@
   "installCommand": "npm ci --ignore-scripts",
   "buildCommand": "npm run site",
   "outputDirectory": "dist-site",
+  "rewrites": [{ "source": "/_mb/events", "destination": "https://mattblack.space/boards/api/events" }],
   "headers": [
     {
       "source": "/(.*)",
