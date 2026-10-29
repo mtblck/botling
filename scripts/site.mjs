@@ -13,12 +13,12 @@ if (!fs.existsSync(path.join(dist, 'index.js'))) throw new Error('Run npm run bu
 fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(path.join(out, 'fonts'), { recursive: true });
 
-const { botling } = await import(path.join(dist, 'index.js'));
-// The mark and favicon are a botling: this seed (Indigo on its own), with square cells,
-// which stay solid at 32px where the seed's own circles thin out.
+const { botling, PALETTES } = await import(path.join(dist, 'index.js'));
+// The mark and favicon are a botling: this seed, square cells, Ember palette.
 const LOGO_SEED = 'botcollector';
-const logo = botling(LOGO_SEED, { size: 32, shape: 'square', title: null });
-const icon = botling(LOGO_SEED, { size: 64, shape: 'square', detail: 'small', title: null });
+const LOGO = { shape: 'square', palette: PALETTES.findIndex((p) => p.name === 'Ember'), title: null };
+const logo = botling(LOGO_SEED, { ...LOGO, size: 32 });
+const icon = botling(LOGO_SEED, { ...LOGO, size: 64, detail: 'small' });
 
 // Preload every module of the package, so the browser fetches them together rather than
 // finding each import only after the one before it has loaded.
