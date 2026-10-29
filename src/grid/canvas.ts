@@ -87,7 +87,7 @@ export function tagged(c: Canvas, part: Part, draw: () => void): void {
 export function centreRows(c: Canvas, evenOnly: boolean): void {
   const used = c.cells.flatMap((row, y) => (row.some((r) => r !== Role.Empty) ? [y] : []));
   const first = used[0];
-  const last = used.at(-1);
+  const last = used[used.length - 1];
   if (first === undefined || last === undefined) return;
   let shift = Math.trunc((c.cells.length - 1 - last - first) / 2);
   if (evenOnly) shift -= shift % 2;
