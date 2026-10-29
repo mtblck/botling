@@ -251,7 +251,8 @@ input[type="text"]:focus-visible {
   justify-items: center;
   gap: 14px;
 }
-.big svg {
+.big svg,
+.big img {
   display: block;
   width: min(240px, 60vw);
   height: auto;
@@ -273,7 +274,8 @@ input[type="text"]:focus-visible {
   font: 0.75rem / 1 var(--mono);
   color: var(--ink-2);
 }
-.sizes svg {
+.sizes svg,
+.sizes img {
   display: block;
   border-radius: 50%;
 }

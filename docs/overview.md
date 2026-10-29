@@ -28,9 +28,10 @@ dependencies and is MIT, art included.
   avatars stay readable.
 - `traits`, `grid`, `smallGrid`, `PALETTES` and the parts lists are exported
   for pickers.
+- `animate: true` makes it blink, pulse its antenna and flicker its screen,
+  with CSS inside the SVG that holds still for reduced motion (ADR 0003).
 
 ## Where it's going
 
 - 0.1.0 is on npm. Next, BotCollector profiles use it as the default avatar
   with a picker.
-- An opt-in animated robot that blinks (#25).

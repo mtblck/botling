@@ -1,8 +1,9 @@
-import { GRID_SIZE, grid, SMALL_GRID_SIZE, smallGrid } from '../grid/index.js';
+import { drawGrid, drawSmallGrid, GRID_SIZE, SMALL_GRID_SIZE } from '../grid/index.js';
 import { PALETTES } from '../palettes.js';
 import { SHAPES } from '../parts.js';
 import { traits } from '../traits.js';
 import { type BotlingOptions, type Detail, type Palette, Role, type Traits } from '../types.js';
+import { type Motion, motionOf, motionStyle } from './animate.js';
 import { cellStyle, type Outline, outline, padding } from './cell.js';
 import { paintAttrs, pathData } from './path.js';
 
@@ -102,25 +103,41 @@ export function botling(seed: string, opts: BotlingOptions = {}): string {
   const showGrid =
     !isSmall && (opts.showGrid === 'auto' || opts.showGrid === undefined ? size >= AUTO_FULL_MIN_SIZE : opts.showGrid);
 
+  if (opts.animate !== undefined && typeof opts.animate !== 'boolean') {
+    throw new RangeError('botling: animate must be true or false');
+  }
+
   // One path per colour keeps the picture (cells don't overlap, bar the
-  // hairline bleed on solid cells) and saves an element per cell.
-  const roles = isSmall ? smallGrid(t) : grid(t);
+  // hairline bleed on solid cells) and saves an element per cell. Animated,
+  // cells that move get paths of their own, one group per motion.
+  const c = isSmall ? drawSmallGrid(t) : drawGrid(t);
   const n = isSmall ? SMALL_GRID_SIZE : GRID_SIZE;
-  const byColour = new Map<string, Outline[]>();
+  const motion = opts.animate ? motionOf(t, isSmall) : () => null;
+  const groups = new Map<Motion | null, Map<string, Outline[]>>([[null, new Map()]]);
   for (let y = 0; y < n; y++) {
     for (let x = 0; x < n; x++) {
-      const role = roles[y]?.[x] ?? Role.Empty;
+      const role = c.cells[y]?.[x] ?? Role.Empty;
       if (role === Role.Empty && !showGrid) continue;
       const fill = role === Role.Empty ? p.grid : colours[role];
+      const m = motion(role, c.parts[y]?.[x] ?? null);
+      const byColour = groups.get(m) ?? new Map<string, Outline[]>();
+      groups.set(m, byColour);
       const outlines = byColour.get(fill) ?? [];
       outlines.push(outline(t.shape, x, y, isSmall));
       byColour.set(fill, outlines);
     }
   }
   const style = cellStyle(t.shape, isSmall);
-  let cells = '';
-  for (const [colour, outlines] of byColour)
-    cells += `<path ${paintAttrs(colour, style.paint)} d="${pathData(outlines)}"/>`;
+  const paths = (byColour: Map<string, Outline[]>): string => {
+    let out = '';
+    for (const [colour, outlines] of byColour)
+      out += `<path ${paintAttrs(colour, style.paint)} d="${pathData(outlines)}"/>`;
+    return out;
+  };
+  const moving = [...groups.keys()].filter((m): m is Motion => m !== null);
+  const anim = motionStyle(seed, moving);
+  let cells = paths(groups.get(null) ?? new Map());
+  for (const m of moving) cells += `<g class="${anim.classes[m]}">${paths(groups.get(m) ?? new Map())}</g>`;
   if (style.attrs && cells) cells = `<g ${style.attrs}>${cells}</g>`;
 
   const pad = padding(t.shape);
@@ -129,7 +146,7 @@ export function botling(seed: string, opts: BotlingOptions = {}): string {
   const a11y = title === null ? 'aria-hidden="true"' : `role="img" aria-label="${escapeXml(title)}"`;
   const bg =
     opts.background === false ? '' : `<rect x="${-pad}" y="${-pad}" width="${span}" height="${span}" fill="${p.bg}"/>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-pad} ${-pad} ${span} ${span}" width="${size}" height="${size}" ${a11y}>${bg}${cells}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-pad} ${-pad} ${span} ${span}" width="${size}" height="${size}" ${a11y}>${anim.css}${bg}${cells}</svg>`;
 }
 
 /**

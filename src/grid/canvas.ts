@@ -7,9 +7,19 @@ export const SMALL_GRID_SIZE = 9;
 /** Index of the detailed grid's centre column. */
 export const CENTER = (GRID_SIZE - 1) / 2;
 
+/**
+ * The parts an animated robot moves: eyes that blink and the top piece,
+ * whose accent tip pulses. Every other cell is untagged.
+ */
+export type Part = 'eyes' | 'top' | null;
+
 /** A role grid plus the drawing helpers every part builder uses. */
 export interface Canvas {
   cells: RoleGrid;
+  /** Which part last painted each cell, indexed like `cells`. */
+  parts: Part[][];
+  /** The part that painting tags cells with; builders set it around the parts that move. */
+  part: Part;
   /** Index of the centre column. */
   center: number;
   /**
@@ -30,13 +40,38 @@ export interface Canvas {
 export function createCanvas(size: number = GRID_SIZE): Canvas {
   const center = (size - 1) / 2;
   const cells: RoleGrid = Array.from({ length: size }, () => new Array<Role>(size).fill(Role.Empty));
-  const paint = (x: number, y: number, role: Role): void => {
-    const row = cells[y];
-    if (row && x >= 0 && x < size) row[x] = role;
+  const parts: Part[][] = Array.from({ length: size }, () => new Array<Part>(size).fill(null));
+  const c: Canvas = {
+    cells,
+    parts,
+    part: null,
+    center,
+    paint: (x, y, role) => {
+      const row = cells[y];
+      const tags = parts[y];
+      if (!row || !tags || x < 0 || x >= size) return;
+      row[x] = role;
+      tags[x] = c.part;
+    },
+    mirror: (dx, y, role) => {
+      c.paint(center - dx, y, role);
+      c.paint(center + dx, y, role);
+    },
   };
-  const mirror = (dx: number, y: number, role: Role): void => {
-    paint(center - dx, y, role);
-    paint(center + dx, y, role);
-  };
-  return { cells, center, mirror, paint };
+  return c;
+}
+
+/**
+ * Tags the cells a drawing step paints with a part, so the renderer can
+ * animate them.
+ *
+ * @param c - Canvas to draw on
+ * @param part - Tag for the cells painted
+ * @param draw - The drawing step
+ */
+export function tagged(c: Canvas, part: Part, draw: () => void): void {
+  const before = c.part;
+  c.part = part;
+  draw();
+  c.part = before;
 }
