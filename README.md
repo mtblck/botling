@@ -46,7 +46,7 @@ The seed is used as given, apart from Unicode normalisation (NFC), so `José` dr
 | Option | Type | Default | What it does |
 |---|---|---|---|
 | `shape` | `'square' \| 'circle' \| 'triangle' \| 'diamond'` | picked by the seed | Cell shape. |
-| `palette` | `number \| Palette` | picked by the seed | Index into `PALETTES` (0-11), or a palette object: one of `HOLIDAY_PALETTES`, or your own with hex colours. |
+| `palette` | `number \| Palette` | picked by the seed | Index into `PALETTES` (0-15), or a palette object: one of `HOLIDAY_PALETTES`, or your own with hex colours. |
 | `size` | `number` | `96` | Width and height in pixels. The SVG scales cleanly to any size. |
 | `detail` | `'auto' \| 'full' \| 'small'` | `'auto'` | `'full'` is the detailed 15x15 robot. `'small'` is a simpler 9x9 robot from the same traits, with touching cells, made to read at 24px. `'auto'` draws `'small'` below 40px. |
 | `showGrid` | `boolean \| 'auto'` | `'auto'` | Draw the empty grid cells. `'auto'` draws them from 40px up; below that they read as noise. The small robot never draws them. |
@@ -122,13 +122,18 @@ The grids are the robot before it's drawn: cell shape, padding and animation are
 
 The seed is hashed (FNV-1a) into a small seeded generator (mulberry32), which picks a palette, head, eyes, mouth, top, side pieces, a few sizes and, now and then, a head marking, a one-sided quirk or an accessory. Those are drawn as roles (body, shade, screen, glow, accent) onto a 15x15 grid, mirrored down the centre column. Small avatars use a 9x9 grid drawn from the same traits. The renderer then draws each cell in the chosen shape and colours each role from the palette.
 
-Today that's 16 palettes, 7 heads, 14 eyes, 11 mouths, 7 tops, 4 side pieces, 4 shapes, 3 head markings, 4 quirks, 4 accessories and a few size and on/off traits: well over 100 million distinct robots. Some parts are drawn for one cell shape: rounded and capsule heads become circles on circle cells, block eyes become rings, domes step by half a cell on triangles and cross eyes become chevrons.
+Today that's 16 palettes, 7 heads, 14 eyes, 11 mouths, 7 tops, 4 side pieces, 4 shapes, 3 head markings, 4 quirks, 4 accessories and a few size and on/off traits: tens of millions of distinct robots, before you count colour. Some parts are drawn for one cell shape: rounded and capsule heads become circles on circle cells, block eyes become rings, domes step by half a cell on triangles and cross eyes become chevrons.
 
 An accessory takes the place of what it covers: headphones replace the top piece and sides, a bow or cap the top piece. A one-sided ear or antenna does the same, unless an accessory already has that spot.
 
 ## Versioning
 
-The picture is the API. Within a major version, a seed with the same options always draws the same robot. Anything that changes an existing seed's robot (art, palette colours, the order or length of any parts list) is a major version. Snapshot tests guard this.
+The picture is the API. Within a major version, a seed with the same options always draws the same robot. Store a seed, shape and palette index, and you get the same robot through every 1.x release.
+
+- **Major:** anything that changes an existing seed's robot, at any size: art, palette colours, the order or length of any parts list, the 40px switch, which parts move when animated, and the output of `traits`, `grid` and `smallGrid`.
+- **Minor:** new holiday palettes, opt-in options and exports (seeds never pick them), smaller SVG markup that draws the same picture, and motion timing.
+
+Don't compare or cache robots by their SVG string across versions; the markup can change while the picture stays put. [ADR 0006](docs/adr/0006-what-1-0-freezes.md) has the full list. Snapshot tests guard it.
 
 ## Developing
 
