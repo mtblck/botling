@@ -50,7 +50,7 @@ Use an opaque, stable id as the seed (a database id or UUID), not an email addre
 | `showGrid` | `boolean \| 'auto'` | `'auto'` | Draw the empty grid cells. `'auto'` draws them from 40px up; below that they read as noise. The small robot never draws them. |
 | `background` | `boolean` | `true` | Draw the palette's background square. |
 | `title` | `string \| null` | `'Robot avatar'` | Accessible name. `null` marks the image decorative (`aria-hidden`). |
-| `animate` | `boolean` | `false` | Eyes blink, the top piece's tip pulses and the screen flickers now and then. Below 40px it only blinks. See [Animation](#animation). |
+| `animate` | `boolean` | `false` | The robot hovers, blinks and talks, its top piece wobbles, its ears twitch and a scanline sweeps its screen. Below 40px it only blinks and hovers. See [Animation](#animation). |
 
 Bad options (an unknown shape, an out-of-range palette, a palette colour that isn't hex, a size of 0) throw a `RangeError` rather than drawing nothing.
 
@@ -60,11 +60,20 @@ Bad options (an unknown shape, an out-of-range palette, a palette colour that is
 botling(user.id, { animate: true });
 ```
 
-`animate: true` adds a small CSS animation inside the SVG, so it moves wherever an SVG image does: inlined, in an `<img>`, as a CSS `url()` or a `data:` URI, with no script. The eyes blink (a wink blinks its open eye; sleepy and happy eyes, already shut, don't), the tip of the antenna or top piece pulses, and the screen flickers now and then. Below 40px only the eyes blink, since anything busier reads as flicker at 24px. Timing comes from the seed, so a page of robots doesn't blink in unison.
+`animate: true` adds a small CSS animation inside the SVG, so it moves wherever an SVG image does: inlined, in an `<img>`, as a CSS `url()` or a `data:` URI, with no script. Every robot moves:
+
+- **Hover.** The whole robot bobs up and down over its background.
+- **Blink.** Every 2 to 4.5 seconds, and about a third of robots blink twice. A lid in the face colour closes over the eye, so robots without a screen blink too. A wink blinks its open eye, an angry brow stays put, and sleepy eyes, already shut, don't blink.
+- **Wobble.** The antenna or other top piece sways from its base and settles; twin antennas and horns sway as a mirrored pair.
+- **Twitch.** Ears, handles and bolts hop up twice every 2 to 3 seconds, the right a beat after the left.
+- **Talk.** The mouth squashes like a short sentence, then rests.
+- **Scanline.** A glowing band sweeps down the screen every 3 to 5 seconds.
+
+Below 40px the robot only blinks and hovers, since anything busier reads as flicker at 24px. Timing comes from the seed, so a page of robots doesn't move in unison.
 
 - **Reduced motion.** It all sits inside `@media (prefers-reduced-motion: no-preference)`, so the robot holds still for anyone who has asked for less motion, and that still robot is the one drawn without `animate`. Motion that runs on its own for more than five seconds should also be stoppable from the page (WCAG 2.2.2), so offer a still option, as the playground does.
 - **A strict CSP.** An inlined SVG's `<style>` counts as an inline style, so a page with `style-src 'self'` blocks it and shows the still robot. An `<img>` is its own document, so `botlingDataUri(id, { animate: true })` animates under any CSP that allows `data:` images.
-- **Cost.** About 700 bytes more per robot. Each animated robot keeps its image repainting, so animate the few that matter (a profile, a hero, the current speaker) rather than a list of 50.
+- **Cost.** About 2.4 KB more per robot at full size (up to 4.5 KB with a big screen to scan), half a kilobyte below 40px. Each animated robot keeps its image repainting, so animate the few that matter (a profile, a hero, the current speaker) rather than a list of 50.
 
 ### Holiday palettes
 

@@ -1,5 +1,6 @@
 import { Role, type Traits } from '../types.js';
 import { type Canvas, CENTER } from './canvas.js';
+import { antennaTip } from './extras.js';
 import type { Layout } from './layout.js';
 import { slots } from './slots.js';
 
@@ -86,9 +87,9 @@ export function drawQuirk(c: Canvas, t: Traits, l: Layout): void {
     }
     case 'antenna': {
       const x = CENTER + hw - 2;
-      c.paint(x, l.top - 1, Role.Shade);
-      c.paint(x, l.top - 2, Role.Shade);
-      c.paint(x, l.top - 3, Role.Accent);
+      const tip = antennaTip(l.top);
+      for (let row = l.top - 1; row > tip; row--) c.paint(x, row, Role.Shade);
+      c.paint(x, tip, Role.Accent);
       break;
     }
     case 'none':

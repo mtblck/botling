@@ -4,7 +4,7 @@ public: true
 
 # 0003: Animate with CSS inside the SVG, opt-in
 
-- **Status:** Accepted
+- **Status:** Accepted; the set of motions is superseded by [0004](0004-every-robot-moves.md)
 - **Date:** 2026-10-29
 - **PR:** https://github.com/mtblck/botling/pull/28
 

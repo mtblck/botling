@@ -8,10 +8,10 @@ export const SMALL_GRID_SIZE = 9;
 export const CENTER = (GRID_SIZE - 1) / 2;
 
 /**
- * The parts an animated robot moves: eyes that blink and the top piece,
- * whose accent tip pulses. Every other cell is untagged.
+ * The parts an animated robot moves: the eyes, the mouth, the top piece and
+ * the side pieces. Every other cell is untagged.
  */
-export type Part = 'eyes' | 'top' | null;
+export type Part = 'eyes' | 'mouth' | 'top' | 'sides' | null;
 
 /** A role grid plus the drawing helpers every part builder uses. */
 export interface Canvas {

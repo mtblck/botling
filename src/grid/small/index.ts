@@ -10,7 +10,8 @@ import { smallLayout } from './layout.js';
  * Draws the simpler 9x9 robot used at small sizes. It comes from the same
  * traits as the detailed one, so a robot keeps its palette, head, eyes,
  * mouth and top piece at every size and only loses detail. Only the eyes
- * are tagged: at 24px anything busier than a blink reads as flicker.
+ * are tagged: at 24px anything busier than a blink reads as flicker, so the
+ * small robot only blinks and hovers.
  *
  * @param t - The robot's traits
  * @returns The canvas, with each cell's role and the part that drew it
