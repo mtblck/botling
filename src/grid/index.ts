@@ -5,7 +5,8 @@ import { drawEyes, drawMouth } from './face.js';
 import { drawHead } from './head.js';
 import { layout } from './layout.js';
 
-export { CENTER, GRID_SIZE } from './canvas.js';
+export { CENTER, GRID_SIZE, SMALL_GRID_SIZE } from './canvas.js';
+export { smallGrid } from './small/index.js';
 
 /**
  * Builds the grid of cell roles for a set of traits. Later parts paint over

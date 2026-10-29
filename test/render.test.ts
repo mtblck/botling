@@ -26,12 +26,30 @@ describe('botling', () => {
 
   it('hides the empty grid below 40px unless asked', () => {
     const cells = (svg: string): number => (svg.match(/<(rect|circle|polygon) /g) ?? []).length;
-    const opts = { shape: 'circle' } as const;
+    const opts = { shape: 'circle', detail: 'full' } as const;
     expect(cells(botling('g', { ...opts, size: 24 }))).toBeLessThan(cells(botling('g', { ...opts, size: 48 })));
     expect(cells(botling('g', { ...opts, size: 24, showGrid: true }))).toBe(cells(botling('g', { ...opts, size: 48 })));
     expect(cells(botling('g', { ...opts, size: 96, showGrid: false }))).toBe(
       cells(botling('g', { ...opts, size: 24 })),
     );
+  });
+
+  it('draws the small robot below 40px and the full robot from 40px', () => {
+    const viewBox = (svg: string): string | undefined => svg.match(/viewBox="([^"]+)"/)?.[1];
+    expect(viewBox(botling('d', { shape: 'square', size: 39 }))).toBe('-0.5 -0.5 10 10');
+    expect(viewBox(botling('d', { shape: 'square', size: 40 }))).toBe('-0.5 -0.5 16 16');
+    expect(viewBox(botling('d', { shape: 'square', size: 96, detail: 'small' }))).toBe('-0.5 -0.5 10 10');
+    expect(viewBox(botling('d', { shape: 'square', size: 24, detail: 'full' }))).toBe('-0.5 -0.5 16 16');
+  });
+
+  it('never draws the empty grid on the small robot', () => {
+    const t = resolveTraits('s');
+    const grid = PALETTES[t.palette]?.grid;
+    expect(botling('s', { detail: 'small', showGrid: true })).not.toContain(`fill="${grid}"`);
+  });
+
+  it.each(SHAPES)('pins the small %s output for a known seed', (shape) => {
+    expect(botling('botling', { shape, size: 24 })).toMatchSnapshot();
   });
 
   it('drops the background when asked', () => {
@@ -53,6 +71,8 @@ describe('botling', () => {
     // @ts-expect-error: checking the runtime guard for untyped callers
     expect(() => botling('x', { shape: 'hexagon' })).toThrow(RangeError);
     expect(() => botling('x', { size: 0 })).toThrow(RangeError);
+    // @ts-expect-error: checking the runtime guard for untyped callers
+    expect(() => botling('x', { detail: 'tiny' })).toThrow(RangeError);
     expect(() => botling('x', { size: Number.POSITIVE_INFINITY })).toThrow(RangeError);
     // @ts-expect-error: a string size could break out of the width attribute
     expect(() => botling('x', { size: '96" onload="x' })).toThrow(RangeError);

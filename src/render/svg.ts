@@ -1,12 +1,16 @@
-import { GRID_SIZE, grid } from '../grid/index.js';
+import { GRID_SIZE, grid, SMALL_GRID_SIZE, smallGrid } from '../grid/index.js';
 import { PALETTES } from '../palettes.js';
 import { SHAPES } from '../parts.js';
 import { traits } from '../traits.js';
-import { type BotlingOptions, type Palette, Role, type Traits } from '../types.js';
+import { type BotlingOptions, type Detail, type Palette, Role, type Traits } from '../types.js';
 import { cell, padding } from './cell.js';
 
-/** Below this size the empty grid reads as noise, so `showGrid: 'auto'` hides it. */
-const AUTO_GRID_MIN_SIZE = 40;
+/**
+ * Below this size the 15x15 robot reads as noise, so `detail: 'auto'` draws
+ * the small robot and `showGrid: 'auto'` hides the empty grid.
+ */
+const AUTO_FULL_MIN_SIZE = 40;
+const DETAILS: readonly Detail[] = ['auto', 'full', 'small'];
 
 const escapeXml = (s: string): string => s.replace(/[&<>"']/g, (ch) => `&#${ch.charCodeAt(0)};`);
 
@@ -63,25 +67,30 @@ export function botling(seed: string, opts: BotlingOptions = {}): string {
   if (typeof size !== 'number' || !Number.isFinite(size) || size <= 0) {
     throw new RangeError('botling: size must be a positive, finite number');
   }
-  const showGrid = opts.showGrid === 'auto' || opts.showGrid === undefined ? size >= AUTO_GRID_MIN_SIZE : opts.showGrid;
+  const detail = opts.detail ?? 'auto';
+  if (!DETAILS.includes(detail)) throw new RangeError(`botling: unknown detail "${String(detail)}"`);
+  const isSmall = detail === 'small' || (detail === 'auto' && size < AUTO_FULL_MIN_SIZE);
+  const showGrid =
+    !isSmall && (opts.showGrid === 'auto' || opts.showGrid === undefined ? size >= AUTO_FULL_MIN_SIZE : opts.showGrid);
 
-  // Cells never overlap, so grouping them by colour keeps the picture and
-  // saves repeating a fill attribute on every cell.
-  const roles = grid(t);
+  // Grouping cells by colour keeps the picture (cells don't overlap, bar the
+  // hairline bleed on solid cells) and saves a fill attribute per cell.
+  const roles = isSmall ? smallGrid(t) : grid(t);
+  const n = isSmall ? SMALL_GRID_SIZE : GRID_SIZE;
   const byColour = new Map<string, string>();
-  for (let y = 0; y < GRID_SIZE; y++) {
-    for (let x = 0; x < GRID_SIZE; x++) {
+  for (let y = 0; y < n; y++) {
+    for (let x = 0; x < n; x++) {
       const role = roles[y]?.[x] ?? Role.Empty;
       if (role === Role.Empty && !showGrid) continue;
       const fill = role === Role.Empty ? p.grid : colours[role];
-      byColour.set(fill, (byColour.get(fill) ?? '') + cell(t.shape, x, y));
+      byColour.set(fill, (byColour.get(fill) ?? '') + cell(t.shape, x, y, isSmall));
     }
   }
   let cells = '';
   for (const [fill, els] of byColour) cells += `<g fill="${fill}">${els}</g>`;
 
   const pad = padding(t.shape);
-  const span = GRID_SIZE + 2 * pad;
+  const span = n + 2 * pad;
   const title = opts.title === undefined ? 'Robot avatar' : opts.title;
   const a11y = title === null ? 'aria-hidden="true"' : `role="img" aria-label="${escapeXml(title)}"`;
   const bg =
