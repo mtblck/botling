@@ -62,6 +62,7 @@ function draw() {
   $('sizes').innerHTML = [96, 48, 32, 24].map((size) => `<li>${robot(size)}<span>${size}px</span></li>`).join('');
   $('code').textContent = snippet();
   for (const input of document.querySelectorAll('.choices input')) input.checked = state[input.name] === input.value;
+  $('animate').setAttribute('aria-pressed', String(state.motion === 'on'));
   saveHash();
 }
 
@@ -136,6 +137,11 @@ $('seed').addEventListener('input', (e) => {
 $('seed-form').addEventListener('submit', (e) => e.preventDefault());
 $('random').addEventListener('click', () => {
   state.seed = $('seed').value = randomSeed();
+  draw();
+});
+// A shortcut to the Motion option, up where people land.
+$('animate').addEventListener('click', () => {
+  state.motion = state.motion === 'on' ? 'off' : 'on';
   draw();
 });
 $('shuffle').addEventListener('click', gallery);

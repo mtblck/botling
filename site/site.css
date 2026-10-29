@@ -203,6 +203,12 @@ li {
 .btn:active {
   transform: translateY(1px);
 }
+/* A toggle: pressed, it looks like a picked choice. */
+.btn[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
 input[type="text"] {
   font: 500 1.05rem / 1.2 var(--mono);
   color: var(--ink);
@@ -243,8 +249,13 @@ input[type="text"]:focus-visible {
 }
 .seed-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  max-width: 520px;
+  max-width: 620px;
+}
+/* The input takes the row; on a phone the buttons drop beneath it. */
+.seed-row input {
+  flex: 1 1 14rem;
 }
 .stage {
   display: grid;
