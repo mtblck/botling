@@ -25,7 +25,10 @@ People store nothing but a seed, so a seed must keep drawing the same robot.
 Anything that changes an existing seed's robot is a **major version**: art,
 palette colours, and the order *or length* of any parts list (seeds pick by
 index over the list length, so even appending changes robots). The snapshot
-tests catch it; if you change them on purpose, say so in the PR and the
+tests catch it, and `test/corpus.test.ts` checks 500 seeds in every shape
+and size: a moved *pictures* digest is a major version, while a moved
+*markup* digest alone is SVG that draws the same picture (see ADR 0006). If
+you change them on purpose (`npx vitest -u`), say so in the PR and the
 CHANGELOG. Before 1.0, art changes are batched freely.
 
 For any art change, open `preview.html` and look at 24px first. Most avatars
