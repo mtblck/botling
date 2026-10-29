@@ -53,6 +53,9 @@ describe('botling', () => {
     // @ts-expect-error: checking the runtime guard for untyped callers
     expect(() => botling('x', { shape: 'hexagon' })).toThrow(RangeError);
     expect(() => botling('x', { size: 0 })).toThrow(RangeError);
+    expect(() => botling('x', { size: Number.POSITIVE_INFINITY })).toThrow(RangeError);
+    // @ts-expect-error: a string size could break out of the width attribute
+    expect(() => botling('x', { size: '96" onload="x' })).toThrow(RangeError);
   });
 
   it('only draws colours from the chosen palette', () => {
@@ -62,6 +65,15 @@ describe('botling', () => {
       for (const [, colour] of botling(`c-${i}`).matchAll(/fill="([^"]+)"/g)) expect(allowed).toContain(colour);
     }
   });
+});
+
+it('never writes the seed into the SVG', () => {
+  expect(botling('user@example.com')).not.toMatch(/user|example/);
+});
+
+it('treats a numeric seed like its string form', () => {
+  // @ts-expect-error: untyped callers may pass a number
+  expect(botling(42)).toBe(botling('42'));
 });
 
 describe('botlingDataUri', () => {

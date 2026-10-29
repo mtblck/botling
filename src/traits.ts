@@ -11,7 +11,8 @@ import type { Traits } from './types.js';
  * @returns The robot's traits
  */
 export function traits(seed: string): Traits {
-  const rng = createRng(seed);
+  // String() so untyped callers passing a number still get a per-value robot.
+  const rng = createRng(String(seed));
   // Draw order is part of the output contract: do not reorder these lines.
   return {
     palette: Math.floor(rng() * PALETTES.length),

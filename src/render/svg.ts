@@ -60,7 +60,9 @@ export function botling(seed: string, opts: BotlingOptions = {}): string {
   const p = PALETTES[t.palette] as Palette;
   const colours = roleColours(p, t);
   const size = opts.size ?? 96;
-  if (!(size > 0)) throw new RangeError('botling: size must be a positive number');
+  if (typeof size !== 'number' || !Number.isFinite(size) || size <= 0) {
+    throw new RangeError('botling: size must be a positive, finite number');
+  }
   const showGrid = opts.showGrid === 'auto' || opts.showGrid === undefined ? size >= AUTO_GRID_MIN_SIZE : opts.showGrid;
 
   // Cells never overlap, so grouping them by colour keeps the picture and

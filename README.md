@@ -35,6 +35,8 @@ React:
 <img src={botlingDataUri(user.id, { size: 40, title: null })} alt="" width={40} height={40} />
 ```
 
+Use an opaque, stable id as the seed (a database id or UUID), not an email address or username. The seed never appears in the SVG, but anyone can render the robot for a guessed email and compare.
+
 ### Options
 
 | Option | Type | Default | What it does |
