@@ -67,6 +67,10 @@ describe('grid', () => {
     }
   });
 
+  it("keeps every antenna tip off the top row, so it doesn't touch the tile's edge", () => {
+    for (let i = 0; i < 500; i++) expect(grid(traits(`tip-${i}`))[0]?.every((r) => r === 0)).toBe(true);
+  });
+
   it('gives mismatched eyes one glowing and one accent eye', () => {
     const t: Traits = {
       ...traits('mismatch'),

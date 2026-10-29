@@ -7,10 +7,16 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-29
+
 ### Added
 
-- `animate: true`: the eyes blink, the top piece's tip pulses and the screen flickers, with CSS inside the SVG that holds still for `prefers-reduced-motion`. Below 40px it only blinks. Off by default; the default output is unchanged.
+- `animate: true`: the robot hovers, blinks (sometimes twice) and talks, its top piece wobbles, its ears, handles and bolts twitch, and a scanline sweeps its screen. Below 40px it only blinks and hovers. It's CSS inside the SVG, so it works as an `<img>` or `data:` URI, and it holds still for `prefers-reduced-motion`. Off by default.
 - The playground has a Motion toggle.
+
+### Changed
+
+- On the tallest heads the antenna (and the off-side antenna quirk) is one cell shorter, so its tip no longer sits on the tile's top edge. This redraws the antenna for about 6% of seeds; everything else draws as before.
 
 ## [0.1.0] - 2026-10-29
 
@@ -34,5 +40,6 @@ First release.
 
 The playground site (`site/`, not part of the npm package) lets you try seeds, shapes and palettes and copy the code.
 
-[Unreleased]: https://github.com/mtblck/botling/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/mtblck/botling/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/mtblck/botling/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/mtblck/botling/releases/tag/v0.1.0

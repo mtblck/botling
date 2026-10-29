@@ -1,14 +1,46 @@
 import { describe, expect, it } from 'vitest';
 import { drawGrid, drawSmallGrid } from '../src/grid/index.js';
-import { botling, CENTER, type Eyes, Role, SHAPES, traits } from '../src/index.js';
+import { botling, CENTER, type Eyes, PALETTES, Role, SHAPES, traits } from '../src/index.js';
 
-/** Cells drawn per colour, counted by subpath, whatever path or group they sit in. */
-function cellsByColour(svg: string): Record<string, number> {
-  const out: Record<string, number> = {};
-  for (const [, colour, d] of svg.matchAll(/<path (?:fill|stroke)="([^"]+)"[^>]* d="([^"]+)"/g)) {
-    out[colour as string] = (out[colour as string] ?? 0) + (d?.match(/m/g) ?? []).length;
+/**
+ * The colour seen at each cell when nothing moves: walks every path in paint
+ * order, skipping groups hidden at rest, and keys each subpath by where it
+ * starts, so a later cell drawn on top wins.
+ */
+function stillFrame(svg: string): Map<string, string> {
+  const seen = new Map<string, string>();
+  const visible = svg.replace(/<g class="[^"]+" opacity="0">.*?<\/g>/g, '');
+  for (const [, colour, d] of visible.matchAll(/<path (?:fill|stroke)="([^"]+)"[^>]* d="([^"]+)"/g)) {
+    let [x, y, sx, sy] = [0, 0, 0, 0];
+    let cmd = '';
+    let args: number[] = [];
+    const run = (): void => {
+      if (cmd === 'm')
+        [x, y, sx, sy] = [x + (args[0] ?? 0), y + (args[1] ?? 0), x + (args[0] ?? 0), y + (args[1] ?? 0)];
+      if (cmd === 'm') seen.set(`${Math.round(x * 1000)},${Math.round(y * 1000)}`, colour as string);
+      if (cmd === 'h') x += args[0] ?? 0;
+      if (cmd === 'v') y += args[0] ?? 0;
+      if (cmd === 'l') [x, y] = [x + (args[0] ?? 0), y + (args[1] ?? 0)];
+      if (cmd === 'z') [x, y] = [sx, sy];
+    };
+    for (const [token] of (d as string).matchAll(/[mhvlz]|-?(?:\d+\.?\d*|\.\d+)/g)) {
+      if (/[mhvlz]/.test(token)) {
+        cmd = token;
+        args = [];
+        if (cmd === 'z') run();
+        continue;
+      }
+      args.push(Number(token));
+      const need = cmd === 'h' || cmd === 'v' ? 1 : 2;
+      if (args.length === need) {
+        run();
+        args = [];
+        // Bare pairs after a move are line-tos.
+        if (cmd === 'm') cmd = 'l';
+      }
+    }
   }
-  return out;
+  return seen;
 }
 
 const classes = (svg: string): string[] => [...svg.matchAll(/<g class="([^"]+)"/g)].map(([, c]) => c as string);
@@ -26,11 +58,11 @@ describe('animate', () => {
     }
   });
 
-  it.each(SHAPES)('draws the same %s cells in the same colours, only regrouped', (shape) => {
+  it.each(SHAPES)('draws the same %s robot when nothing moves', (shape) => {
     for (let i = 0; i < 50; i++) {
       for (const size of [24, 96]) {
-        const still = botling(`a-${i}`, { shape, size });
-        expect(cellsByColour(botling(`a-${i}`, { shape, size, animate: true }))).toEqual(cellsByColour(still));
+        const still = stillFrame(botling(`a-${i}`, { shape, size }));
+        expect(stillFrame(botling(`a-${i}`, { shape, size, animate: true }))).toEqual(still);
       }
     }
   });
@@ -41,19 +73,44 @@ describe('animate', () => {
     expect(svg.match(/<style>/g)).toHaveLength(1);
   });
 
-  it('only blinks on the small robot', () => {
+  it('only blinks and hovers on the small robot', () => {
     for (let i = 0; i < 50; i++) {
-      for (const c of classes(botling(`a-${i}`, { animate: true, size: 24 }))) expect(c).toMatch(/^botling-blink-/);
+      for (const c of classes(botling(`a-${i}`, { animate: true, size: 24 })))
+        expect(c).toMatch(/^botling-(blink2?|hover)-/);
     }
   });
 
-  it('blinks, pulses and flickers on the full robot', () => {
+  it('uses every motion on the full robot', () => {
     const seen = new Set(
       Array.from({ length: 50 }, (_, i) => classes(botling(`a-${i}`, { animate: true })))
         .flat()
         .map((c) => c.split('-')[1]),
     );
-    expect([...seen].sort()).toEqual(['blink', 'flicker', 'pulse']);
+    expect([...seen].sort()).toEqual(['blink', 'blink2', 'hover', 'scan', 'talk', 'twitch', 'wobble']);
+  });
+
+  it('moves every robot, screen or not', () => {
+    for (let i = 0; i < 200; i++) {
+      for (const size of [24, 96]) {
+        const moving = classes(botling(`m-${i}`, { animate: true, size }));
+        expect(moving.some((c) => c.startsWith('botling-hover-'))).toBe(true);
+      }
+    }
+  });
+
+  it('puts a lid under blinking eyes, so a robot without a screen visibly blinks', () => {
+    const seed = Array.from({ length: 500 }, (_, i) => `l-${i}`).find((s) => {
+      const t = traits(s);
+      return !t.hasScreen && t.eyes === 'dot' && t.accessory === 'none';
+    }) as string;
+    const t = traits(seed);
+    const svg = botling(seed, { animate: true, shape: 'square', palette: t.palette });
+    const body = new RegExp(`fill="${PALETTES[t.palette]?.body}"`, 'g');
+    // The body path gains the two eye cells as lids, beneath the blinking eyes.
+    const still = botling(seed, { shape: 'square', palette: t.palette });
+    const count = (s: string): number => s.match(body)?.length ?? 0;
+    expect(count(svg)).toBeGreaterThanOrEqual(count(still));
+    expect(stillFrame(svg)).toEqual(stillFrame(still));
   });
 
   it('times each seed differently, and the same every time', () => {
@@ -72,11 +129,9 @@ describe('animate', () => {
     }
   });
 
-  it("doesn't blink eyes drawn shut", () => {
-    for (const eyes of ['sleepy', 'happy'] as const) {
-      const seed = seedWith(eyes);
-      expect(botling(seed, { animate: true })).not.toContain('botling-blink');
-    }
+  it("doesn't blink eyes drawn shut, but blinks happy ones", () => {
+    expect(botling(seedWith('sleepy'), { animate: true })).not.toContain('botling-blink');
+    expect(botling(seedWith('happy'), { animate: true })).toMatch(/botling-blink2?-/);
   });
 
   it('blinks only the open eye of a wink, and never an angry brow', () => {
@@ -101,10 +156,12 @@ describe('animate', () => {
     expect(botling('user@example.com', { animate: true })).not.toMatch(/user|example/);
   });
 
-  it('adds under a kilobyte', () => {
+  it('adds about 2.4 KB at full size and half a kilobyte small', () => {
     for (let i = 0; i < 100; i++) {
-      const extra = botling(`b-${i}`, { animate: true }).length - botling(`b-${i}`).length;
-      expect(extra).toBeLessThan(1000);
+      expect(botling(`b-${i}`, { animate: true }).length - botling(`b-${i}`).length).toBeLessThan(4500);
+      expect(
+        botling(`b-${i}`, { animate: true, size: 24 }).length - botling(`b-${i}`, { size: 24 }).length,
+      ).toBeLessThan(900);
     }
   });
 });

@@ -3,7 +3,7 @@ import { PALETTES } from '../palettes.js';
 import { SHAPES } from '../parts.js';
 import { traits } from '../traits.js';
 import { type BotlingOptions, type Detail, type Palette, Role, type Traits } from '../types.js';
-import { animation, MOTIONS, type Motion } from './animate.js';
+import { animation } from './animate.js';
 import { cellStyle, type Outline, outline, padding } from './cell.js';
 import { paintAttrs, pathData } from './path.js';
 
@@ -90,18 +90,6 @@ function roleColours(p: Palette, t: Traits): Record<Exclude<Role, 0>, string> {
  * @returns A standalone SVG document
  */
 export function botling(seed: string, opts: BotlingOptions = {}): string {
-  return render(seed, opts, MOTIONS);
-}
-
-/**
- * {@link botling} with a choice of motions when animating, for comparing them.
- *
- * @param seed - Any string, such as a user id
- * @param opts - Rendering options
- * @param motions - The motions `animate` turns on
- * @returns A standalone SVG document
- */
-export function render(seed: string, opts: BotlingOptions, motions: readonly Motion[]): string {
   const t = resolveTraits(seed, opts);
   const p = resolvePalette(t, opts);
   const colours = roleColours(p, t);
@@ -123,7 +111,7 @@ export function render(seed: string, opts: BotlingOptions, motions: readonly Mot
   // the grid and each moving class get paths of their own.
   const c = isSmall ? drawSmallGrid(t) : drawGrid(t);
   const n = isSmall ? SMALL_GRID_SIZE : GRID_SIZE;
-  const anim = opts.animate ? animation(seed, t, isSmall, motions) : null;
+  const anim = opts.animate ? animation(seed, t, isSmall) : null;
   const GRID = anim ? 'grid' : '';
   const groups = new Map<string, Map<string, Outline[]>>([
     [GRID, new Map()],
@@ -143,7 +131,7 @@ export function render(seed: string, opts: BotlingOptions, motions: readonly Mot
       const fill = role === Role.Empty ? p.grid : colours[role];
       const part = c.parts[y]?.[x] ?? null;
       const cell = outline(t.shape, x, y, isSmall);
-      add(role === Role.Empty ? GRID : (anim?.classOf(role, part, x, y) ?? ''), fill, cell);
+      add(role === Role.Empty ? GRID : (anim?.classOf(role, part, x) ?? ''), fill, cell);
       for (const [key, as] of anim && role !== Role.Empty ? anim.copies(role, part, x, y) : []) {
         add(key, colours[as as Exclude<Role, 0>], cell);
       }
