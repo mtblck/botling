@@ -45,7 +45,8 @@
     "test:watch": "vitest",
     "preview": "tsx scripts/preview.ts",
     "hero": "tsx scripts/hero.ts",
-    "prepublishOnly": "npm run lint && npm run typecheck && npm test && npm run build"
+    "prepublishOnly": "npm run lint && npm run typecheck && npm test && npm run build",
+    "coverage": "vitest run --coverage --coverage.reporter=lcov --coverage.reporter=json-summary --coverage.reporter=text-summary"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.4",

@@ -1,0 +1,29 @@
+name: Bug report
+description: botling threw, drew something broken, or the playground misbehaved.
+labels: [type:bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you expected, and what you got instead. A screenshot helps.
+    validations:
+      required: true
+  - type: textarea
+    id: call
+    attributes:
+      label: The call
+      description: The seed and options, or the playground link (it carries both). Don't paste a real user's id or email; any seed that shows the problem works.
+      placeholder: "botling('plucky-servo-42', { shape: 'triangle', size: 24 })"
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: botling version
+      placeholder: "0.1.0"
+  - type: input
+    id: where
+    attributes:
+      label: Browser or runtime
+      placeholder: "Safari 19 on iOS, or Node 22"

@@ -1,27 +1,93 @@
 name: CI
 
+# The baseline every repo runs on each PR and on main: install from the
+# lockfile, then lint, test and build. Required checks and the Dependabot
+# review both read this, so keep the job names stable.
+# Multi-app repos: copy the check job per app with `defaults.run.working-directory`,
+# prefix the coverage paths with the app's directory, and give each app its own
+# artifact name starting with `coverage` (e.g. `coverage-admin`) and COVERAGE_NAME.
 on:
+  pull_request:
   push:
     branches: [main]
-  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
   check:
+    name: Lint, test and build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          # The PR merge commit and its base parent, for coverage of the changed lines.
+          fetch-depth: 2
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      # No dependency gets to run code at install. If one genuinely needs its
+      # install script, drop the flag and say which one and why here.
+      - run: npm ci --ignore-scripts
+      - run: npm run lint --if-present
+      # A `coverage` script, when there is one, runs the same tests and also writes
+      # coverage/lcov.info (repo-setup has the script for each test runner).
+      - name: Test
+        run: |
+          if node -e "process.exit(require('./package.json').scripts?.coverage ? 0 : 1)"; then
+            npm run coverage
+          else
+            npm test --if-present
+          fi
+      - run: npm run typecheck
+      - run: npm run build --if-present
+      # The playground: CSP and headers guard, then the site build.
+      - run: npm run hosting:check --if-present
+      - run: npm run site --if-present
+      # Report only: whole-repo and changed-line coverage in the job summary, plus
+      # coverage/diff-coverage.json for the Claude review. Fails only below the
+      # COVERAGE_MIN / DIFF_COVERAGE_MIN repository variables, when a repo sets them.
+      - name: Coverage report
+        if: ${{ !cancelled() && hashFiles('coverage/lcov.info') != '' }}
+        run: node .github/scripts/coverage-report.mjs
+        env:
+          COVERAGE_MIN: ${{ vars.COVERAGE_MIN }}
+          DIFF_COVERAGE_MIN: ${{ vars.DIFF_COVERAGE_MIN }}
+      - name: Upload coverage
+        if: ${{ !cancelled() && hashFiles('coverage/lcov.info') != '' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage
+          path: |
+            coverage/lcov.info
+            coverage/coverage-summary.json
+            coverage/diff-coverage.json
+          retention-days: 14
+          if-no-files-found: ignore
+
+  # The package supports Node 20 and up; the main job runs on 22.
+  compat:
+    name: Test on Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     strategy:
       matrix:
-        node: [20, 22, 24]
+        node: [20, 24]
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
           cache: npm
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run typecheck
-      - run: npx vitest run --coverage
+      - run: npm ci --ignore-scripts
+      - run: npm test
       - run: npm run build
