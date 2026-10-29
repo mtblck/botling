@@ -1,17 +1,21 @@
 // Pure helpers behind the playground's controls, kept apart from the DOM so
-// test/site-snippet.test.ts can check that the copied code draws the same robot.
+// test/site.test.ts can check that the copied code draws the same robot. A palette is
+// either a PALETTES index ('0'-'11') or a HOLIDAY_PALETTES key ('halloween').
 
 /**
  * Options for botling() from the playground state, leaving out anything on auto.
  *
  * @param {{ shape: string, palette: string, grid: string }} state - The playground's choices
  * @param {object} [extra] - Options to add, such as size
+ * @param {Record<string, object>} [holidays] - HOLIDAY_PALETTES, to look holiday keys up in
  * @returns {object} botling() options
  */
-export function options(state, extra = {}) {
+export function options(state, extra = {}, holidays = {}) {
   const o = { ...extra };
   if (state.shape !== 'auto') o.shape = state.shape;
-  if (state.palette !== 'auto') o.palette = Number(state.palette);
+  if (isHoliday(state.palette)) {
+    if (holidays[state.palette]) o.palette = holidays[state.palette];
+  } else if (state.palette !== 'auto') o.palette = Number(state.palette);
   if (state.grid !== 'auto') o.showGrid = state.grid === 'on';
   return o;
 }
@@ -24,6 +28,12 @@ export function options(state, extra = {}) {
  */
 export function snippet(state) {
   const args = Object.entries(options(state)).map(([k, v]) => `${k}: ${JSON.stringify(v).replaceAll('"', "'")}`);
+  // The object would print as a wall of hex; name it the way a developer would.
+  if (isHoliday(state.palette))
+    args.splice(state.shape === 'auto' ? 0 : 1, 0, `palette: HOLIDAY_PALETTES.${state.palette}`);
   const seed = JSON.stringify(state.seed).replaceAll("'", "\\'").replace(/^"|"$/g, "'");
   return `botling(${seed}${args.length ? `, { ${args.join(', ')} }` : ''})`;
 }
+
+/** Holiday keys are names; built-in palettes are numbers. */
+const isHoliday = (palette) => palette !== 'auto' && !/^\d+$/.test(palette);

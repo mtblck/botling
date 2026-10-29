@@ -16,7 +16,8 @@ const escapeXml = (s: string): string => s.replace(/[&<>"']/g, (ch) => `&#${ch.c
 
 /**
  * Applies option overrides to a seed's traits, rejecting values that would
- * otherwise fail quietly.
+ * otherwise fail quietly. With a palette object, `palette` stays the seed's
+ * own index: the object is drawn, but it isn't one of {@link PALETTES}.
  *
  * @param seed - Any string
  * @param opts - Caller options
@@ -28,13 +29,40 @@ export function resolveTraits(seed: string, opts: BotlingOptions = {}): Traits {
     if (!SHAPES.includes(opts.shape)) throw new RangeError(`botling: unknown shape "${String(opts.shape)}"`);
     t.shape = opts.shape;
   }
-  if (opts.palette !== undefined) {
+  if (opts.palette !== undefined && typeof opts.palette !== 'object') {
     if (!Number.isInteger(opts.palette) || opts.palette < 0 || opts.palette >= PALETTES.length) {
-      throw new RangeError(`botling: palette must be an integer from 0 to ${PALETTES.length - 1}`);
+      throw new RangeError(`botling: palette must be an integer from 0 to ${PALETTES.length - 1}, or a palette object`);
     }
     t.palette = opts.palette;
   }
   return t;
+}
+
+const HEX = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
+const PALETTE_KEYS = ['bg', 'grid', 'body', 'shade', 'screen', 'glow', 'accent'] as const;
+
+/**
+ * The palette to paint with: a palette object from the options, else the
+ * built-in palette the traits name. Object colours go straight into SVG
+ * attributes, so anything but a hex colour is rejected.
+ */
+function resolvePalette(t: Traits, opts: BotlingOptions): Palette {
+  const custom: unknown = opts.palette;
+  if (typeof custom !== 'object') return PALETTES[t.palette] as Palette;
+  if (custom === null || Array.isArray(custom)) {
+    throw new RangeError('botling: palette must be an index into PALETTES or a palette object');
+  }
+  // Read each colour once into a copy, so a getter can't pass the check and then change.
+  const source = custom as Record<string, unknown>;
+  const checked: Palette = { name: String(source.name ?? 'Custom') } as Palette;
+  for (const key of PALETTE_KEYS) {
+    const colour = source[key];
+    if (typeof colour !== 'string' || !HEX.test(colour)) {
+      throw new RangeError(`botling: palette.${key} must be a hex colour such as #1d1210`);
+    }
+    checked[key] = colour;
+  }
+  return checked;
 }
 
 /**
@@ -61,7 +89,7 @@ function roleColours(p: Palette, t: Traits): Record<Exclude<Role, 0>, string> {
  */
 export function botling(seed: string, opts: BotlingOptions = {}): string {
   const t = resolveTraits(seed, opts);
-  const p = PALETTES[t.palette] as Palette;
+  const p = resolvePalette(t, opts);
   const colours = roleColours(p, t);
   const size = opts.size ?? 96;
   if (typeof size !== 'number' || !Number.isFinite(size) || size <= 0) {

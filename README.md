@@ -44,14 +44,24 @@ Use an opaque, stable id as the seed (a database id or UUID), not an email addre
 | Option | Type | Default | What it does |
 |---|---|---|---|
 | `shape` | `'square' \| 'circle' \| 'triangle'` | picked by the seed | Cell shape. |
-| `palette` | `number` | picked by the seed | Index into `PALETTES` (0-11). |
+| `palette` | `number \| Palette` | picked by the seed | Index into `PALETTES` (0-11), or a palette object: one of `HOLIDAY_PALETTES`, or your own with hex colours. |
 | `size` | `number` | `96` | Width and height in pixels. The SVG scales cleanly to any size. |
 | `detail` | `'auto' \| 'full' \| 'small'` | `'auto'` | `'full'` is the detailed 15x15 robot. `'small'` is a simpler 9x9 robot from the same traits, with touching cells, made to read at 24px. `'auto'` draws `'small'` below 40px. |
 | `showGrid` | `boolean \| 'auto'` | `'auto'` | Draw the empty grid cells. `'auto'` draws them from 40px up; below that they read as noise. The small robot never draws them. |
 | `background` | `boolean` | `true` | Draw the palette's background square. |
 | `title` | `string \| null` | `'Robot avatar'` | Accessible name. `null` marks the image decorative (`aria-hidden`). |
 
-Bad options (an unknown shape, an out-of-range palette, a size of 0) throw a `RangeError` rather than drawing nothing.
+Bad options (an unknown shape, an out-of-range palette, a palette colour that isn't hex, a size of 0) throw a `RangeError` rather than drawing nothing.
+
+### Holiday palettes
+
+`HOLIDAY_PALETTES` has New Year's, Valentine's, St Patrick's, Fourth of July, Halloween and Christmas. A seed never picks one, so everyday robots don't change; pass one in to dress the same robot up for the day:
+
+```ts
+import { botling, HOLIDAY_PALETTES } from 'botling';
+
+botling(user.id, { palette: HOLIDAY_PALETTES.halloween });
+```
 
 ### Building a picker
 

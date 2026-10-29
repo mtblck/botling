@@ -69,8 +69,12 @@ export type Sides = 'none' | 'bolts' | 'ears' | 'handles';
 export interface BotlingOptions {
   /** Cell shape. Defaults to the one the seed picks. */
   shape?: Shape;
-  /** Palette index into {@link PALETTES}. Defaults to the one the seed picks. */
-  palette?: number;
+  /**
+   * Palette: an index into {@link PALETTES}, or a palette object such as one
+   * of {@link HOLIDAY_PALETTES} or your own (colours as hex, e.g. `#1d1210`).
+   * Defaults to the one the seed picks.
+   */
+  palette?: number | Palette;
   /**
    * Draw the empty grid cells behind the robot. `'auto'` (the default) draws
    * them at 40px and up, where they read as texture rather than noise. The

@@ -1,21 +1,22 @@
 // The playground. Imports botling straight from the package build (copied to /lib by
 // scripts/site.mjs), so the page always shows what npm ships. State lives in the URL
 // hash, which never reaches the server or analytics: seeds stay in the browser.
-import { botling, botlingDataUri, PALETTES, resolveTraits, SHAPES } from '/lib/index.js';
+import { botling, botlingDataUri, HOLIDAY_PALETTES, PALETTES, resolveTraits, SHAPES } from '/lib/index.js';
 import { options as optionsFor, snippet as snippetFor } from '/snippet.js';
 import { randomSeed } from '/words.js';
 
 const $ = (id) => document.getElementById(id);
 const state = { seed: '', shape: 'auto', palette: 'auto', grid: 'auto' };
 
-const options = (extra) => optionsFor(state, extra);
+const options = (extra) => optionsFor(state, extra, HOLIDAY_PALETTES);
 const snippet = () => snippetFor(state);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
 /** Names the big robot for screen readers, so a change of seed or option is heard. */
 function describe() {
   const t = resolveTraits(state.seed, options());
-  const parts = [`${t.shape} cells`, `${PALETTES[t.palette].name} palette`, `${t.head} head`, `${t.eyes} eyes`];
+  const palette = HOLIDAY_PALETTES[state.palette] ?? PALETTES[t.palette];
+  const parts = [`${t.shape} cells`, `${palette.name} palette`, `${t.head} head`, `${t.eyes} eyes`];
   if (t.mouth !== 'none') parts.push(`${t.mouth === 'o' ? 'O-shaped' : t.mouth} mouth`);
   if (t.top !== 'none') parts.push(`${t.top} on top`);
   return `Robot for "${state.seed}": ${parts.join(', ')}`;
@@ -68,6 +69,12 @@ function swatch(p) {
 
 radios($('shapes'), 'shape', [['auto', 'Seed picks'], ...SHAPES.map((s) => [s, s[0].toUpperCase() + s.slice(1)])]);
 radios($('palettes'), 'palette', [['auto', 'Seed picks'], ...PALETTES.map((p, i) => [String(i), p.name, swatch(p)])]);
+// Same radio name as the palettes above, so picking a holiday clears an everyday palette.
+radios(
+  $('holidays'),
+  'palette',
+  Object.entries(HOLIDAY_PALETTES).map(([key, p]) => [key, p.name, swatch(p)]),
+);
 radios($('grids'), 'grid', [
   ['auto', 'Auto'],
   ['on', 'On'],
