@@ -55,3 +55,18 @@ export function pick<T>(rng: Rng, list: readonly T[]): T {
 export function int(rng: Rng, lo: number, hi: number): number {
   return lo + Math.floor(rng() * (hi - lo + 1));
 }
+
+/**
+ * Usually the first item of a list, otherwise one of the rest. Draws twice
+ * either way, so the outcome doesn't shift the draws that follow.
+ *
+ * @param rng - Generator to draw from
+ * @param chance - Odds of picking from the rest, from 0 to 1
+ * @param list - The default first, then the alternatives
+ * @returns One item of `list`
+ */
+export function maybePick<T>(rng: Rng, chance: number, list: readonly T[]): T {
+  const roll = rng();
+  const alt = pick(rng, list.slice(1));
+  return roll < chance ? alt : (list[0] as T);
+}

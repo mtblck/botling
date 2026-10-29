@@ -1,5 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { EYES, HEADS, MOUTHS, PALETTES, SHAPES, SIDES, TOPS, traits } from '../src/index.js';
+import {
+  ACCESSORIES,
+  EYES,
+  HEADS,
+  MOUTHS,
+  PALETTES,
+  PATTERNS,
+  QUIRKS,
+  SHAPES,
+  SIDES,
+  TOPS,
+  traits,
+} from '../src/index.js';
 
 const SAMPLE = Array.from({ length: 3000 }, (_, i) => traits(`user-${i}`));
 
@@ -21,9 +33,19 @@ describe('traits', () => {
     ['top', TOPS],
     ['sides', SIDES],
     ['shape', SHAPES],
+    ['pattern', PATTERNS],
+    ['quirk', QUIRKS],
+    ['accessory', ACCESSORIES],
   ] as const)('reaches every %s', (key, values) => {
     const seen = new Set(SAMPLE.map((t) => t[key]));
     expect([...seen].sort()).toEqual([...values].sort());
+  });
+
+  it('leaves most robots plain, so the extras stay a surprise', () => {
+    const share = (pred: (t: (typeof SAMPLE)[number]) => boolean): number => SAMPLE.filter(pred).length / SAMPLE.length;
+    expect(share((t) => t.pattern === 'none')).toBeCloseTo(0.65, 1);
+    expect(share((t) => t.quirk === 'none')).toBeCloseTo(0.75, 1);
+    expect(share((t) => t.accessory === 'none')).toBeCloseTo(0.75, 1);
   });
 
   it('keeps sizes in range', () => {

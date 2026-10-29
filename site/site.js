@@ -13,13 +13,18 @@ const options = (extra) => optionsFor(state, extra, HOLIDAY_PALETTES);
 const snippet = () => snippetFor(state);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
+const ACCESSORY_NAMES = { headphones: 'headphones', visor: 'a visor band', bow: 'a bow', cap: 'a cap' };
+
 /** Names the big robot for screen readers, so a change of seed or option is heard. */
 function describe() {
   const t = resolveTraits(state.seed, options());
   const palette = HOLIDAY_PALETTES[state.palette] ?? PALETTES[t.palette];
   const parts = [`${t.shape} cells`, `${palette.name} palette`, `${t.head} head`, `${t.eyes} eyes`];
   if (t.mouth !== 'none') parts.push(`${t.mouth === 'o' ? 'O-shaped' : t.mouth} mouth`);
-  if (t.top !== 'none') parts.push(`${t.top} on top`);
+  // Matches slots() in the package: these accessories and an off-side antenna take the top piece's place.
+  const isTopCovered = ['headphones', 'bow', 'cap'].includes(t.accessory) || t.quirk === 'antenna';
+  if (t.top !== 'none' && !isTopCovered) parts.push(`${t.top} on top`);
+  if (t.accessory !== 'none') parts.push(`wearing ${ACCESSORY_NAMES[t.accessory]}`);
   return `Robot for "${state.seed}": ${parts.join(', ')}`;
 }
 

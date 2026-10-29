@@ -1,16 +1,18 @@
 import { Role, type Traits } from '../types.js';
 import { type Canvas, CENTER } from './canvas.js';
+import { drawExpressionEyes, drawExpressionMouth } from './expressions.js';
 import type { Layout } from './layout.js';
 
 /**
  * Draws both eyes. Every style is mirrored except `mismatch`, which has one
- * tall glowing eye and one small accent eye.
+ * tall glowing eye and one small accent eye, and `wink`.
  *
  * @param c - Canvas to draw on
  * @param t - The robot's traits
  * @param l - Shared layout
  */
 export function drawEyes(c: Canvas, t: Traits, l: Layout): void {
+  if (drawExpressionEyes(c, t, l)) return;
   const { eyeRow: y, eyeX: x } = l;
   const eye = (dx: number, row: number): void => c.mirror(dx, row, Role.Glow);
   switch (t.eyes) {
@@ -121,6 +123,8 @@ export function drawMouth(c: Canvas, t: Traits, l: Layout): void {
       break;
     case 'none':
       break;
+    default:
+      drawExpressionMouth(c, t, l, width);
   }
   if (t.hasCheeks && t.hasScreen) c.mirror(l.eyeX + 1, l.eyeRow + 2, Role.Accent);
 }

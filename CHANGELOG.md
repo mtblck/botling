@@ -16,7 +16,10 @@ First release.
 - `botling(seed, options)` renders a seeded robot as an SVG string.
 - `botlingDataUri(seed, options)` returns the same SVG as a `data:` URI.
 - Square, circle, triangle and diamond cell grids.
-- 12 palettes, 7 heads, 10 eyes, 8 mouths, 7 tops and 4 side pieces.
+- 16 palettes (four of them two-tone), 7 heads, 14 eyes, 11 mouths, 7 tops and 4 side pieces.
+- Expressions: happy, winking, angry and surprised eyes; frown, grin and zigzag mouths.
+- Now and then a head marking (forehead stripe, rivets, chin panel), a one-sided quirk (one ear, a dent, a patch, an off-centre antenna), an accessory (headphones, visor band, bow, cap) or a chest light. `PATTERNS`, `QUIRKS` and `ACCESSORIES` list them.
+- Parts drawn for a cell shape: round heads and ring eyes on circles, stepped domes and chevron eyes on triangles.
 - `traits`, `grid`, `resolveTraits` and the part lists for building pickers.
 - `showGrid: 'auto'` hides the empty grid below 40px.
 - `HOLIDAY_PALETTES` (New Year's, Valentine's, St Patrick's, Fourth of July, Halloween, Christmas), and `palette` accepts a palette object as well as an index. Seeds never pick a holiday palette.

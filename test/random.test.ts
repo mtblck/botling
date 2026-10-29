@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createRng, hash, int, pick } from '../src/random.js';
+import { createRng, hash, int, maybePick, pick } from '../src/random.js';
 
 describe('hash', () => {
   it('matches the FNV-1a reference values', () => {
@@ -37,5 +37,21 @@ describe('pick and int', () => {
     }
     expect([...picked].sort()).toEqual(['a', 'b', 'c']);
     expect([...ints].sort()).toEqual([3, 4, 5]);
+  });
+});
+
+describe('maybePick', () => {
+  it('draws twice whichever way it goes, so later draws stay put', () => {
+    const a = createRng('steady');
+    const b = createRng('steady');
+    maybePick(a, 0, ['none', 'x']);
+    maybePick(b, 1, ['none', 'x']);
+    expect(a()).toBe(b());
+  });
+
+  it('keeps the first item unless the roll says otherwise', () => {
+    const r = createRng('odds');
+    expect(maybePick(r, 0, ['none', 'x', 'y'])).toBe('none');
+    expect(['x', 'y']).toContain(maybePick(r, 1, ['none', 'x', 'y']));
   });
 });

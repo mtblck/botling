@@ -6,6 +6,7 @@ import {
   grid,
   HEADS,
   MOUTHS,
+  PATTERNS,
   Role,
   type Role as RoleT,
   SIDES,
@@ -22,7 +23,7 @@ const count = (g: RoleT[][], role: RoleT): number => g.flat().filter((r) => r ==
  * the list so each one meets many faces without a full cross product.
  */
 function* combinations(): Generator<Traits> {
-  const base = traits('combinations');
+  const base: Traits = { ...traits('combinations'), quirk: 'none', accessory: 'none' };
   let i = 0;
   for (const head of HEADS)
     for (const eyes of EYES)
@@ -32,6 +33,7 @@ function* combinations(): Generator<Traits> {
             for (const hasShoulders of [true, false]) {
               const top = TOPS[i % TOPS.length] ?? 'none';
               const sides = SIDES[i % SIDES.length] ?? 'none';
+              const pattern = PATTERNS[i % PATTERNS.length] ?? 'none';
               i++;
               yield {
                 ...base,
@@ -40,6 +42,7 @@ function* combinations(): Generator<Traits> {
                 mouth,
                 top,
                 sides,
+                pattern,
                 halfWidth,
                 hasScreen,
                 hasShoulders,
@@ -57,9 +60,9 @@ describe('grid', () => {
     expect(CENTER).toBe((GRID_SIZE - 1) / 2);
   });
 
-  it('is mirror-symmetric for every part except mismatched eyes', () => {
+  it('is mirror-symmetric for every part except mismatched eyes, winks, quirks and some accessories', () => {
     for (const t of combinations()) {
-      if (t.eyes === 'mismatch') continue;
+      if (t.eyes === 'mismatch' || t.eyes === 'wink') continue;
       for (const row of grid(t)) expect(row).toEqual([...row].reverse());
     }
   });
@@ -72,6 +75,9 @@ describe('grid', () => {
       hasCheeks: false,
       top: 'none',
       sides: 'none',
+      pattern: 'none',
+      quirk: 'none',
+      accessory: 'none',
     };
     const g = grid(t);
     const left = g.map((row) => row.slice(0, CENTER));

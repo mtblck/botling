@@ -1,5 +1,6 @@
 import type { RoleGrid, Traits } from '../../types.js';
 import { createCanvas, SMALL_GRID_SIZE } from '../canvas.js';
+import { drawSmallDetails } from './details.js';
 import { drawSmallExtras } from './extras.js';
 import { drawSmallEyes, drawSmallMouth } from './face.js';
 import { drawSmallHead } from './head.js';
@@ -20,5 +21,6 @@ export function smallGrid(t: Traits): RoleGrid {
   drawSmallEyes(c, t, l);
   drawSmallMouth(c, t, l);
   drawSmallExtras(c, t, l);
+  drawSmallDetails(c, t, l);
   return c.cells;
 }

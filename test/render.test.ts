@@ -94,7 +94,7 @@ it.each(SHAPES)('keeps %s robots within the size budget', (shape) => {
   // About a third of the per-cell-element output; a jump means a cell got longer.
   for (let i = 0; i < 100; i++) {
     expect(botling(`b-${i}`, { shape }).length).toBeLessThan(7500);
-    expect(botling(`b-${i}`, { shape, size: 24 }).length).toBeLessThan(2500);
+    expect(botling(`b-${i}`, { shape, size: 24 }).length).toBeLessThan(2600);
   }
 });
 

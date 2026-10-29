@@ -1,9 +1,11 @@
 import type { RoleGrid, Traits } from '../types.js';
 import { createCanvas } from './canvas.js';
+import { drawAccessory, drawChestLight, drawPattern, drawQuirk } from './details.js';
 import { drawShoulders, drawSides, drawTop } from './extras.js';
 import { drawEyes, drawMouth } from './face.js';
 import { drawHead } from './head.js';
 import { layout } from './layout.js';
+import { slots } from './slots.js';
 
 export { CENTER, GRID_SIZE, SMALL_GRID_SIZE } from './canvas.js';
 export { smallGrid } from './small/index.js';
@@ -18,11 +20,16 @@ export { smallGrid } from './small/index.js';
 export function grid(t: Traits): RoleGrid {
   const c = createCanvas();
   const l = layout(t);
+  const s = slots(t);
   drawHead(c, t, l);
+  drawPattern(c, t, l);
   drawEyes(c, t, l);
   drawMouth(c, t, l);
-  drawTop(c, t, l);
-  drawSides(c, t, l);
+  if (s.hasTop) drawTop(c, t, l);
+  if (s.hasSides) drawSides(c, t, l);
   drawShoulders(c, t);
+  drawChestLight(c, t);
+  drawQuirk(c, t, l);
+  drawAccessory(c, t, l);
   return c.cells;
 }

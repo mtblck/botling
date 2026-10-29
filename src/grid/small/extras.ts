@@ -1,5 +1,6 @@
 import { Role, type Traits } from '../../types.js';
 import type { Canvas } from '../canvas.js';
+import { slots } from '../slots.js';
 import type { SmallLayout } from './layout.js';
 
 /**
@@ -12,7 +13,8 @@ import type { SmallLayout } from './layout.js';
 export function drawSmallExtras(c: Canvas, t: Traits, l: SmallLayout): void {
   const y = l.top;
   const edge = l.halfWidth - 1;
-  switch (t.top) {
+  const s = slots(t);
+  switch (s.hasTop ? t.top : 'none') {
     case 'antenna':
       c.mirror(0, y - 1, Role.Shade);
       c.mirror(0, y - 2, Role.Accent);
@@ -40,7 +42,7 @@ export function drawSmallExtras(c: Canvas, t: Traits, l: SmallLayout): void {
   }
 
   const out = l.halfWidth + 1;
-  switch (t.sides) {
+  switch (s.hasSides ? t.sides : 'none') {
     case 'ears':
       c.mirror(out, l.eyeRow, Role.Shade);
       c.mirror(out, l.eyeRow + 1, Role.Shade);

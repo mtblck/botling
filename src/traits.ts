@@ -1,6 +1,6 @@
 import { PALETTES } from './palettes.js';
-import { EYES, HEADS, MOUTHS, SHAPES, SIDES, TOPS } from './parts.js';
-import { createRng, int, pick } from './random.js';
+import { ACCESSORIES, EYES, HEADS, MOUTHS, PATTERNS, QUIRKS, SHAPES, SIDES, TOPS } from './parts.js';
+import { createRng, int, maybePick, pick } from './random.js';
 import type { Traits } from './types.js';
 
 /**
@@ -29,5 +29,9 @@ export function traits(seed: string): Traits {
     hasCheeks: rng() < 0.25,
     eyeGap: int(rng, 1, 3),
     shape: pick(rng, SHAPES),
+    pattern: maybePick(rng, 0.35, PATTERNS),
+    quirk: maybePick(rng, 0.25, QUIRKS),
+    accessory: maybePick(rng, 0.25, ACCESSORIES),
+    hasChestLight: rng() < 0.5,
   };
 }

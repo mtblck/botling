@@ -4,7 +4,8 @@ import type { SmallLayout } from './layout.js';
 
 /**
  * Draws the small eyes. Styles collapse to the shape they read as at 24px:
- * a dot, a tall bar, a wide bar, a visor or one centre eye.
+ * a dot, a tall bar, a wide bar, a visor or one centre eye. Happy eyes are a
+ * dot here, angry ones keep a brow and a wink keeps one eye shut.
  *
  * @param c - Canvas to draw on
  * @param t - The robot's traits
@@ -33,6 +34,23 @@ export function drawSmallEyes(c: Canvas, t: Traits, l: SmallLayout): void {
       break;
     case 'sleepy':
       eye(x, y + 1);
+      break;
+    case 'angry':
+      c.mirror(x, y, Role.Accent);
+      eye(x, y + 1);
+      break;
+    case 'surprised':
+      eye(x, y);
+      eye(x, y + 1);
+      if (x >= 2) {
+        eye(x - 1, y);
+        eye(x - 1, y + 1);
+      }
+      break;
+    case 'wink':
+      c.paint(c.center - x, y, Role.Glow);
+      c.paint(c.center - x, y + 1, Role.Glow);
+      c.paint(c.center + x, y + 1, Role.Glow);
       break;
     case 'mismatch':
       c.paint(c.center - x, y, Role.Glow);
@@ -64,6 +82,7 @@ export function drawSmallMouth(c: Canvas, t: Traits, l: SmallLayout): void {
       if (isWide) c.mirror(1, y, Role.Glow);
       break;
     case 'grille':
+    case 'zigzag':
       c.mirror(0, y, Role.Glow);
       if (isWide) c.mirror(2, y, Role.Glow);
       break;
@@ -75,6 +94,15 @@ export function drawSmallMouth(c: Canvas, t: Traits, l: SmallLayout): void {
       break;
     case 'o':
       c.mirror(0, y, Role.Glow);
+      break;
+    // The mouth gets one row here, so a frown's corners and a zigzag's
+    // peaks would touch the eyes: a frown draws as a small line, a zigzag as
+    // a grille and a grin as a line across the whole screen.
+    case 'frown':
+      c.mirror(0, y, Role.Glow);
+      break;
+    case 'grin':
+      for (let dx = 0; dx < l.halfWidth; dx++) c.mirror(dx, y, Role.Glow);
       break;
     case 'none':
       break;
