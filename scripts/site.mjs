@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ogImage } from './og.mjs';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const out = path.join(ROOT, 'dist-site');
@@ -13,10 +14,11 @@ if (!fs.existsSync(path.join(dist, 'index.js'))) throw new Error('Run npm run bu
 fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(path.join(out, 'fonts'), { recursive: true });
 
-const { botling, PALETTES } = await import(path.join(dist, 'index.js'));
-// The mark and favicon are a botling: this seed, square cells, Ember palette.
-const LOGO_SEED = 'botcollector';
-const LOGO = { shape: 'square', palette: PALETTES.findIndex((p) => p.name === 'Ember'), title: null };
+const lib = await import(path.join(dist, 'index.js'));
+const { botling, PALETTES } = lib;
+// The mark and favicon are a botling: this seed, square cells, Ice palette.
+const LOGO_SEED = 'jolly-sprocket-65';
+const LOGO = { shape: 'square', palette: PALETTES.findIndex((p) => p.name === 'Ice'), title: null };
 const logo = botling(LOGO_SEED, { ...LOGO, size: 32 });
 const icon = botling(LOGO_SEED, { ...LOGO, size: 64, detail: 'small' });
 
@@ -34,6 +36,7 @@ const page = fs
   .replace('{{preloads}}', preloads);
 fs.writeFileSync(path.join(out, 'index.html'), page);
 fs.writeFileSync(path.join(out, 'icon.svg'), icon);
+fs.writeFileSync(path.join(out, 'og.png'), ogImage(lib));
 for (const f of ['site.css', 'site.js', 'snippet.js', 'words.js', 'theme.js', 'analytics.js', 'track.js']) {
   fs.copyFileSync(path.join(ROOT, 'site', f), path.join(out, f));
 }
