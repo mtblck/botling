@@ -48,7 +48,8 @@
     "prepublishOnly": "npm run lint && npm run typecheck && npm test && npm run build",
     "site": "npm run build && node scripts/site.mjs",
     "hosting:check": "node scripts/check-hosting.mjs",
-    "serve": "node scripts/serve.mjs"
+    "serve": "node scripts/serve.mjs",
+    "coverage": "vitest run --coverage --coverage.reporter=lcov --coverage.reporter=json-summary --coverage.reporter=text-summary"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.4",
