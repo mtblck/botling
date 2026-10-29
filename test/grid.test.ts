@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { drawGrid, drawSmallGrid } from '../src/grid/index.js';
 import {
   CENTER,
   EYES,
@@ -10,6 +11,8 @@ import {
   Role,
   type Role as RoleT,
   SIDES,
+  SMALL_GRID_SIZE,
+  smallGrid,
   TOPS,
   type Traits,
   traits,
@@ -78,6 +81,25 @@ describe('grid', () => {
       const used = grid(t).flatMap((row, y) => (row.some((r) => r !== Role.Empty) ? [y] : []));
       const above = used[0] ?? 0;
       const below = GRID_SIZE - 1 - (used.at(-1) ?? 0);
+      expect(Math.abs(above - below)).toBeLessThanOrEqual(t.shape === 'triangle' ? 3 : 1);
+    }
+  });
+
+  it('centres the small robot too, and moves the animation tags with the cells', () => {
+    // Two of these seeds' small robots start off-centre, so dropping the move fails this.
+    for (let i = 0; i < 3000; i++) {
+      const t = traits(`c${i}`);
+      for (const c of [drawGrid(t), drawSmallGrid(t)]) {
+        c.parts.forEach((row, y) => {
+          row.forEach((part, x) => {
+            if (part !== null) expect(c.cells[y]?.[x]).not.toBe(Role.Empty);
+          });
+        });
+      }
+      if (t.hasShoulders) continue;
+      const used = smallGrid(t).flatMap((row, y) => (row.some((r) => r !== Role.Empty) ? [y] : []));
+      const above = used[0] ?? 0;
+      const below = SMALL_GRID_SIZE - 1 - (used[used.length - 1] ?? 0);
       expect(Math.abs(above - below)).toBeLessThanOrEqual(t.shape === 'triangle' ? 3 : 1);
     }
   });
