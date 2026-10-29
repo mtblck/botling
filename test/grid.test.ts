@@ -71,6 +71,17 @@ describe('grid', () => {
     for (let i = 0; i < 500; i++) expect(grid(traits(`tip-${i}`))[0]?.every((r) => r === 0)).toBe(true);
   });
 
+  it('centres a robot without shoulders top to bottom, to the row (two rows on triangles)', () => {
+    for (let i = 0; i < 500; i++) {
+      const t = traits(`mid-${i}`);
+      if (t.hasShoulders) continue;
+      const used = grid(t).flatMap((row, y) => (row.some((r) => r !== Role.Empty) ? [y] : []));
+      const above = used[0] ?? 0;
+      const below = GRID_SIZE - 1 - (used.at(-1) ?? 0);
+      expect(Math.abs(above - below)).toBeLessThanOrEqual(t.shape === 'triangle' ? 3 : 1);
+    }
+  });
+
   it('gives mismatched eyes one glowing and one accent eye', () => {
     const t: Traits = {
       ...traits('mismatch'),

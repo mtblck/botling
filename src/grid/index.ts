@@ -1,5 +1,5 @@
 import type { RoleGrid, Traits } from '../types.js';
-import { type Canvas, createCanvas, tagged } from './canvas.js';
+import { type Canvas, centreRows, createCanvas, tagged } from './canvas.js';
 import { drawAccessory, drawChestLight, drawPattern, drawQuirk } from './details.js';
 import { drawShoulders, drawSides, drawTop } from './extras.js';
 import { drawEyes, drawMouth } from './face.js';
@@ -12,7 +12,8 @@ export { drawSmallGrid, smallGrid } from './small/index.js';
 
 /**
  * Draws the detailed robot for a set of traits. Later parts paint over
- * earlier ones, so the order below is part of the output contract.
+ * earlier ones, so the order below is part of the output contract. A robot
+ * without shoulders is then centred top to bottom.
  *
  * @param t - The robot's traits
  * @returns The canvas, with each cell's role and the part that drew it
@@ -32,6 +33,7 @@ export function drawGrid(t: Traits): Canvas {
   // An off-side antenna moves like a top piece, a one-sided ear like the sides.
   tagged(c, t.quirk === 'antenna' ? 'top' : t.quirk === 'ear' ? 'sides' : null, () => drawQuirk(c, t, l));
   drawAccessory(c, t, l);
+  if (!t.hasShoulders) centreRows(c, t.shape === 'triangle');
   return c;
 }
 

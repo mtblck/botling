@@ -75,3 +75,27 @@ export function tagged(c: Canvas, part: Part, draw: () => void): void {
   draw();
   c.part = before;
 }
+
+/**
+ * Moves everything drawn up or down by whole rows so it sits in the middle
+ * of the canvas, for a robot with no shoulders anchoring it to the bottom.
+ * Triangle cells flip with every row, so they only move by even rows.
+ *
+ * @param c - Canvas to centre
+ * @param evenOnly - Move by an even number of rows only
+ */
+export function centreRows(c: Canvas, evenOnly: boolean): void {
+  const used = c.cells.flatMap((row, y) => (row.some((r) => r !== Role.Empty) ? [y] : []));
+  const first = used[0];
+  const last = used.at(-1);
+  if (first === undefined || last === undefined) return;
+  let shift = Math.trunc((c.cells.length - 1 - last - first) / 2);
+  if (evenOnly) shift -= shift % 2;
+  if (shift === 0) return;
+  const move = <T>(rows: T[][], blank: T): T[][] =>
+    rows.map((_, y) => rows[y - shift]?.slice() ?? new Array<T>(rows.length).fill(blank));
+  const cells = move(c.cells, Role.Empty as Role);
+  const parts = move(c.parts, null as Part);
+  c.cells.splice(0, c.cells.length, ...cells);
+  c.parts.splice(0, c.parts.length, ...parts);
+}

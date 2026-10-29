@@ -16,7 +16,8 @@ any change to the robot a seed draws is a major version.
 
 ### Changed
 
-- On the tallest heads the antenna (and the off-side antenna quirk) is one cell shorter, so its tip no longer sits on the tile's top edge. This redraws the antenna for about 6% of seeds; everything else draws as before.
+- On the tallest heads the antenna (and the off-side antenna quirk) is one cell shorter, so its tip no longer sits on the tile's top edge. This redraws the antenna for about 6% of seeds.
+- A robot without shoulders is centred top to bottom, to the row (to two rows on triangle cells, which flip every row). Short robots used to sit high in their tile; about 20% of seeds move down, or now and then up, by a cell or two.
 
 ## [0.1.0] - 2026-10-29
 
