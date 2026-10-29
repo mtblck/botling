@@ -59,8 +59,9 @@ const SPECS: Record<Variant, Spec> = {
     period: [30, 50],
     rule: ORIGIN,
   },
-  // A glowing copy of each screen row, hidden at rest, so the band shows on dark screens too.
-  scan: { keyframes: '0%,16%,100%{opacity:0}4%,8%{opacity:.8}', period: [30, 50] },
+  // A glowing copy of each screen row, hidden at rest, so the band shows on dark
+  // screens too; faint, so it reads as a tint and not as more eyes.
+  scan: { keyframes: '0%,16%,100%{opacity:0}4%,8%{opacity:.35}', period: [30, 50] },
   hover: { keyframes: '50%{transform:translateY(-.4px)}', period: [26, 40], timing: ' ease-in-out' },
 };
 
