@@ -1,0 +1,65 @@
+name: Release
+
+# Publishes to npm when Matt pushes a version tag (v0.1.0, v1.2.3), then makes
+# the GitHub release from that version's CHANGELOG section. npm trusted
+# publishing: npm accepts this workflow's OIDC token instead of a stored token,
+# and adds a provenance statement linking the package to this commit.
+# One-time setup on npmjs.com, once the package exists: botling -> Settings ->
+# Trusted publishers -> GitHub Actions, repository mtblck/botling, workflow
+# release.yml. CONTRIBUTING.md has the release steps.
+on:
+  push:
+    tags: ['v*']
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Check and publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      # To create the GitHub release.
+      contents: write
+      # The OIDC token npm trusted publishing exchanges for a one-time publish token.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      # Node 24 ships npm 11, which trusted publishing needs (11.5.1 or newer).
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm ci --ignore-scripts
+      # The tag must name the version in package.json, so v0.1.1 can't publish 0.1.0.
+      - name: Tag matches package.json
+        id: version
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if [ "$TAG" != "v$version" ]; then echo "::error::Tag $TAG doesn't match package.json version $version."; exit 1; fi
+          if npm view "botling@$version" version >/dev/null 2>&1; then
+            echo "::notice::botling@$version is already on npm; skipping the publish."
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          fi
+      # prepublishOnly runs lint, typecheck, tests and the build first, so a red
+      # check stops the publish; the build it makes is what ships.
+      - if: steps.version.outputs.published != 'true'
+        run: npm publish --access public
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          # This version's CHANGELOG section: from its heading to the next one.
+          awk -v v="${TAG#v}" '/^## \[/ { on = index($0, "## [" v "]") == 1; next } /^\[.*\]: / { exit } on' CHANGELOG.md > notes.md
+          if gh release view "$TAG" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1; then exit 0; fi
+          gh release create "$TAG" -R "$GITHUB_REPOSITORY" --title "$TAG" --notes-file notes.md --verify-tag

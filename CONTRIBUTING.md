@@ -47,3 +47,21 @@ are shown small.
 Open a draft, fill in the template, and mark it ready when CI is green. Keep
 TypeScript files under 200 lines, give exported functions JSDoc, and add a
 test that fails without your change.
+
+## Releasing
+
+Matt releases; `.github/workflows/release.yml` publishes on a version tag.
+
+1. Move the CHANGELOG's `[Unreleased]` entries under a new `## [x.y.z] - date`
+   heading, set `version` in `package.json` to match, and merge that.
+2. Tag the merge commit and push the tag: `git tag vx.y.z && git push origin vx.y.z`.
+3. The workflow checks the tag matches `package.json`, runs lint, typecheck,
+   tests and the build (`prepublishOnly`), publishes with provenance through
+   npm trusted publishing, and makes the GitHub release from the CHANGELOG.
+
+The very first version has to be published by hand (`npm publish --access public`
+from a clean checkout of the tag), because npm only offers trusted publishing
+for a package that exists. Then set it up under the package's Settings ->
+Trusted publishers (GitHub Actions, `mtblck/botling`, `release.yml`). The
+workflow skips the publish for a version that's already on npm, so tagging
+that first version still makes its GitHub release.
