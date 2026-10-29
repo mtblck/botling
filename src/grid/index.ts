@@ -24,13 +24,13 @@ export function drawGrid(t: Traits): Canvas {
   drawHead(c, t, l);
   drawPattern(c, t, l);
   tagged(c, 'eyes', () => drawEyes(c, t, l));
-  drawMouth(c, t, l);
+  tagged(c, 'mouth', () => drawMouth(c, t, l));
   if (s.hasTop) tagged(c, 'top', () => drawTop(c, t, l));
-  if (s.hasSides) drawSides(c, t, l);
+  if (s.hasSides) tagged(c, 'sides', () => drawSides(c, t, l));
   drawShoulders(c, t);
   drawChestLight(c, t);
-  // An off-side antenna is a top piece too, so its tip pulses.
-  tagged(c, t.quirk === 'antenna' ? 'top' : null, () => drawQuirk(c, t, l));
+  // An off-side antenna moves like a top piece, a one-sided ear like the sides.
+  tagged(c, t.quirk === 'antenna' ? 'top' : t.quirk === 'ear' ? 'sides' : null, () => drawQuirk(c, t, l));
   drawAccessory(c, t, l);
   return c;
 }

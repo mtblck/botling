@@ -1,5 +1,5 @@
 import { Role, type Traits } from '../types.js';
-import { type Canvas, CENTER } from './canvas.js';
+import { type Canvas, CENTER, tagged } from './canvas.js';
 import { drawExpressionEyes, drawExpressionMouth } from './expressions.js';
 import type { Layout } from './layout.js';
 
@@ -126,5 +126,6 @@ export function drawMouth(c: Canvas, t: Traits, l: Layout): void {
     default:
       drawExpressionMouth(c, t, l, width);
   }
-  if (t.hasCheeks && t.hasScreen) c.mirror(l.eyeX + 1, l.eyeRow + 2, Role.Accent);
+  // Cheeks stay put when the mouth moves.
+  if (t.hasCheeks && t.hasScreen) tagged(c, null, () => c.mirror(l.eyeX + 1, l.eyeRow + 2, Role.Accent));
 }
