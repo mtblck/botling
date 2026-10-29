@@ -50,8 +50,8 @@ const RING: Cells = [
  */
 export function drawExpressionEyes(c: Canvas, t: Traits, l: Layout): boolean {
   const { eyeRow: y, eyeX: x } = l;
-  const eyes = (cells: Cells, role: Role = Role.Glow, row = y): void => {
-    for (const [dx, dy] of cells) c.mirror(x + dx, row + dy, role);
+  const eyes = (cells: Cells, role: Role = Role.Glow): void => {
+    for (const [dx, dy] of cells) c.mirror(x + dx, y + dy, role);
   };
   if (t.shape === 'triangle' && t.eyes === 'cross') eyes(CHEVRON);
   else if (t.shape === 'circle' && t.eyes === 'block') eyes(RING);
