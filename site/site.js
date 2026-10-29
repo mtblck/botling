@@ -62,6 +62,7 @@ function draw() {
   $('sizes').innerHTML = [96, 48, 32, 24].map((size) => `<li>${robot(size)}<span>${size}px</span></li>`).join('');
   $('code').textContent = snippet();
   for (const input of document.querySelectorAll('.choices input')) input.checked = state[input.name] === input.value;
+  $('grid').setAttribute('aria-pressed', String(state.grid !== 'off'));
   $('animate').setAttribute('aria-pressed', String(state.motion === 'on'));
   saveHash();
 }
@@ -135,11 +136,20 @@ $('seed').addEventListener('input', (e) => {
   draw();
 });
 $('seed-form').addEventListener('submit', (e) => e.preventDefault());
+// A new seed, cells and palette (everyday or holiday). Grid and motion stay as they are.
+const pickOne = (list) => list[Math.floor(Math.random() * list.length)];
 $('random').addEventListener('click', () => {
   state.seed = $('seed').value = randomSeed();
+  state.shape = pickOne(SHAPES);
+  state.palette = pickOne([...PALETTES.map((_, i) => String(i)), ...Object.keys(HOLIDAY_PALETTES)]);
   draw();
 });
-// A shortcut to the Motion option, up where people land.
+// Shortcuts to the Background grid and Motion options, up where people land. The grid
+// button turns the grid off, or back to auto, which draws it on the big robot.
+$('grid').addEventListener('click', () => {
+  state.grid = state.grid === 'off' ? 'auto' : 'off';
+  draw();
+});
 $('animate').addEventListener('click', () => {
   state.motion = state.motion === 'on' ? 'off' : 'on';
   draw();
