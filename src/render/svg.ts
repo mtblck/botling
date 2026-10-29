@@ -16,7 +16,8 @@ const escapeXml = (s: string): string => s.replace(/[&<>"']/g, (ch) => `&#${ch.c
 
 /**
  * Applies option overrides to a seed's traits, rejecting values that would
- * otherwise fail quietly.
+ * otherwise fail quietly. With a palette object, `palette` stays the seed's
+ * own index: the object is drawn, but it isn't one of {@link PALETTES}.
  *
  * @param seed - Any string
  * @param opts - Caller options
@@ -30,7 +31,7 @@ export function resolveTraits(seed: string, opts: BotlingOptions = {}): Traits {
   }
   if (opts.palette !== undefined && typeof opts.palette !== 'object') {
     if (!Number.isInteger(opts.palette) || opts.palette < 0 || opts.palette >= PALETTES.length) {
-      throw new RangeError(`botling: palette must be an integer from 0 to ${PALETTES.length - 1}`);
+      throw new RangeError(`botling: palette must be an integer from 0 to ${PALETTES.length - 1}, or a palette object`);
     }
     t.palette = opts.palette;
   }
@@ -46,14 +47,22 @@ const PALETTE_KEYS = ['bg', 'grid', 'body', 'shade', 'screen', 'glow', 'accent']
  * attributes, so anything but a hex colour is rejected.
  */
 function resolvePalette(t: Traits, opts: BotlingOptions): Palette {
-  const custom = opts.palette;
+  const custom: unknown = opts.palette;
   if (typeof custom !== 'object') return PALETTES[t.palette] as Palette;
+  if (custom === null || Array.isArray(custom)) {
+    throw new RangeError('botling: palette must be an index into PALETTES or a palette object');
+  }
+  // Read each colour once into a copy, so a getter can't pass the check and then change.
+  const source = custom as Record<string, unknown>;
+  const checked: Palette = { name: String(source.name ?? 'Custom') } as Palette;
   for (const key of PALETTE_KEYS) {
-    if (typeof custom?.[key] !== 'string' || !HEX.test(custom[key])) {
+    const colour = source[key];
+    if (typeof colour !== 'string' || !HEX.test(colour)) {
       throw new RangeError(`botling: palette.${key} must be a hex colour such as #1d1210`);
     }
+    checked[key] = colour;
   }
-  return custom;
+  return checked;
 }
 
 /**

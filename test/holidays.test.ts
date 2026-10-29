@@ -52,3 +52,30 @@ describe('palette objects', () => {
     expect(() => botling('x', { palette: null as unknown as Palette })).toThrow(RangeError);
   });
 });
+
+describe('palette hardening', () => {
+  it('reads each colour once, so a getter cannot swap in markup after the check', () => {
+    let reads = 0;
+    const tricky = {
+      ...HOLIDAY_PALETTES.christmas,
+      get body() {
+        reads++;
+        return reads > 1 ? '"/><script>alert(1)</script>' : '#123456';
+      },
+    };
+    const svg = botling('x', { palette: tricky });
+    expect(svg).not.toContain('<script');
+    expect(reads).toBe(1);
+  });
+
+  it('cannot be recoloured at runtime', () => {
+    expect(Object.isFrozen(HOLIDAY_PALETTES.halloween)).toBe(true);
+    expect(PALETTES.every((p) => Object.isFrozen(p))).toBe(true);
+  });
+
+  it('names the problem for null or an array', () => {
+    expect(() => botling('x', { palette: [] as unknown as Palette })).toThrow(
+      /index into PALETTES or a palette object/,
+    );
+  });
+});
