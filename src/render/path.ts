@@ -12,7 +12,7 @@ export function num(milli: number): string {
   const s = String(milli / 1000);
   if (s.startsWith('0.')) return s.slice(1);
   if (s.startsWith('-0.')) return `-${s.slice(2)}`;
-  return s === '-0' ? '0' : s;
+  return s;
 }
 
 const MINUS = 45;
