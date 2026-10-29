@@ -16,6 +16,7 @@ any change to the robot a seed draws is a major version.
 
 - ADR 0006 and a README Versioning section: what 1.0 freezes, and what a minor version may still change.
 - README: an Advanced section documenting `resolveTraits`, `grid`, `smallGrid`, `Role` and the grid sizes, and a note on how seeds are used.
+
 ### Fixed
 
 - README: the palette index runs from 0 to 15, not 0 to 11.
