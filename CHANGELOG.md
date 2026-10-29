@@ -17,5 +17,6 @@ any change to the robot a seed draws is a major version.
 - `showGrid: 'auto'` hides the empty grid below 40px.
 - `HOLIDAY_PALETTES` (New Year's, Valentine's, St Patrick's, Fourth of July, Halloween, Christmas), and `palette` accepts a palette object as well as an index. Seeds never pick a holiday palette.
 - `detail` option and `smallGrid()`: below 40px (`detail: 'auto'`), a simpler 9x9 robot from the same traits with touching cells, so 24px avatars stay readable.
+- Requires Node 22 or newer (Node 20 reached end of life in April 2026).
 
 The playground site (`site/`, not part of the npm package) lets you try seeds, shapes and palettes and copy the code.

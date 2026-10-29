@@ -6,7 +6,7 @@ a problem is the most useful thing you can send.
 
 ## Setting up
 
-Node 20 or newer and npm.
+Node 22 or newer and npm.
 
 ```bash
 npm install

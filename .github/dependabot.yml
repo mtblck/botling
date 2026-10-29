@@ -26,10 +26,12 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
-    # Held majors go here, each with the reason, e.g.:
-    # ignore:
-    #   - dependency-name: typescript
-    #     update-types: [version-update:semver-major]
+    # Held majors, each with the reason:
+    ignore:
+      # Types follow the oldest Node the package supports (engines.node), so
+      # nothing newer type-checks by accident. Bump with engines.
+      - dependency-name: '@types/node'
+        update-types: [version-update:semver-major]
 
   - package-ecosystem: github-actions
     directory: /
