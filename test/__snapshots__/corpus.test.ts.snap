@@ -1,0 +1,67 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`golden corpus > pins the circle markup, still and animated 1`] = `
+{
+  "full": "593eb2d8c3c49bbe",
+  "fullAnimated": "d33b1c67deb0b9a2",
+  "small": "8b47e4761159253f",
+  "smallAnimated": "7d973e94ea1cbde5",
+}
+`;
+
+exports[`golden corpus > pins the circle pictures 1`] = `
+{
+  "full": "f6284d9ad4cfc879",
+  "small": "c7848659031aa5f7",
+}
+`;
+
+exports[`golden corpus > pins the diamond markup, still and animated 1`] = `
+{
+  "full": "529d0f318cf0e201",
+  "fullAnimated": "57a4bd6583919dcd",
+  "small": "b7202fbcdc2af9d1",
+  "smallAnimated": "669572631b3d52bb",
+}
+`;
+
+exports[`golden corpus > pins the diamond pictures 1`] = `
+{
+  "full": "24283254ecafa60b",
+  "small": "c7848659031aa5f7",
+}
+`;
+
+exports[`golden corpus > pins the square markup, still and animated 1`] = `
+{
+  "full": "44104b5f70e4e9ef",
+  "fullAnimated": "b8f6e146e1031dd7",
+  "small": "66a67b1ed955da19",
+  "smallAnimated": "0beb4d74c052cbe4",
+}
+`;
+
+exports[`golden corpus > pins the square pictures 1`] = `
+{
+  "full": "24283254ecafa60b",
+  "small": "c7848659031aa5f7",
+}
+`;
+
+exports[`golden corpus > pins the traits of every seed 1`] = `"eae0816403930e79"`;
+
+exports[`golden corpus > pins the triangle markup, still and animated 1`] = `
+{
+  "full": "8bb06fabc410fd65",
+  "fullAnimated": "8fcd7e1fa39d08ad",
+  "small": "883d5519c43aab12",
+  "smallAnimated": "bcac9f8e2a244eef",
+}
+`;
+
+exports[`golden corpus > pins the triangle pictures 1`] = `
+{
+  "full": "7fea0859a5dbbba3",
+  "small": "c7848659031aa5f7",
+}
+`;
