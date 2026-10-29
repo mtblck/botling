@@ -28,13 +28,32 @@ export function resolveTraits(seed: string, opts: BotlingOptions = {}): Traits {
     if (!SHAPES.includes(opts.shape)) throw new RangeError(`botling: unknown shape "${String(opts.shape)}"`);
     t.shape = opts.shape;
   }
-  if (opts.palette !== undefined) {
+  if (opts.palette !== undefined && typeof opts.palette !== 'object') {
     if (!Number.isInteger(opts.palette) || opts.palette < 0 || opts.palette >= PALETTES.length) {
       throw new RangeError(`botling: palette must be an integer from 0 to ${PALETTES.length - 1}`);
     }
     t.palette = opts.palette;
   }
   return t;
+}
+
+const HEX = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
+const PALETTE_KEYS = ['bg', 'grid', 'body', 'shade', 'screen', 'glow', 'accent'] as const;
+
+/**
+ * The palette to paint with: a palette object from the options, else the
+ * built-in palette the traits name. Object colours go straight into SVG
+ * attributes, so anything but a hex colour is rejected.
+ */
+function resolvePalette(t: Traits, opts: BotlingOptions): Palette {
+  const custom = opts.palette;
+  if (typeof custom !== 'object') return PALETTES[t.palette] as Palette;
+  for (const key of PALETTE_KEYS) {
+    if (typeof custom?.[key] !== 'string' || !HEX.test(custom[key])) {
+      throw new RangeError(`botling: palette.${key} must be a hex colour such as #1d1210`);
+    }
+  }
+  return custom;
 }
 
 /**
@@ -61,7 +80,7 @@ function roleColours(p: Palette, t: Traits): Record<Exclude<Role, 0>, string> {
  */
 export function botling(seed: string, opts: BotlingOptions = {}): string {
   const t = resolveTraits(seed, opts);
-  const p = PALETTES[t.palette] as Palette;
+  const p = resolvePalette(t, opts);
   const colours = roleColours(p, t);
   const size = opts.size ?? 96;
   if (typeof size !== 'number' || !Number.isFinite(size) || size <= 0) {
