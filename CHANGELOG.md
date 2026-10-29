@@ -22,6 +22,10 @@ any change to the robot a seed draws is a major version.
 
 - README: the palette index runs from 0 to 15, not 0 to 11.
 
+### Fixed
+
+- README: the palette index runs from 0 to 15, not 0 to 11.
+
 ## [0.2.0] - 2026-10-29
 
 ### Added
