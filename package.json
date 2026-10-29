@@ -1,0 +1,57 @@
+{
+  "name": "botling",
+  "version": "0.1.0",
+  "description": "Seeded robot avatars drawn on a grid of squares, circles or triangles. Zero dependencies, SVG output.",
+  "keywords": [
+    "avatar",
+    "robot",
+    "identicon",
+    "svg",
+    "generator",
+    "pixel-art"
+  ],
+  "license": "MIT",
+  "author": "mtblck (https://github.com/mtblck)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtblck/botling.git"
+  },
+  "bugs": "https://github.com/mtblck/botling/issues",
+  "homepage": "https://github.com/mtblck/botling#readme",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "preview": "tsx scripts/preview.ts",
+    "hero": "tsx scripts/hero.ts",
+    "prepublishOnly": "npm run lint && npm run typecheck && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.6.4",
+    "@types/node": "^22.20.5",
+    "@vitest/coverage-v8": "^4.1.12",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.12"
+  }
+}
