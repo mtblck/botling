@@ -203,6 +203,11 @@ li {
 .btn:active {
   transform: translateY(1px);
 }
+.btn .icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
 /* A toggle: pressed, it looks like a picked choice. */
 .btn[aria-pressed="true"] {
   background: var(--accent);
