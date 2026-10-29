@@ -43,8 +43,8 @@ opt-in option.
 
 ## Consequences
 
-A golden corpus of seeds (#37, landing before 1.0) will check the picture
-rules on every PR, and the snapshots check the markup. Callers can store a seed, a shape and a palette
+A golden corpus of seeds (`test/corpus.test.ts`) checks the picture rules
+on every PR, and its markup digests and the snapshots check the SVG. Callers can store a seed, a shape and a palette
 index and rely on them through 1.x, but shouldn't compare or cache by the
 SVG string across versions. Art that would reach existing seeds piles up
 for 2.0. If that pile gets large, or people ask to keep old robots, we
