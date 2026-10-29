@@ -55,7 +55,7 @@ const SPECS: Record<Motion | 'blink2', Spec> = {
     timing: ' step-end',
   },
   // A glowing copy of each screen row, hidden at rest, so the band shows on dark screens too.
-  scan: { keyframes: '0%,12%,100%{opacity:0}5%{opacity:.5}', period: [30, 50] },
+  scan: { keyframes: '0%,16%,100%{opacity:0}4%,8%{opacity:.8}', period: [30, 50] },
   hover: { keyframes: '50%{transform:translateY(-.4px)}', period: [26, 40], timing: ' ease-in-out' },
 };
 
@@ -71,8 +71,8 @@ export interface Animation {
   /** The class for a cell, or null for a still one. Cells with one class share a group. */
   classOf: (role: Role, part: Part, x: number, y: number) => string | null;
   /**
-   * Extra copies of a cell: a lid under a blinking eye, in the colour around
-   * it, and a hidden glowing copy of a screen cell for the scanline. Each is
+   * Extra copies of a cell: a lid under a blinking eye or a talking mouth, in
+   * the colour around it, and a hidden glowing copy of a screen cell for the scanline. Each is
    * a group (`''` for the still one) and the role whose colour it takes.
    */
   copies: (role: Role, part: Part, x: number, y: number) => [string, Role][];
@@ -138,14 +138,15 @@ export function animation(seed: string, t: Traits, isSmall: boolean, motions: re
     if (part === 'top' && on('wobble')) return cls('wobble', 0, side > 0);
     if (part === 'top' && role === Role.Accent && on('pulse')) return cls('pulse');
     if (part === 'sides' && on('twitch')) return cls('twitch', side > 0 ? 2 : 0);
-    if (!t.hasScreen) return null;
     if (part === 'mouth' && role === Role.Glow && on('talk')) return cls('talk');
+    if (!t.hasScreen) return null;
     if ((role === Role.Screen || role === Role.Glow) && on('flicker')) return cls('flicker');
     return null;
   };
   const copies = (role: Role, part: Part, x: number, y: number): [string, Role][] => {
     const out: [string, Role][] = [];
-    if (classOf(role, part, x, y)?.startsWith('botling-blink')) out.push(['', t.hasScreen ? Role.Screen : Role.Body]);
+    const moving = classOf(role, part, x, y) ?? '';
+    if (/^botling-(blink|talk)/.test(moving)) out.push(['', t.hasScreen ? Role.Screen : Role.Body]);
     if (t.hasScreen && role === Role.Screen && on('scan')) out.push([cls('scan', clock.scan.period - y), Role.Glow]);
     return out;
   };
