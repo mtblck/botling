@@ -3,6 +3,18 @@ import { type Canvas, GRID_SIZE } from './canvas.js';
 import type { Layout } from './layout.js';
 
 /**
+ * The row an antenna's tip sits on: three above the head, but never on the
+ * top row, so a tall head's antenna has a shorter stalk and the tip keeps
+ * clear of the tile's edge.
+ *
+ * @param top - The head's top row
+ * @returns The tip's row
+ */
+export function antennaTip(top: number): number {
+  return Math.max(top - 3, 1);
+}
+
+/**
  * Draws whatever sits on top of the head: antennas, horns, a fin and so on.
  *
  * @param c - Canvas to draw on
@@ -13,11 +25,12 @@ export function drawTop(c: Canvas, t: Traits, l: Layout): void {
   const y = l.top;
   const edge = t.halfWidth - 1;
   switch (t.top) {
-    case 'antenna':
-      c.mirror(0, y - 1, Role.Shade);
-      c.mirror(0, y - 2, Role.Shade);
-      c.mirror(0, y - 3, Role.Accent);
+    case 'antenna': {
+      const tip = antennaTip(y);
+      for (let row = y - 1; row > tip; row--) c.mirror(0, row, Role.Shade);
+      c.mirror(0, tip, Role.Accent);
       break;
+    }
     case 'twin':
       c.mirror(edge, y - 1, Role.Shade);
       c.mirror(edge, y - 2, Role.Accent);

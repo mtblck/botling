@@ -129,17 +129,24 @@ export function render(seed: string, opts: BotlingOptions, motions: readonly Mot
     [GRID, new Map()],
     ['', new Map()],
   ]);
+  const add = (key: string, fill: string, cell: Outline): void => {
+    const byColour = groups.get(key) ?? new Map<string, Outline[]>();
+    groups.set(key, byColour);
+    const outlines = byColour.get(fill) ?? [];
+    outlines.push(cell);
+    byColour.set(fill, outlines);
+  };
   for (let y = 0; y < n; y++) {
     for (let x = 0; x < n; x++) {
       const role = c.cells[y]?.[x] ?? Role.Empty;
       if (role === Role.Empty && !showGrid) continue;
       const fill = role === Role.Empty ? p.grid : colours[role];
-      const key = role === Role.Empty ? GRID : (anim?.classOf(role, c.parts[y]?.[x] ?? null, x, y) ?? '');
-      const byColour = groups.get(key) ?? new Map<string, Outline[]>();
-      groups.set(key, byColour);
-      const outlines = byColour.get(fill) ?? [];
-      outlines.push(outline(t.shape, x, y, isSmall));
-      byColour.set(fill, outlines);
+      const part = c.parts[y]?.[x] ?? null;
+      const cell = outline(t.shape, x, y, isSmall);
+      add(role === Role.Empty ? GRID : (anim?.classOf(role, part, x, y) ?? ''), fill, cell);
+      for (const [key, as] of anim && role !== Role.Empty ? anim.copies(role, part, x, y) : []) {
+        add(key, colours[as as Exclude<Role, 0>], cell);
+      }
     }
   }
   const style = cellStyle(t.shape, isSmall);
@@ -151,7 +158,7 @@ export function render(seed: string, opts: BotlingOptions, motions: readonly Mot
   };
   const moving = [...groups.keys()].filter((k) => k !== '' && k !== GRID);
   let robot = paths('');
-  for (const k of moving) robot += `<g class="${k}">${paths(k)}</g>`;
+  for (const k of moving) robot += `<g class="${k}"${anim?.attrs(k) ?? ''}>${paths(k)}</g>`;
   if (anim?.wrap && robot) {
     robot = `<g class="${anim.wrap}">${robot}</g>`;
     moving.push(anim.wrap);

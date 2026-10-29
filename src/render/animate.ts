@@ -12,8 +12,8 @@ export const MOTIONS: readonly Motion[] = ['blink', 'pulse', 'wobble', 'twitch',
 /** The only motions the small robot gets: anything busier reads as flicker at 24px. */
 const SMALL_MOTIONS: readonly Motion[] = ['blink', 'hover'];
 
-/** Eyes drawn shut or squinting already; a blink would squash them flat. */
-const SHUT_EYES: readonly Traits['eyes'][] = ['sleepy', 'happy'];
+/** Eyes drawn shut already; a blink would squash a line into a thinner line. */
+const SHUT_EYES: readonly Traits['eyes'][] = ['sleepy'];
 
 interface Spec {
   /** Keyframes, the same in every robot, so robots inlined on one page share them. */
@@ -34,14 +34,15 @@ const SPECS: Record<Motion | 'blink2', Spec> = {
   },
   pulse: { keyframes: '50%{opacity:.35}', period: [18, 26], timing: ' ease-in-out' },
   wobble: {
-    keyframes: '0%,45%,100%{transform:none}15%{transform:rotate(-9deg)}30%{transform:rotate(6deg)}',
+    keyframes:
+      '0%,50%,100%{transform:none}12%{transform:rotate(-18deg)}28%{transform:rotate(13deg)}40%{transform:rotate(-5deg)}',
     period: [28, 40],
     rule: 'transform-box:fill-box;transform-origin:50% 100%;',
     timing: ' ease-in-out',
   },
   twitch: {
     keyframes: '0%,88%,93%,100%{transform:none}90%,96%{transform:translateY(-.35px)}',
-    period: [35, 60],
+    period: [18, 32],
   },
   talk: {
     keyframes: '0%,55%,65%,75%,100%{transform:none}60%,70%,80%{transform:scaleY(.35)}',
@@ -53,7 +54,8 @@ const SPECS: Record<Motion | 'blink2', Spec> = {
     period: [80, 139],
     timing: ' step-end',
   },
-  scan: { keyframes: '0%,12%,100%{opacity:1}4%{opacity:.45}', period: [30, 50] },
+  // A glowing copy of each screen row, hidden at rest, so the band shows on dark screens too.
+  scan: { keyframes: '0%,12%,100%{opacity:0}5%{opacity:.5}', period: [30, 50] },
   hover: { keyframes: '50%{transform:translateY(-.4px)}', period: [26, 40], timing: ' ease-in-out' },
 };
 
@@ -68,6 +70,14 @@ interface Clock {
 export interface Animation {
   /** The class for a cell, or null for a still one. Cells with one class share a group. */
   classOf: (role: Role, part: Part, x: number, y: number) => string | null;
+  /**
+   * Extra copies of a cell: a lid under a blinking eye, in the colour around
+   * it, and a hidden glowing copy of a screen cell for the scanline. Each is
+   * a group (`''` for the still one) and the role whose colour it takes.
+   */
+  copies: (role: Role, part: Part, x: number, y: number) => [string, Role][];
+  /** Attributes for a group: scanline copies start hidden. */
+  attrs: (cls: string) => string;
   /** The class for a group around the whole robot, or null. */
   wrap: string | null;
   /** The `<style>` for the classes used. */
@@ -130,12 +140,19 @@ export function animation(seed: string, t: Traits, isSmall: boolean, motions: re
     if (part === 'sides' && on('twitch')) return cls('twitch', side > 0 ? 2 : 0);
     if (!t.hasScreen) return null;
     if (part === 'mouth' && role === Role.Glow && on('talk')) return cls('talk');
-    if (role === Role.Screen && on('scan')) return cls('scan', clock.scan.period - y);
     if ((role === Role.Screen || role === Role.Glow) && on('flicker')) return cls('flicker');
     return null;
   };
+  const copies = (role: Role, part: Part, x: number, y: number): [string, Role][] => {
+    const out: [string, Role][] = [];
+    if (classOf(role, part, x, y)?.startsWith('botling-blink')) out.push(['', t.hasScreen ? Role.Screen : Role.Body]);
+    if (t.hasScreen && role === Role.Screen && on('scan')) out.push([cls('scan', clock.scan.period - y), Role.Glow]);
+    return out;
+  };
   return {
     classOf,
+    copies,
+    attrs: (id) => (id.startsWith('botling-scan') ? ' opacity="0"' : ''),
     wrap: on('hover') ? cls('hover') : null,
     css: (used) => {
       const names = new Set<string>();
