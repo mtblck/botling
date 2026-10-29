@@ -1,5 +1,5 @@
 import { Role, type Traits } from '../types.js';
-import { type Canvas, CENTER } from './canvas.js';
+import { type Canvas, CENTER, tagged } from './canvas.js';
 import type { Layout } from './layout.js';
 
 /** Cell offsets from an eye's centre, as [columns outward, rows down]. */
@@ -58,13 +58,17 @@ export function drawExpressionEyes(c: Canvas, t: Traits, l: Layout): boolean {
   else if (t.eyes === 'happy') eyes(HAPPY);
   else if (t.eyes === 'surprised') eyes(SURPRISED);
   else if (t.eyes === 'angry') {
-    eyes(ANGRY_BROW, Role.Accent);
+    // The brow stays put when the eye under it blinks.
+    tagged(c, null, () => eyes(ANGRY_BROW, Role.Accent));
     c.mirror(x, y + 1, Role.Glow);
   } else if (t.eyes === 'wink') {
     // Open on the left, shut on the right.
     c.paint(CENTER - x, y, Role.Glow);
     c.paint(CENTER - x, y + 1, Role.Glow);
-    for (let dx = -1; dx <= 1; dx++) c.paint(CENTER + x + dx, y + 1, Role.Glow);
+    // Only the open eye blinks.
+    tagged(c, null, () => {
+      for (let dx = -1; dx <= 1; dx++) c.paint(CENTER + x + dx, y + 1, Role.Glow);
+    });
   } else return false;
   return true;
 }

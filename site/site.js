@@ -7,7 +7,9 @@ import { arrival, track } from '/track.js';
 import { randomSeed } from '/words.js';
 
 const $ = (id) => document.getElementById(id);
-const state = { seed: '', shape: 'auto', palette: 'auto', grid: 'auto' };
+const DEFAULTS = { shape: 'auto', palette: 'auto', grid: 'auto', motion: 'off' };
+const KEYS = Object.keys(DEFAULTS);
+const state = { seed: '', ...DEFAULTS };
 
 const options = (extra) => optionsFor(state, extra, HOLIDAY_PALETTES);
 const snippet = () => snippetFor(state);
@@ -35,7 +37,7 @@ function saveHash() {
   hashTimer = setTimeout(() => {
     const hash = new URLSearchParams();
     hash.set('seed', state.seed);
-    for (const k of ['shape', 'palette', 'grid']) if (state[k] !== 'auto') hash.set(k, state[k]);
+    for (const k of KEYS) if (state[k] !== DEFAULTS[k]) hash.set(k, state[k]);
     try {
       history.replaceState(null, '', `#${hash}`);
     } catch {
@@ -44,12 +46,20 @@ function saveHash() {
   }, 300);
 }
 
+/**
+ * The robot at a size. An animated robot goes in an <img>: the CSP's style-src 'self'
+ * would block the <style> inside an inlined SVG, but an image is its own document.
+ */
+function robot(size) {
+  const opts = options({ size, title: null });
+  if (!opts.animate) return botling(state.seed, opts);
+  return `<img src="${botlingDataUri(state.seed, opts)}" alt="" width="${size}" height="${size}">`;
+}
+
 function draw() {
-  $('big').innerHTML = botling(state.seed, options({ size: 240, title: null }));
+  $('big').innerHTML = robot(240);
   $('big').setAttribute('aria-label', describe());
-  $('sizes').innerHTML = [96, 48, 32, 24]
-    .map((size) => `<li>${botling(state.seed, options({ size, title: null }))}<span>${size}px</span></li>`)
-    .join('');
+  $('sizes').innerHTML = [96, 48, 32, 24].map((size) => `<li>${robot(size)}<span>${size}px</span></li>`).join('');
   $('code').textContent = snippet();
   for (const input of document.querySelectorAll('.choices input')) input.checked = state[input.name] === input.value;
   saveHash();
@@ -85,6 +95,10 @@ radios($('grids'), 'grid', [
   ['auto', 'Auto'],
   ['on', 'On'],
   ['off', 'Off'],
+]);
+radios($('motions'), 'motion', [
+  ['off', 'Still'],
+  ['on', 'Animated'],
 ]);
 // Swatch colours go in through the CSSOM, which the CSP allows, rather than style attributes.
 for (const b of document.querySelectorAll('.sw b')) b.style.background = b.dataset.c;
@@ -162,9 +176,9 @@ function readHash() {
   const fromHash = new URLSearchParams(location.hash.slice(1));
   // A text input can't hold a line break, so drop them rather than draw a robot the box can't show.
   state.seed = fromHash.get('seed')?.replace(/[\r\n]+/g, '') ?? randomSeed();
-  for (const k of ['shape', 'palette', 'grid']) {
+  for (const k of KEYS) {
     const v = fromHash.get(k);
-    state[k] = v && document.querySelector(`.choices input[name="${k}"][value="${CSS.escape(v)}"]`) ? v : 'auto';
+    state[k] = v && document.querySelector(`.choices input[name="${k}"][value="${CSS.escape(v)}"]`) ? v : DEFAULTS[k];
   }
   $('seed').value = state.seed;
   draw();

@@ -50,8 +50,21 @@ Use an opaque, stable id as the seed (a database id or UUID), not an email addre
 | `showGrid` | `boolean \| 'auto'` | `'auto'` | Draw the empty grid cells. `'auto'` draws them from 40px up; below that they read as noise. The small robot never draws them. |
 | `background` | `boolean` | `true` | Draw the palette's background square. |
 | `title` | `string \| null` | `'Robot avatar'` | Accessible name. `null` marks the image decorative (`aria-hidden`). |
+| `animate` | `boolean` | `false` | Eyes blink, the top piece's tip pulses and the screen flickers now and then. Below 40px it only blinks. See [Animation](#animation). |
 
 Bad options (an unknown shape, an out-of-range palette, a palette colour that isn't hex, a size of 0) throw a `RangeError` rather than drawing nothing.
+
+### Animation
+
+```ts
+botling(user.id, { animate: true });
+```
+
+`animate: true` adds a small CSS animation inside the SVG, so it moves wherever an SVG image does: inlined, in an `<img>`, as a CSS `url()` or a `data:` URI, with no script. The eyes blink (a wink blinks its open eye; sleepy and happy eyes, already shut, don't), the tip of the antenna or top piece pulses, and the screen flickers now and then. Below 40px only the eyes blink, since anything busier reads as flicker at 24px. Timing comes from the seed, so a page of robots doesn't blink in unison.
+
+- **Reduced motion.** It all sits inside `@media (prefers-reduced-motion: no-preference)`, so the robot holds still for anyone who has asked for less motion, and that still robot is the one drawn without `animate`. Motion that runs on its own for more than five seconds should also be stoppable from the page (WCAG 2.2.2), so offer a still option, as the playground does.
+- **A strict CSP.** An inlined SVG's `<style>` counts as an inline style, so a page with `style-src 'self'` blocks it and shows the still robot. An `<img>` is its own document, so `botlingDataUri(id, { animate: true })` animates under any CSP that allows `data:` images.
+- **Cost.** About 700 bytes more per robot. Each animated robot keeps its image repainting, so animate the few that matter (a profile, a hero, the current speaker) rather than a list of 50.
 
 ### Holiday palettes
 

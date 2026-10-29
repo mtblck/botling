@@ -129,4 +129,12 @@ export interface BotlingOptions {
   size?: number;
   /** Accessible name. Defaults to "Robot avatar". Pass `null` to mark the image decorative. */
   title?: string | null;
+  /**
+   * Bring the robot to life with a small CSS animation inside the SVG: the
+   * eyes blink, the top piece's tip pulses and the screen flickers now and
+   * then. Below 40px it only blinks. It holds still for anyone who prefers
+   * reduced motion, and the still frame is the robot drawn without it.
+   * Defaults to false.
+   */
+  animate?: boolean;
 }

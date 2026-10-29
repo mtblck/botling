@@ -1,5 +1,5 @@
 import { Role, type Traits } from '../../types.js';
-import type { Canvas } from '../canvas.js';
+import { type Canvas, tagged } from '../canvas.js';
 import type { SmallLayout } from './layout.js';
 
 /**
@@ -36,7 +36,7 @@ export function drawSmallEyes(c: Canvas, t: Traits, l: SmallLayout): void {
       eye(x, y + 1);
       break;
     case 'angry':
-      c.mirror(x, y, Role.Accent);
+      tagged(c, null, () => c.mirror(x, y, Role.Accent));
       eye(x, y + 1);
       break;
     case 'surprised':
@@ -50,7 +50,7 @@ export function drawSmallEyes(c: Canvas, t: Traits, l: SmallLayout): void {
     case 'wink':
       c.paint(c.center - x, y, Role.Glow);
       c.paint(c.center - x, y + 1, Role.Glow);
-      c.paint(c.center + x, y + 1, Role.Glow);
+      tagged(c, null, () => c.paint(c.center + x, y + 1, Role.Glow));
       break;
     case 'mismatch':
       c.paint(c.center - x, y, Role.Glow);

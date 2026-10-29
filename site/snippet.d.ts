@@ -6,6 +6,8 @@ export interface PlaygroundState {
   shape: string;
   palette: string;
   grid: string;
+  /** 'on' animates the robot; anything else leaves it still. */
+  motion?: string;
 }
 export function options(
   state: Omit<PlaygroundState, 'seed'>,

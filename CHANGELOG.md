@@ -7,6 +7,11 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+### Added
+
+- `animate: true`: the eyes blink, the top piece's tip pulses and the screen flickers, with CSS inside the SVG that holds still for `prefers-reduced-motion`. Below 40px it only blinks. Off by default; the default output is unchanged.
+- The playground has a Motion toggle.
+
 ## [0.1.0] - 2026-10-29
 
 First release.

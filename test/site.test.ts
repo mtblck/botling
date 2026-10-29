@@ -23,6 +23,11 @@ describe('playground snippet', () => {
       expect(run(snippet(state))).toBe(botling(seed, options(state)));
     },
   );
+
+  it('copies animate: true only when the robot is animated', () => {
+    expect(snippet({ seed: 'abc', ...auto, motion: 'on' })).toBe("botling('abc', { animate: true })");
+    expect(snippet({ seed: 'abc', ...auto, motion: 'off' })).toBe("botling('abc')");
+  });
 });
 
 describe('playground holiday palettes', () => {
