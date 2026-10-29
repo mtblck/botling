@@ -1,5 +1,5 @@
 /** The cell shape a robot is drawn with. */
-export type Shape = 'square' | 'circle' | 'triangle';
+export type Shape = 'square' | 'circle' | 'triangle' | 'diamond';
 
 /** How much detail a robot is drawn with. See {@link BotlingOptions.detail}. */
 export type Detail = 'auto' | 'full' | 'small';

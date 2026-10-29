@@ -24,6 +24,6 @@ const bots = SHAPES.flatMap((shape, row) =>
 mkdirSync('docs', { recursive: true });
 writeFileSync(
   'docs/hero.svg',
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-label="Rows of botling robots drawn with square, circle and triangle cells">${bots.join('')}</svg>\n`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-label="Rows of botling robots drawn with square, circle, triangle and diamond cells">${bots.join('')}</svg>\n`,
 );
 console.log('wrote docs/hero.svg');

@@ -7,6 +7,13 @@ const TRIANGLE_SCALE = 0.94;
  * anti-aliasing doesn't leave hairline seams between them.
  */
 const SOLID_BLEED = 0.01;
+/** Half-diagonal of a diamond cell with a gap, so tips almost meet their neighbours'. */
+const DIAMOND_RADIUS = 0.47;
+/**
+ * Half-diagonal of a solid diamond: a diamond this size has the same area as
+ * the cell, so small robots keep their weight and the edges zigzag.
+ */
+const SOLID_DIAMOND_RADIUS = Math.SQRT1_2;
 
 const fmt = (n: number): string => String(Math.round(n * 1000) / 1000);
 
@@ -15,6 +22,7 @@ const fmt = (n: number): string => String(Math.round(n * 1000) / 1000);
  *
  * Triangle cells alternate up and down like a chessboard and are twice as
  * wide as they are tall, so neighbours interlock into a triangular lattice.
+ * Diamond cells are squares turned 45 degrees, centred on the cell.
  *
  * @param shape - Cell shape
  * @param x - Column
@@ -25,6 +33,12 @@ const fmt = (n: number): string => String(Math.round(n * 1000) / 1000);
 export function cell(shape: Shape, x: number, y: number, isSolid = false): string {
   if (shape === 'circle') {
     return `<circle cx="${x + 0.5}" cy="${y + 0.5}" r="${isSolid ? 0.5 : 0.44}"/>`;
+  }
+  if (shape === 'diamond') {
+    const r = isSolid ? SOLID_DIAMOND_RADIUS : DIAMOND_RADIUS;
+    const cx = x + 0.5;
+    const cy = y + 0.5;
+    return `<polygon points="${fmt(cx)},${fmt(cy - r)} ${fmt(cx + r)},${fmt(cy)} ${fmt(cx)},${fmt(cy + r)} ${fmt(cx - r)},${fmt(cy)}"/>`;
   }
   if (shape === 'triangle') {
     const isUp = (x + y) % 2 === 0;

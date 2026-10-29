@@ -12,7 +12,7 @@ exports[`traits > pins the traits for a known seed 1`] = `
   "head": "rounded",
   "mouth": "smile",
   "palette": 0,
-  "shape": "triangle",
+  "shape": "diamond",
   "sides": "bolts",
   "top": "dish",
   "topRow": 5,

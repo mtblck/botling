@@ -1,12 +1,12 @@
 # botling
 
-Seeded robot avatars drawn on a grid of squares, circles or triangles.
+Seeded robot avatars drawn on a grid of squares, circles, triangles or diamonds.
 Try it at **[botling.me](https://botling.me)**.
 
-![Rows of botling robots in square, circle and triangle cells](docs/hero.svg)
+![Rows of botling robots in square, circle, triangle and diamond cells](docs/hero.svg)
 
 - **Same seed, same robot.** Pass a user id and you get the same robot every time, on any machine, with no storage.
-- **Three grids.** Every robot can be drawn with square, circle or triangle cells.
+- **Four grids.** Every robot can be drawn with square, circle, triangle or diamond cells.
 - **Reads at any size.** Below 40px it switches to a simpler version of the same robot, so a 24px avatar still has a face.
 - **Small and self-contained.** Zero dependencies, returns an SVG string, no network requests, works in the browser, Node and edge runtimes.
 - **MIT licensed**, art included.
@@ -43,7 +43,7 @@ Use an opaque, stable id as the seed (a database id or UUID), not an email addre
 
 | Option | Type | Default | What it does |
 |---|---|---|---|
-| `shape` | `'square' \| 'circle' \| 'triangle'` | picked by the seed | Cell shape. |
+| `shape` | `'square' \| 'circle' \| 'triangle' \| 'diamond'` | picked by the seed | Cell shape. |
 | `palette` | `number \| Palette` | picked by the seed | Index into `PALETTES` (0-11), or a palette object: one of `HOLIDAY_PALETTES`, or your own with hex colours. |
 | `size` | `number` | `96` | Width and height in pixels. The SVG scales cleanly to any size. |
 | `detail` | `'auto' \| 'full' \| 'small'` | `'auto'` | `'full'` is the detailed 15x15 robot. `'small'` is a simpler 9x9 robot from the same traits, with touching cells, made to read at 24px. `'auto'` draws `'small'` below 40px. |
@@ -83,7 +83,7 @@ Store the user's chosen `shape` and `palette` next to their seed, and pass them 
 
 The seed is hashed (FNV-1a) into a small seeded generator (mulberry32), which picks a palette, head, eyes, mouth, top, side pieces and a few sizes. Those are drawn as roles (body, shade, screen, glow, accent) onto a 15x15 grid, mirrored down the centre column. Small avatars use a 9x9 grid drawn from the same traits. The renderer then draws each cell in the chosen shape and colours each role from the palette.
 
-Today that's 12 palettes, 7 heads, 10 eyes, 8 mouths, 7 tops, 4 side pieces, 3 shapes and a few size and on/off traits: well over 10 million distinct robots.
+Today that's 12 palettes, 7 heads, 10 eyes, 8 mouths, 7 tops, 4 side pieces, 4 shapes and a few size and on/off traits: well over 10 million distinct robots.
 
 ## Versioning
 

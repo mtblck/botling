@@ -21,7 +21,7 @@ dependencies and is MIT, art included.
 
 - `botling(seed, options)` returns an SVG string; `botlingDataUri()` the same
   as a `data:` URI. Same seed, same robot.
-- Square, circle or triangle cells; 12 palettes; 7 heads, 10 eyes, 8 mouths,
+- Square, circle, triangle or diamond cells; 12 palettes; 7 heads, 10 eyes, 8 mouths,
   7 tops, 4 side pieces.
 - Below 40px it draws a simpler 9x9 robot from the same traits, so 24px
   avatars stay readable.
