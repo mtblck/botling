@@ -1,5 +1,5 @@
 import { createRng, int, maybePick, pick } from '../../src/core/random.js';
-import type { Palette, Shape } from '../../src/styles/botling/types.js';
+import type { Palette, Shape } from '../../src/core/types.js';
 import { blob, type Canvas, createCanvas, type Kind, Role, stamp } from './art.js';
 import { COATS } from './palettes.js';
 
@@ -70,7 +70,6 @@ function draw(t: AnimalTraits): Canvas {
     t.species === 'frog'
       ? [hw - 1, hw, hw, hw, hw, hw - 1]
       : [hw - 1, hw, hw, hw, ...(t.tall ? [hw] : []), hw, hw - 1, hw - 2];
-  const bottom = top + rows.length - 1;
   const left = c.center - hw;
   blob(c, top, rows, Role.Body, Role.Shade);
   const ear = EARS[t.species];
@@ -83,7 +82,7 @@ function draw(t: AnimalTraits): Canvas {
     for (const dx of [eyeX - 1, eyeX, eyeX + 1])
       for (let y = eyeRow - 1; y <= eyeRow + 1; y++) c.mirror(dx, y, Role.Screen);
   if (t.species !== 'frog') eyes(c, t, eyeRow, eyeX);
-  face(c, t, eyeRow + 2, hw, bottom);
+  face(c, t, eyeRow + 2, hw, top + rows.length - 1);
   if (t.hasCheeks && t.species !== 'owl') c.mirror(eyeX + 1, eyeRow + 2, Role.Accent);
   extra(c, t, top, hw, eyeRow);
   return c;
