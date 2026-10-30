@@ -7,6 +7,10 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-30
+
+The robot each seed draws is now frozen for the whole of 1.x: the same seed and options draw the same picture until 2.0. [ADR 0006](https://github.com/mtblck/botling/blob/main/docs/adr/0006-what-1-0-freezes.md) lists what is frozen and what a minor version may still change, and a golden corpus of 500 seeds checks it on every change.
+
 ### Changed
 
 - Seeds are normalised to Unicode NFC before hashing, so an accented letter draws the same robot whether it was typed as one character or as a letter plus a combining accent. ASCII seeds, and any seed already in NFC (what keyboards normally produce), keep their robot.
@@ -58,6 +62,7 @@ First release.
 
 The playground site (`site/`, not part of the npm package) lets you try seeds, shapes and palettes and copy the code.
 
-[Unreleased]: https://github.com/mtblck/botling/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/mtblck/botling/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/mtblck/botling/compare/v0.2.0...v1.0.0
 [0.2.0]: https://github.com/mtblck/botling/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/mtblck/botling/releases/tag/v0.1.0
