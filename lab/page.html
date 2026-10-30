@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap">
 <style>
-/* Layout: one column on botling.me's dot grid. A seed bar, the five families side by side for that seed, then a wall per family, then the plan. */
+/* Layout: one column on botling.me's dot grid. A seed bar, the four families side by side for that seed, then a wall per family, then the plan. */
 :root {
   --paper: #f3f2f8;
   --card: #fbfbfd;
@@ -73,13 +73,13 @@ input[type="text"] {
 .seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .btn:hover, .seg button:hover { border-color: var(--accent); }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-.five { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.five { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .five figure { margin: 0; display: grid; gap: 6px; justify-items: center; text-align: center; min-width: 0; }
 .five svg { width: 100%; max-width: 140px; height: auto; }
 .five figcaption { display: grid; gap: 2px; }
 .five strong { font-family: var(--display); font-size: 17px; font-weight: 600; }
 .five span { color: var(--ink-2); font-size: 12px; font-family: var(--mono); overflow-wrap: anywhere; }
-@media (max-width: 640px) { .five { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .five { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 section.family { display: grid; gap: 12px; padding-top: 8px; border-top: 1px solid var(--rule); }
 .family-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
 .chip { font: 600 12px var(--mono); padding: 3px 8px; border-radius: 99px; border: 1px solid currentColor; }
@@ -93,15 +93,22 @@ section.family { display: grid; gap: 12px; padding-top: 8px; border-top: 1px sol
 .plan { display: grid; gap: 14px; background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 20px; }
 .plan ol, .plan ul { margin: 0; padding-left: 22px; display: grid; gap: 8px; max-width: 75ch; }
 code { font: 13.5px var(--mono); background: var(--accent-soft); padding: 1px 5px; border-radius: 5px; overflow-wrap: anywhere; }
+.names { display: grid; gap: 0; border: 1px solid var(--rule); border-radius: 10px; overflow-x: auto; }
+.name-row { display: grid; grid-template-columns: 7rem 7rem minmax(12rem, 1.4fr) minmax(10rem, 1fr); gap: 12px; padding: 10px 14px; border-top: 1px solid var(--rule); min-width: 40rem; }
+.name-row:first-child { border-top: 0; }
+.name-row.head { font: 600 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+.name-row strong { font-family: var(--display); font-size: 17px; font-weight: 600; color: var(--accent); }
+.name-row.parked { color: var(--ink-2); }
+.name-row.parked strong { color: var(--ink-2); }
 pre { margin: 0; overflow-x: auto; background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; font: 13.5px/1.5 var(--mono); }
 pre code { background: none; padding: 0; }
 </style>
 
 <main>
   <header>
-    <div class="eyebrow">Botling lab · prototype, not in the package</div>
+    <div class="eyebrow">Botling lab · prototype, not in the package · dinosaurs parked</div>
     <h1>Botling Families Lab</h1>
-    <p class="lede">Four new avatar families built the way the robots are: a seed picks traits, the traits paint a 15×15 grid with five colour roles, and the package's own cell, path and frame code draws it. Type any seed to see it as all five families. Click any avatar to make it the seed.</p>
+    <p class="lede">Three new avatar families built the way the robots are: a seed picks traits, the traits paint a 15×15 grid with five colour roles, and the package's own cell, path and frame code draws it. Type any seed to see it in every family. Click any avatar to make it the seed.</p>
   </header>
 
   <div class="bar">
@@ -134,16 +141,29 @@ pre code { background: none; padding: 0; }
 
   <div id="families"></div>
 
+  <section class="plan" aria-labelledby="names-h">
+    <h2 id="names-h">Names that fit Botling</h2>
+    <p>Botling is <em>bot</em> plus <em>-ling</em>, the old ending for something small and young (duckling, gosling). Every family can follow the same pattern: one short word for the creature, plus <em>-ling</em>. All of these names are unclaimed on npm today.</p>
+    <div class="names">
+      <div class="name-row head"><span>Family</span><span>Recommended</span><span>Why</span><span>Also considered</span></div>
+      <div class="name-row"><span>Robots</span><strong>Botling</strong><span>The original.</span><span>–</span></div>
+      <div class="name-row"><span>Animals</span><strong>Pawling</strong><span>Paws cover cats, dogs, bears and bunnies, and it sounds soft.</span><span>Critterling, Furling (a real word for rolling up a sail), Petling</span></div>
+      <div class="name-row"><span>People</span><strong>Folkling</strong><span>"Folk" is warm and plural-friendly, with no age or gender in it.</span><span>Humling, Peepling, Faceling</span></div>
+      <div class="name-row"><span>Monsters</span><strong>Gobling</strong><span>A goblin pun that already ends in -ling, and the shortest of the set.</span><span>Monsterling, Beastling, Monling</span></div>
+      <div class="name-row parked"><span>Dinosaurs</span><strong>Dinoling</strong><span>Parked with the dinosaurs for now.</span><span>Rexling</span></div>
+    </div>
+    <p>In code each name becomes the function and the import path: <code>pawling(seed)</code> from <code>botling/pawlings</code>. The playground could call the whole set "the Botlings" and switch between them with tabs.</p>
+  </section>
+
   <section class="plan" aria-labelledby="plan-h">
     <h2 id="plan-h">How families could join the package</h2>
     <p>Recommendation: one package, one shared renderer, and each family as its own entry point. Robots stay exactly as 1.x froze them.</p>
 <pre><code>import { botling } from 'botling';          // robots, unchanged
-import { animal } from 'botling/animals';   // new, opt-in
-import { person } from 'botling/people';
-import { monster } from 'botling/monsters';
-import { dino } from 'botling/dinos';
+import { pawling } from 'botling/pawlings'; // animals, new and opt-in
+import { folkling } from 'botling/folklings'; // people
+import { gobling } from 'botling/goblings';   // monsters
 
-animal('matt@botling.me', { size: 48, frame: 'circle', animate: true });</code></pre>
+pawling('matt@botling.me', { size: 48, frame: 'circle', animate: true });</code></pre>
     <ol>
       <li><strong>Subpath exports, not a <code>kind</code> option.</strong> A <code>kind</code> switch on <code>botling()</code> would pull every family's art into every bundle, and it would blur the fact that each family has its own frozen picture. Separate entry points tree-shake, and robot-only users pay nothing.</li>
       <li><strong>Not sibling npm packages, at least at first.</strong> Each would need its own releases, tags and copy of the renderer. One package keeps one release and one playground. A family could still graduate to its own package later if it gets its own brand.</li>
@@ -170,11 +190,7 @@ animal('matt@botling.me', { size: 48, frame: 'circle', animate: true });</code><
     {
       key: 'monster', kind: L.monster, title: 'Monsters', status: ['good', 'Strongest'],
       notes: 'Blob, tall, wide, ghost and box bodies with one, two or three eyes, eye stalks or tiny eyes, fangs, teeth and tongues, horns, antennae, spikes, arms and wings. Closest to the robots in spirit and colour, and they hold up in every cell shape.',
-    },
-    {
-      key: 'dino', kind: L.dino, title: 'Dinosaurs', status: ['warn', 'Promising, roughest'],
-      notes: 'Drawn in profile, the only family that is: rex, triceratops, stegosaurus, brontosaurus and pterodactyl, facing either way, with spots, eye styles and party hats, bows or crowns. Stego and rex read well. Species are hand-drawn templates, so there is less variety per species than the other families, and triceratops and pterodactyl need redrawing.',
-    },
+    }
   ];
   const robotDesc = (s) => { const t = L.robotTraits(s); return [t.head, t.eyes, t.mouth].join(' · '); };
   const state = { seed: '', shape: '', size: 72, seeds: [] };
