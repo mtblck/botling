@@ -6,7 +6,7 @@ public: true
 
 - **Status:** Accepted
 - **Date:** 2026-10-30
-- **PR:** (this PR)
+- **PR:** https://github.com/mtblck/botling/pull/47
 
 ## Context
 
