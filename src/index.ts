@@ -8,6 +8,7 @@ export { HOLIDAY_PALETTES, type Holiday } from './holidays.js';
 export { PALETTES } from './palettes.js';
 export { ACCESSORIES, EYES, HEADS, MOUTHS, PATTERNS, QUIRKS, SHAPES, SIDES, TOPS } from './parts.js';
 export { botling, botlingDataUri, resolveTraits } from './render/svg.js';
+export { randomSeed } from './seed.js';
 export { traits } from './traits.js';
 export type {
   Accessory,

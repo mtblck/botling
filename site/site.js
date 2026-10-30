@@ -1,10 +1,9 @@
 // The playground. Imports botling straight from the package build (copied to /lib by
 // scripts/site.mjs), so the page always shows what npm ships. State lives in the URL
 // hash, which never reaches the server or analytics: seeds stay in the browser.
-import { botling, botlingDataUri, HOLIDAY_PALETTES, PALETTES, resolveTraits, SHAPES } from '/lib/index.js';
+import { botling, botlingDataUri, HOLIDAY_PALETTES, PALETTES, randomSeed, resolveTraits, SHAPES } from '/lib/index.js';
 import { options as optionsFor, snippet as snippetFor } from '/snippet.js';
 import { arrival, track } from '/track.js';
-import { randomSeed } from '/words.js';
 
 const $ = (id) => document.getElementById(id);
 const DEFAULTS = { shape: 'auto', palette: 'auto', grid: 'auto', motion: 'off' };
@@ -122,7 +121,7 @@ async function copy(text, what) {
 }
 
 function gallery() {
-  const seeds = Array.from({ length: 28 }, randomSeed);
+  const seeds = Array.from({ length: 28 }, () => randomSeed());
   $('gallery').innerHTML = seeds
     .map(
       (s) =>
