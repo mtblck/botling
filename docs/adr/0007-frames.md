@@ -6,7 +6,7 @@ public: true
 
 - **Status:** Accepted
 - **Date:** 2026-10-30
-- **PR:** https://github.com/mtblck/botling/pull/TBD
+- **PR:** https://github.com/mtblck/botling/pull/46
 
 ## Context
 
