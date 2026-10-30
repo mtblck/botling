@@ -1,6 +1,6 @@
 import { type Canvas, createCanvas } from '../../src/core/canvas.js';
-import type { Palette, Shape } from '../../src/styles/botling/types.js';
-import { Role } from '../../src/styles/botling/types.js';
+import type { Palette, Shape } from '../../src/core/types.js';
+import { Role } from '../../src/core/types.js';
 
 /** One avatar family: how a seed becomes traits, a picture and colours. */
 export interface Kind<T> {

@@ -2,7 +2,7 @@ import { centreRows } from '../src/core/canvas.js';
 import { cellStyle, type Outline, outline, padding } from '../src/core/render/cell.js';
 import { framed, frameFit } from '../src/core/render/frame.js';
 import { paintAttrs, pathData } from '../src/core/render/path.js';
-import { type Frame, type Palette, Role, type Shape } from '../src/styles/botling/types.js';
+import { type Frame, type Palette, Role, type Shape } from '../src/core/types.js';
 import type { Kind } from './kinds/art.js';
 
 /** Options for {@link renderKind}. */
