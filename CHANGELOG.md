@@ -7,6 +7,13 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-30
+
+### Added
+
+- A `frame` option draws the background as a `'square'` (the default, unchanged), `'rounded'`, `'squircle'` or `'circle'`, with transparent corners. A circle crops the robot, a squircle draws it at 92% so wide shoulders fit, and the grid keeps only the whole cells inside the frame. `FRAMES` lists them. Without `frame`, every robot draws exactly as before.
+- The playground has a Frame control, and its robots now show the frame they're drawn with instead of a rounded corner added by the page.
+
 ## [1.1.0] - 2026-10-30
 
 ### Added
@@ -69,7 +76,8 @@ First release.
 
 The playground site (`site/`, not part of the npm package) lets you try seeds, shapes and palettes and copy the code.
 
-[Unreleased]: https://github.com/mtblck/botling/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/mtblck/botling/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/mtblck/botling/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/mtblck/botling/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/mtblck/botling/compare/v0.2.0...v1.0.0
 [0.2.0]: https://github.com/mtblck/botling/compare/v0.1.0...v0.2.0

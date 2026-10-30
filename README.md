@@ -63,11 +63,29 @@ There are 400,000 of these seeds, so two people can get the same one. To give ev
 | `size` | `number` | `96` | Width and height in pixels. The SVG scales cleanly to any size. |
 | `detail` | `'auto' \| 'full' \| 'small'` | `'auto'` | `'full'` is the detailed 15x15 robot. `'small'` is a simpler 9x9 robot from the same traits, with touching cells, made to read at 24px. `'auto'` draws `'small'` below 40px. |
 | `showGrid` | `boolean \| 'auto'` | `'auto'` | Draw the empty grid cells. `'auto'` draws them from 40px up; below that they read as noise. The small robot never draws them. |
-| `background` | `boolean` | `true` | Draw the palette's background square. |
+| `frame` | `'square' \| 'rounded' \| 'squircle' \| 'circle'` | `'square'` | The outline of the background. See [Frames](#frames). |
+| `background` | `boolean` | `true` | Draw the palette's background. |
 | `title` | `string \| null` | `'Robot avatar'` | Accessible name. `null` marks the image decorative (`aria-hidden`). |
 | `animate` | `boolean` | `false` | The robot hovers, blinks and talks, its top piece wobbles, its ears twitch and a scanline sweeps its screen. Below 40px it only blinks and hovers. See [Animation](#animation). |
 
 Bad options (an unknown shape, an out-of-range palette, a palette colour that isn't hex, a size of 0) throw a `RangeError` rather than drawing nothing.
+
+### Frames
+
+```ts
+botling(user.id, { frame: 'circle' });
+```
+
+`frame` sets the outline of the background. Outside it the image is transparent, so a round avatar sits on any page colour without CSS.
+
+- **`'square'`** (the default) fills the image, as every robot did before frames.
+- **`'rounded'`** has corners a fifth of its width round. The robot keeps its size; the small robot can lose a sliver of a shoulder at the corners.
+- **`'squircle'`** is a smooth app-icon curve. Wide shoulders reach into the corners it cuts, so the robot draws at 92% to fit, the same for every seed so a list of avatars lines up.
+- **`'circle'`** crops the robot to a circle at full size. Shoulders run off the edge like a portrait, and so can the tips of the widest antennas and ears.
+
+The grid behind the robot keeps only whole cells inside the frame, so its edge steps round the curve, and in a squircle it fills the room the smaller robot leaves. `FRAMES` lists the four, for a picker. A seed never picks a frame, so store the one a user chooses with their seed.
+
+Every frame but `'square'` clips with a `<clipPath>`. Its id names the frame and its size (`botling-circle-500-16000`), so robots inlined on one page share identical clip paths instead of clashing. In an `<img>` or a `data:` URI each robot is its own document, so ids never meet.
 
 ### Animation
 
@@ -114,7 +132,7 @@ const options = SHAPES.flatMap((shape) => PALETTES.map((_, palette) => botling(u
 traits(user.id); // { head: 'tv', eyes: 'visor', mouth: 'grille', top: 'antenna', ... }
 ```
 
-Store the user's chosen `shape` and `palette` next to their seed, and pass them back in.
+Store the user's chosen `shape`, `palette` and `frame` next to their seed, and pass them back in. `FRAMES` lists the frames, as `SHAPES` lists the cells.
 
 ### Advanced
 

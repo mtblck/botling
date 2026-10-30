@@ -5,6 +5,7 @@ import { traits } from '../traits.js';
 import { type BotlingOptions, type Detail, type Palette, Role, type Traits } from '../types.js';
 import { animation } from './animate.js';
 import { cellStyle, type Outline, outline, padding } from './cell.js';
+import { FRAMES, framed, frameFit } from './frame.js';
 import { paintAttrs, pathData } from './path.js';
 
 /**
@@ -105,12 +106,18 @@ export function botling(seed: string, opts: BotlingOptions = {}): string {
   if (opts.animate !== undefined && typeof opts.animate !== 'boolean') {
     throw new RangeError('botling: animate must be true or false');
   }
+  const frame = opts.frame ?? 'square';
+  if (!FRAMES.includes(frame)) throw new RangeError(`botling: unknown frame "${String(frame)}"`);
 
   // One path per colour keeps the picture (cells don't overlap, bar the
   // hairline bleed on solid cells) and saves an element per cell. Animated,
   // the grid and each moving class get paths of their own.
   const c = isSmall ? drawSmallGrid(t) : drawGrid(t);
   const n = isSmall ? SMALL_GRID_SIZE : GRID_SIZE;
+  const pad = padding(t.shape);
+  const fit = frameFit(frame, t.shape, n, pad);
+  // A shrunk robot leaves room in its frame, which the grid fills past its 15x15.
+  const reach = showGrid ? fit.reach : 0;
   const anim = opts.animate ? animation(seed, t, isSmall) : null;
   const GRID = anim ? 'grid' : '';
   const groups = new Map<string, Map<string, Outline[]>>([
@@ -124,10 +131,10 @@ export function botling(seed: string, opts: BotlingOptions = {}): string {
     outlines.push(cell);
     byColour.set(fill, outlines);
   };
-  for (let y = 0; y < n; y++) {
-    for (let x = 0; x < n; x++) {
+  for (let y = -reach; y < n + reach; y++) {
+    for (let x = -reach; x < n + reach; x++) {
       const role = c.cells[y]?.[x] ?? Role.Empty;
-      if (role === Role.Empty && !showGrid) continue;
+      if (role === Role.Empty && !(showGrid && fit.holds(x, y))) continue;
       const fill = role === Role.Empty ? p.grid : colours[role];
       const part = c.parts[y]?.[x] ?? null;
       const cell = outline(t.shape, x, y, isSmall);
@@ -154,14 +161,12 @@ export function botling(seed: string, opts: BotlingOptions = {}): string {
   let cells = (GRID ? paths(GRID) : '') + robot;
   if (style.attrs && cells) cells = `<g ${style.attrs}>${cells}</g>`;
 
-  const pad = padding(t.shape);
   const span = n + 2 * pad;
   const title = opts.title === undefined ? 'Robot avatar' : opts.title;
   const a11y = title === null ? 'aria-hidden="true"' : `role="img" aria-label="${escapeXml(title)}"`;
-  const bg =
-    opts.background === false ? '' : `<rect x="${-pad}" y="${-pad}" width="${span}" height="${span}" fill="${p.bg}"/>`;
   const css = anim?.css(moving) ?? '';
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-pad} ${-pad} ${span} ${span}" width="${size}" height="${size}" ${a11y}>${css}${bg}${cells}</svg>`;
+  const body = framed(frame, fit, n, pad, opts.background === false ? null : p.bg, cells);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-pad} ${-pad} ${span} ${span}" width="${size}" height="${size}" ${a11y}>${css}${body}</svg>`;
 }
 
 /**

@@ -1,6 +1,9 @@
 /** The cell shape a robot is drawn with. */
 export type Shape = 'square' | 'circle' | 'triangle' | 'diamond';
 
+/** The outline of the background a robot sits in. See {@link BotlingOptions.frame}. */
+export type Frame = 'square' | 'rounded' | 'squircle' | 'circle';
+
 /** How much detail a robot is drawn with. See {@link BotlingOptions.detail}. */
 export type Detail = 'auto' | 'full' | 'small';
 
@@ -123,8 +126,16 @@ export interface BotlingOptions {
    * reads at 24px. `'auto'` (the default) picks `'small'` below 40px.
    */
   detail?: Detail;
-  /** Draw the background square. Defaults to true. */
+  /** Draw the background. Defaults to true. */
   background?: boolean;
+  /**
+   * The outline of the background. `'square'` (the default) fills the image.
+   * `'rounded'` has corners a fifth of its width, `'squircle'` is a smooth
+   * app-icon curve with the robot drawn a little smaller to fit, and
+   * `'circle'` crops the robot to a circle, shoulders and all. The corners
+   * outside the frame are transparent, and the grid keeps only whole cells.
+   */
+  frame?: Frame;
   /** Width and height in pixels. Defaults to 96. */
   size?: number;
   /** Accessible name. Defaults to "Robot avatar". Pass `null` to mark the image decorative. */

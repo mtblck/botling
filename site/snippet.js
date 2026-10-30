@@ -5,7 +5,7 @@
 /**
  * Options for botling() from the playground state, leaving out anything on auto.
  *
- * @param {{ shape: string, palette: string, grid: string, motion?: string }} state - The playground's choices
+ * @param {{ shape: string, frame?: string, palette: string, grid: string, motion?: string }} state - The playground's choices
  * @param {object} [extra] - Options to add, such as size
  * @param {Record<string, object>} [holidays] - HOLIDAY_PALETTES, to look holiday keys up in
  * @returns {object} botling() options
@@ -13,6 +13,7 @@
 export function options(state, extra = {}, holidays = {}) {
   const o = { ...extra };
   if (state.shape !== 'auto') o.shape = state.shape;
+  if (state.frame && state.frame !== 'square') o.frame = state.frame;
   if (isHoliday(state.palette)) {
     if (holidays[state.palette]) o.palette = holidays[state.palette];
   } else if (state.palette !== 'auto') o.palette = Number(state.palette);
@@ -24,14 +25,15 @@ export function options(state, extra = {}, holidays = {}) {
 /**
  * The call a developer would write for the robot on screen.
  *
- * @param {{ seed: string, shape: string, palette: string, grid: string, motion?: string }} state - The playground's choices
+ * @param {{ seed: string, shape: string, frame?: string, palette: string, grid: string, motion?: string }} state - The playground's choices
  * @returns {string} A botling(...) call in single-quoted JavaScript
  */
 export function snippet(state) {
-  const args = Object.entries(options(state)).map(([k, v]) => `${k}: ${JSON.stringify(v).replaceAll('"', "'")}`);
+  const opts = options(state);
+  const args = Object.entries(opts).map(([k, v]) => `${k}: ${JSON.stringify(v).replaceAll('"', "'")}`);
   // The object would print as a wall of hex; name it the way a developer would.
   if (isHoliday(state.palette))
-    args.splice(state.shape === 'auto' ? 0 : 1, 0, `palette: HOLIDAY_PALETTES.${state.palette}`);
+    args.splice(Number('shape' in opts) + Number('frame' in opts), 0, `palette: HOLIDAY_PALETTES.${state.palette}`);
   const seed = JSON.stringify(state.seed).replaceAll("'", "\\'").replace(/^"|"$/g, "'");
   return `botling(${seed}${args.length ? `, { ${args.join(', ')} }` : ''})`;
 }
