@@ -113,3 +113,30 @@ export function outline(shape: Shape, x: number, y: number, isSolid = false): Ou
 export function padding(shape: Shape): number {
   return shape === 'triangle' ? 0.8 : 0.5;
 }
+
+/**
+ * Points on the edge of a gapped cell as drawn, in thousandths: enough to
+ * tell whether the whole cell fits inside a convex frame. Round dots and the
+ * rounded corners of squares are tested at their compass and diagonal points.
+ *
+ * @param shape - Cell shape
+ * @param x - Column
+ * @param y - Row
+ * @returns Points on the cell's drawn edge
+ */
+export function edge(shape: Shape, x: number, y: number): Outline {
+  if (shape === 'triangle' || shape === 'diamond') return outline(shape, x, y);
+  // A circle is a dot of CIRCLE_RADIUS; a square is a box inset by SQUARE_INSET with SQUARE_RADIUS corners.
+  const r = shape === 'circle' ? CIRCLE_RADIUS : SQUARE_RADIUS;
+  const half = shape === 'circle' ? 0 : 0.5 - SQUARE_INSET - SQUARE_RADIUS;
+  const d = r * Math.SQRT1_2;
+  const out: Point[] = [];
+  for (const sx of [-1, 1]) {
+    for (const sy of [-1, 1]) {
+      const cx = x + 0.5 + sx * half;
+      const cy = y + 0.5 + sy * half;
+      out.push(pt(cx + sx * r, cy), pt(cx, cy + sy * r), pt(cx + sx * d, cy + sy * d));
+    }
+  }
+  return out;
+}

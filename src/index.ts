@@ -7,6 +7,7 @@ export { CENTER, GRID_SIZE, grid, SMALL_GRID_SIZE, smallGrid } from './grid/inde
 export { HOLIDAY_PALETTES, type Holiday } from './holidays.js';
 export { PALETTES } from './palettes.js';
 export { ACCESSORIES, EYES, HEADS, MOUTHS, PATTERNS, QUIRKS, SHAPES, SIDES, TOPS } from './parts.js';
+export { FRAMES } from './render/frame.js';
 export { botling, botlingDataUri, resolveTraits } from './render/svg.js';
 export { randomSeed } from './seed.js';
 export { traits } from './traits.js';
@@ -15,6 +16,7 @@ export type {
   BotlingOptions,
   Detail,
   Eyes,
+  Frame,
   Head,
   Mouth,
   Palette,

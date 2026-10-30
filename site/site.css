@@ -283,8 +283,8 @@ input[type="text"]:focus-visible {
   display: block;
   width: min(240px, 60vw);
   height: auto;
-  border-radius: 24px;
-  box-shadow: 0 10px 30px rgb(23 21 31 / 0.18);
+  /* A drop shadow follows the frame, where a box shadow would stay square. */
+  filter: drop-shadow(0 10px 15px rgb(23 21 31 / 0.18));
 }
 .sizes {
   list-style: none;
@@ -304,7 +304,6 @@ input[type="text"]:focus-visible {
 .sizes svg,
 .sizes img {
   display: block;
-  border-radius: 50%;
 }
 .note {
   margin: 0;

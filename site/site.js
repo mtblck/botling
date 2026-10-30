@@ -1,12 +1,21 @@
 // The playground. Imports botling straight from the package build (copied to /lib by
 // scripts/site.mjs), so the page always shows what npm ships. State lives in the URL
 // hash, which never reaches the server or analytics: seeds stay in the browser.
-import { botling, botlingDataUri, HOLIDAY_PALETTES, PALETTES, randomSeed, resolveTraits, SHAPES } from '/lib/index.js';
+import {
+  botling,
+  botlingDataUri,
+  FRAMES,
+  HOLIDAY_PALETTES,
+  PALETTES,
+  randomSeed,
+  resolveTraits,
+  SHAPES,
+} from '/lib/index.js';
 import { options as optionsFor, snippet as snippetFor } from '/snippet.js';
 import { arrival, track } from '/track.js';
 
 const $ = (id) => document.getElementById(id);
-const DEFAULTS = { shape: 'auto', palette: 'auto', grid: 'auto', motion: 'off' };
+const DEFAULTS = { shape: 'auto', frame: 'square', palette: 'auto', grid: 'auto', motion: 'off' };
 const KEYS = Object.keys(DEFAULTS);
 const state = { seed: '', ...DEFAULTS };
 
@@ -20,7 +29,8 @@ const ACCESSORY_NAMES = { headphones: 'headphones', visor: 'a visor band', bow: 
 function describe() {
   const t = resolveTraits(state.seed, options());
   const palette = HOLIDAY_PALETTES[state.palette] ?? PALETTES[t.palette];
-  const parts = [`${t.shape} cells`, `${palette.name} palette`, `${t.head} head`, `${t.eyes} eyes`];
+  const framing = state.frame === 'square' ? [] : [`in a ${state.frame} frame`];
+  const parts = [`${t.shape} cells`, ...framing, `${palette.name} palette`, `${t.head} head`, `${t.eyes} eyes`];
   if (t.mouth !== 'none') parts.push(`${t.mouth === 'o' ? 'O-shaped' : t.mouth} mouth`);
   // Matches slots() in the package: these accessories and an off-side antenna take the top piece's place.
   const isTopCovered = ['headphones', 'bow', 'cap'].includes(t.accessory) || t.quirk === 'antenna';
@@ -84,7 +94,13 @@ function swatch(p) {
   return `<i class="sw" aria-hidden="true"><b data-c="${p.bg}"></b><b data-c="${p.body}"></b><b data-c="${p.glow}"></b><b data-c="${p.accent}"></b></i>`;
 }
 
-radios($('shapes'), 'shape', [['auto', 'Seed picks'], ...SHAPES.map((s) => [s, s[0].toUpperCase() + s.slice(1)])]);
+const title = (s) => s[0].toUpperCase() + s.slice(1);
+radios($('shapes'), 'shape', [['auto', 'Seed picks'], ...SHAPES.map((s) => [s, title(s)])]);
+radios(
+  $('frames'),
+  'frame',
+  FRAMES.map((f) => [f, title(f)]),
+);
 radios($('palettes'), 'palette', [['auto', 'Seed picks'], ...PALETTES.map((p, i) => [String(i), p.name, swatch(p)])]);
 // Same radio name as the palettes above, so picking a holiday clears an everyday palette.
 radios(

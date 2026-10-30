@@ -24,6 +24,13 @@ describe('playground snippet', () => {
     },
   );
 
+  it('copies the frame unless it is the default square', () => {
+    expect(snippet({ seed: 'abc', ...auto, frame: 'square' })).toBe("botling('abc')");
+    const state: PlaygroundState = { seed: 'abc', ...auto, shape: 'diamond', frame: 'circle' };
+    expect(snippet(state)).toBe("botling('abc', { shape: 'diamond', frame: 'circle' })");
+    expect(run(snippet(state))).toBe(botling('abc', options(state)));
+  });
+
   it('copies animate: true only when the robot is animated', () => {
     expect(snippet({ seed: 'abc', ...auto, motion: 'on' })).toBe("botling('abc', { animate: true })");
     expect(snippet({ seed: 'abc', ...auto, motion: 'off' })).toBe("botling('abc')");
@@ -32,8 +39,12 @@ describe('playground snippet', () => {
 
 describe('playground holiday palettes', () => {
   it.each(Object.keys(HOLIDAY_PALETTES))('copies code for %s that draws the robot on screen', (holiday) => {
-    for (const shape of ['auto', 'circle']) {
-      const state: PlaygroundState = { seed: 'mtblck', shape, palette: holiday, grid: 'auto' };
+    for (const [shape, frame] of [
+      ['auto', 'square'],
+      ['circle', 'squircle'],
+      ['auto', 'circle'],
+    ] as const) {
+      const state: PlaygroundState = { seed: 'mtblck', shape, frame, palette: holiday, grid: 'auto' };
       const code = snippet(state);
       expect(code).toContain(`palette: HOLIDAY_PALETTES.${holiday}`);
       expect(run(code)).toBe(botling('mtblck', options(state, {}, HOLIDAY_PALETTES)));
