@@ -11,7 +11,7 @@ Try it at **[botling.me](https://botling.me)**.
 - **Small and self-contained.** Zero dependencies, returns an SVG string, no network requests, works in the browser, Node and edge runtimes.
 - **MIT licensed**, art included.
 
-> Status: pre-release (0.x). The art is still being tuned, so robots may change between 0.x versions. From 1.0, the robot a seed draws only changes in a major version.
+> Stable since 1.0: the robot a seed draws only changes in a major version. See [Versioning](#versioning).
 
 ## Install
 

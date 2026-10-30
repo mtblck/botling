@@ -34,6 +34,6 @@ dependencies and is MIT, art included.
 
 ## Where it's going
 
-- 0.1.0 is on npm; 0.2.0 adds animation. 1.0 freezes every seed's robot
-  (ADR 0006), after a last contrast pass on the palettes. Then BotCollector
-  profiles use it as the default avatar, with a picker.
+- 1.0 freezes every seed's robot (ADR 0006), after a last contrast pass on
+  the palettes. Next, BotCollector profiles use it as the default avatar,
+  with a picker.
