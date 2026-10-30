@@ -1,5 +1,5 @@
+import { type Canvas, CENTER, tagged } from '../../../core/canvas.js';
 import { Role, type Traits } from '../types.js';
-import { type Canvas, CENTER, tagged } from './canvas.js';
 import type { Layout } from './layout.js';
 
 /** Cell offsets from an eye's centre, as [columns outward, rows down]. */

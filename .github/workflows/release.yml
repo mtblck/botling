@@ -4,8 +4,8 @@ name: Release
 # the GitHub release from that version's CHANGELOG section. npm trusted
 # publishing: npm accepts this workflow's OIDC token instead of a stored token,
 # and adds a provenance statement linking the package to this commit.
-# One-time setup on npmjs.com, once the package exists: botling -> Settings ->
-# Trusted publishers -> GitHub Actions, repository mtblck/botling, workflow
+# One-time setup on npmjs.com, once the package exists: seedkin -> Settings ->
+# Trusted publishers -> GitHub Actions, repository mtblck/seedkin, workflow
 # release.yml. CONTRIBUTING.md has the release steps.
 on:
   push:

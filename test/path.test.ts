@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { num, paintAttrs, pathData } from '../src/render/path.js';
+import { num, paintAttrs, pathData } from '../src/core/render/path.js';
 
 describe('num', () => {
   it('writes the shortest decimal', () => {

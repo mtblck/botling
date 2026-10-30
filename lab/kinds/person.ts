@@ -1,5 +1,5 @@
-import { createRng, int, maybePick, pick } from '../../src/random.js';
-import type { Palette, Shape } from '../../src/types.js';
+import { createRng, int, maybePick, pick } from '../../src/core/random.js';
+import type { Palette, Shape } from '../../src/styles/botling/types.js';
 import { blob, type Canvas, createCanvas, type Kind, Role } from './art.js';
 import { HAIR, OUTFITS, SKIN } from './palettes.js';
 import { drawHair, HAIRS, TOP } from './person-hair.js';

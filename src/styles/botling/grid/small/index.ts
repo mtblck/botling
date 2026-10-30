@@ -1,5 +1,5 @@
+import { type Canvas, centreRows, createCanvas, SMALL_GRID_SIZE, tagged } from '../../../../core/canvas.js';
 import type { RoleGrid, Traits } from '../../types.js';
-import { type Canvas, centreRows, createCanvas, SMALL_GRID_SIZE, tagged } from '../canvas.js';
 import { drawSmallDetails } from './details.js';
 import { drawSmallExtras } from './extras.js';
 import { drawSmallEyes, drawSmallMouth } from './face.js';

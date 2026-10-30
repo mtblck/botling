@@ -1,5 +1,5 @@
-import { createRng, maybePick, pick } from '../../src/random.js';
-import type { Palette, Shape } from '../../src/types.js';
+import { createRng, maybePick, pick } from '../../src/core/random.js';
+import type { Palette, Shape } from '../../src/styles/botling/types.js';
 import { type Canvas, createCanvas, type Kind, Role, stamp } from './art.js';
 import { SCALES } from './palettes.js';
 

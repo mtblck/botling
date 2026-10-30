@@ -1,5 +1,5 @@
+import { type Canvas, centreRows, createCanvas, tagged } from '../../../core/canvas.js';
 import type { RoleGrid, Traits } from '../types.js';
-import { type Canvas, centreRows, createCanvas, tagged } from './canvas.js';
 import { drawAccessory, drawChestLight, drawPattern, drawQuirk } from './details.js';
 import { drawShoulders, drawSides, drawTop } from './extras.js';
 import { drawEyes, drawMouth } from './face.js';
@@ -7,7 +7,7 @@ import { drawHead } from './head.js';
 import { layout } from './layout.js';
 import { slots } from './slots.js';
 
-export { CENTER, GRID_SIZE, type Part, SMALL_GRID_SIZE } from './canvas.js';
+export { CENTER, GRID_SIZE, type Part, SMALL_GRID_SIZE } from '../../../core/canvas.js';
 export { drawSmallGrid, smallGrid } from './small/index.js';
 
 /**

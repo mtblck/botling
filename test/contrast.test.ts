@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { HOLIDAY_PALETTES, PALETTES, type Palette } from '../src/index.js';
+import { HOLIDAY_PALETTES, PALETTES, type Palette } from '../src/styles/botling/index.js';
 
 /** WCAG relative luminance of a #rrggbb colour. */
 function luminance(hex: string): number {

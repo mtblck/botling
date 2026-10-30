@@ -1,46 +1,7 @@
-/** The cell shape a robot is drawn with. */
-export type Shape = 'square' | 'circle' | 'triangle' | 'diamond';
+import type { Detail, Frame, Palette, Shape } from '../../core/types.js';
 
-/** The outline of the background a robot sits in. See {@link BotlingOptions.frame}. */
-export type Frame = 'square' | 'rounded' | 'squircle' | 'circle';
-
-/** How much detail a robot is drawn with. See {@link BotlingOptions.detail}. */
-export type Detail = 'auto' | 'full' | 'small';
-
-/**
- * What a grid cell is part of. Each role maps to one palette colour, so a
- * palette can restyle a robot without touching its layout.
- */
-export const Role = {
-  Empty: 0,
-  Body: 1,
-  Screen: 2,
-  Glow: 3,
-  Accent: 4,
-  Shade: 5,
-} as const;
-export type Role = (typeof Role)[keyof typeof Role];
-
-/** A grid of roles, indexed `[row][column]`. */
-export type RoleGrid = Role[][];
-
-/** The colours one robot is painted with. All values are CSS colours. */
-export interface Palette {
-  name: string;
-  /** Square behind the robot. */
-  bg: string;
-  /** Empty grid cells, when the grid is shown. */
-  grid: string;
-  body: string;
-  /** Body edge, ears and neck. */
-  shade: string;
-  /** Face screen behind the eyes and mouth. */
-  screen: string;
-  /** Eyes and mouth on a screen. */
-  glow: string;
-  /** Antenna tips, bolts, cheeks and other details. */
-  accent: string;
-}
+export type { Detail, Frame, Palette, RoleGrid, Shape } from '../../core/types.js';
+export { Role } from '../../core/types.js';
 
 /** Every choice that makes up one robot. */
 export interface Traits {

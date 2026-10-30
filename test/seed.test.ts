@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { botling, randomSeed } from '../src/index.js';
+import { botling, randomSeed } from '../src/styles/botling/index.js';
 
 describe('randomSeed', () => {
   it('reads as adjective-noun-number', () => {

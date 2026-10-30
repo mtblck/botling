@@ -14,7 +14,7 @@ if (!fs.existsSync(path.join(dist, 'index.js'))) throw new Error('Run npm run bu
 fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(path.join(out, 'fonts'), { recursive: true });
 
-const lib = await import(path.join(dist, 'index.js'));
+const lib = await import(path.join(dist, 'styles/botling/index.js'));
 const { botling, PALETTES } = lib;
 // The mark and favicon are a botling: this seed, square cells, Ice palette.
 const LOGO_SEED = 'jolly-sprocket-65';

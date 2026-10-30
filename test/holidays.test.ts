@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { botling, HOLIDAY_PALETTES, PALETTES, resolveTraits } from '../src/index.js';
-import type { Palette } from '../src/types.js';
+import { botling, HOLIDAY_PALETTES, PALETTES, resolveTraits } from '../src/styles/botling/index.js';
+import type { Palette } from '../src/styles/botling/types.js';
 
 const holidays = Object.entries(HOLIDAY_PALETTES);
 const fills = (svg: string): Set<string> => new Set([...svg.matchAll(/fill="([^"]+)"/g)].map((m) => m[1] as string));

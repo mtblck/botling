@@ -1,12 +1,12 @@
-import { drawGrid, drawSmallGrid, GRID_SIZE, SMALL_GRID_SIZE } from '../grid/index.js';
-import { PALETTES } from '../palettes.js';
-import { SHAPES } from '../parts.js';
-import { traits } from '../traits.js';
-import { type BotlingOptions, type Detail, type Palette, Role, type Traits } from '../types.js';
+import { cellStyle, type Outline, outline, padding } from '../../core/render/cell.js';
+import { FRAMES, framed, frameFit } from '../../core/render/frame.js';
+import { paintAttrs, pathData } from '../../core/render/path.js';
 import { animation } from './animate.js';
-import { cellStyle, type Outline, outline, padding } from './cell.js';
-import { FRAMES, framed, frameFit } from './frame.js';
-import { paintAttrs, pathData } from './path.js';
+import { drawGrid, drawSmallGrid, GRID_SIZE, SMALL_GRID_SIZE } from './grid/index.js';
+import { PALETTES } from './palettes.js';
+import { SHAPES } from './parts.js';
+import { traits } from './traits.js';
+import { type BotlingOptions, type Detail, type Palette, Role, type Traits } from './types.js';
 
 /**
  * Below this size the 15x15 robot reads as noise, so `detail: 'auto'` draws

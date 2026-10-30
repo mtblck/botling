@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { drawGrid, drawSmallGrid } from '../src/grid/index.js';
-import { botling, CENTER, type Eyes, PALETTES, Role, SHAPES, traits } from '../src/index.js';
+import { drawGrid, drawSmallGrid } from '../src/styles/botling/grid/index.js';
+import { botling, CENTER, type Eyes, PALETTES, Role, SHAPES, traits } from '../src/styles/botling/index.js';
 
 /**
  * The colour seen at each cell when nothing moves: walks every path in paint

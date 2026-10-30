@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { drawGrid, drawSmallGrid } from '../src/grid/index.js';
+import { drawGrid, drawSmallGrid } from '../src/styles/botling/grid/index.js';
 import {
   CENTER,
   EYES,
@@ -16,7 +16,7 @@ import {
   TOPS,
   type Traits,
   traits,
-} from '../src/index.js';
+} from '../src/styles/botling/index.js';
 
 const count = (g: RoleT[][], role: RoleT): number => g.flat().filter((r) => r === role).length;
 

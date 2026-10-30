@@ -3,7 +3,7 @@
  * Usage: npm run hero
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { botling, SHAPES } from '../src/index.js';
+import { botling, SHAPES } from '../src/styles/botling/index.js';
 
 const SIZE = 72;
 const GAP = 12;

@@ -1,5 +1,5 @@
+import { type Canvas, GRID_SIZE } from '../../../core/canvas.js';
 import { Role, type Traits } from '../types.js';
-import { type Canvas, GRID_SIZE } from './canvas.js';
 import type { Layout } from './layout.js';
 
 /**

@@ -1,31 +1,12 @@
 /**
- * botling: seeded robot avatars drawn on a grid of squares, circles, triangles or diamonds.
+ * seedkin: a family of seeded pixel avatars drawn on a grid of squares,
+ * circles, triangles or diamonds. Each style has its own entry point, such as
+ * `seedkin/botling`; this one holds what they share.
  *
  * @packageDocumentation
  */
-export { CENTER, GRID_SIZE, grid, SMALL_GRID_SIZE, smallGrid } from './grid/index.js';
-export { HOLIDAY_PALETTES, type Holiday } from './holidays.js';
-export { PALETTES } from './palettes.js';
-export { ACCESSORIES, EYES, HEADS, MOUTHS, PATTERNS, QUIRKS, SHAPES, SIDES, TOPS } from './parts.js';
-export { FRAMES } from './render/frame.js';
-export { botling, botlingDataUri, resolveTraits } from './render/svg.js';
-export { randomSeed } from './seed.js';
-export { traits } from './traits.js';
-export type {
-  Accessory,
-  BotlingOptions,
-  Detail,
-  Eyes,
-  Frame,
-  Head,
-  Mouth,
-  Palette,
-  Pattern,
-  Quirk,
-  RoleGrid,
-  Shape,
-  Sides,
-  Top,
-  Traits,
-} from './types.js';
-export { Role } from './types.js';
+export { CENTER, GRID_SIZE, SMALL_GRID_SIZE } from './core/canvas.js';
+export { FRAMES } from './core/render/frame.js';
+export { randomSeed } from './core/seed.js';
+export type { Detail, Frame, Palette, RoleGrid, Shape } from './core/types.js';
+export { Role } from './core/types.js';

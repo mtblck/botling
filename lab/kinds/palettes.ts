@@ -1,4 +1,4 @@
-import type { Palette } from '../../src/types.js';
+import type { Palette } from '../../src/styles/botling/types.js';
 
 const p = (name: string, ...c: [string, string, string, string, string, string, string]): Palette => {
   const [bg, grid, body, shade, screen, glow, accent] = c;

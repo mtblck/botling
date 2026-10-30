@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { botling, FRAMES, grid, SHAPES, smallGrid, traits } from '../src/index.js';
-import { outline, padding } from '../src/render/cell.js';
-import { contains, frameFit } from '../src/render/frame.js';
-import type { Shape } from '../src/types.js';
+import { outline, padding } from '../src/core/render/cell.js';
+import { contains, frameFit } from '../src/core/render/frame.js';
+import { botling, FRAMES, grid, SHAPES, smallGrid, traits } from '../src/styles/botling/index.js';
+import type { Shape } from '../src/styles/botling/types.js';
 
 /** Corners that bound a drawn robot cell, in grid units: its box, and a triangle's or diamond's overhang. */
 const bounds = (shape: Shape, x: number, y: number, isSmall: boolean): [number, number][] => [

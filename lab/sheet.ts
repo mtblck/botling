@@ -3,7 +3,7 @@
  * the art. Usage: npx tsx lab/sheet.ts out.html [count]
  */
 import { writeFileSync } from 'node:fs';
-import { botling } from '../src/index.js';
+import { botling } from '../src/styles/botling/index.js';
 import { animal } from './kinds/animal.js';
 import type { Kind } from './kinds/art.js';
 import { dino } from './kinds/dino.js';

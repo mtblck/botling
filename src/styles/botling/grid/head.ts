@@ -1,5 +1,5 @@
+import type { Canvas } from '../../../core/canvas.js';
 import { Role, type Traits } from '../types.js';
-import type { Canvas } from './canvas.js';
 import type { Layout } from './layout.js';
 
 /** Rounded and capsule heads on circle cells, drawn as circles. */

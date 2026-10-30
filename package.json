@@ -1,22 +1,24 @@
 {
-  "name": "botling",
-  "version": "1.2.0",
-  "description": "Seeded robot avatars drawn on a grid of squares, circles or triangles. Zero dependencies, SVG output.",
+  "name": "seedkin",
+  "version": "1.0.0",
+  "description": "Seedkin: a family of seeded pixel avatars (robots first) drawn as SVG. Zero dependencies.",
   "keywords": [
     "avatar",
     "robot",
     "identicon",
     "svg",
     "generator",
-    "pixel-art"
+    "pixel-art",
+    "seedkin",
+    "botling"
   ],
   "license": "MIT",
   "author": "Matt Black (https://mattblack.space)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mtblck/botling.git"
+    "url": "git+https://github.com/mtblck/seedkin.git"
   },
-  "bugs": "https://github.com/mtblck/botling/issues",
+  "bugs": "https://github.com/mtblck/seedkin/issues",
   "funding": "https://ko-fi.com/mtblck",
   "homepage": "https://botling.me",
   "type": "module",
@@ -25,6 +27,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./botling": {
+      "types": "./dist/styles/botling/index.d.ts",
+      "default": "./dist/styles/botling/index.js"
     },
     "./package.json": "./package.json"
   },

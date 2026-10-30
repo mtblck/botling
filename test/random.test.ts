@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createRng, hash, int, maybePick, pick } from '../src/random.js';
+import { createRng, hash, int, maybePick, pick } from '../src/core/random.js';
 
 describe('hash', () => {
   it('matches the FNV-1a reference values', () => {

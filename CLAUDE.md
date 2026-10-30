@@ -1,8 +1,12 @@
-# botling
+# seedkin
 
-Seeded robot avatars as SVG: zero runtime dependencies, ESM only, TypeScript, MIT,
-published to npm as `botling`. Public repo `mtblck/botling`; the playground site is
-`site/`. README has the API and design notes; `docs/overview.md` the why.
+A family of seeded pixel avatars as SVG: zero runtime dependencies, ESM only,
+TypeScript, MIT. The npm package is `seedkin` (not yet published), with one
+entry point per style; Botling (robots, `seedkin/botling`) is the first, and the
+old `botling` package stays frozen at 1.2.0 on npm. Public repo `mtblck/seedkin`
+(renamed from `mtblck/botling`); the playground site is `site/`. Shared code is
+in `src/core/`, each style in `src/styles/<name>/` (ADR 0009); prototypes of new
+styles are in `lab/`. README has the API and design notes; `docs/overview.md` the why.
 
 ## Commands
 
@@ -22,7 +26,7 @@ session. Marking it ready also triggers `.github/workflows/claude-review.yml`.
   a major version. Anything that changes an existing seed's robot (trait draw order, the
   order or length of a parts or palette list, palette colours, part drawing, cell
   geometry) is a major change; the snapshot tests catch it.
-- **Below 40px, the simpler 9x9 robot** (`src/grid/small/`) from the same traits, chosen
+- **Below 40px, the simpler 9x9 robot** (`src/styles/botling/grid/small/`) from the same traits, chosen
   by Matt from side-by-side options, so 24px avatars keep a face.
 - **Zero runtime dependencies**, no requests, no globals: the output is a string.
 - **Playground:** plain HTML/CSS/JS in `site/`, built by `scripts/site.mjs` into
