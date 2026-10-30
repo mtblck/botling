@@ -66,6 +66,8 @@ function platformRandom(): number {
  * @returns A seed such as `plucky-servo-427`
  */
 export function randomSeed(random: () => number = platformRandom): string {
-  const pick = (list: readonly string[]): string => list[Math.floor(random() * list.length)] as string;
-  return `${pick(ADJECTIVES)}-${pick(NOUNS)}-${Math.floor(random() * 1000)}`;
+  // Clamped, so a source that strays outside [0, 1) still gives a real word.
+  const index = (n: number): number => Math.min(n - 1, Math.max(0, Math.floor(random() * n)));
+  const pick = (list: readonly string[]): string => list[index(list.length)] as string;
+  return `${pick(ADJECTIVES)}-${pick(NOUNS)}-${index(1000)}`;
 }

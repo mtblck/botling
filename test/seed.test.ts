@@ -13,6 +13,8 @@ describe('randomSeed', () => {
   it('takes its randomness from the source it is given', () => {
     expect(randomSeed(() => 0)).toBe('brave-bolt-0');
     expect(randomSeed(() => 0.9999)).toBe('turbo-spark-999');
+    expect(randomSeed(() => 1)).toBe('turbo-spark-999');
+    expect(randomSeed(() => -1)).toBe('brave-bolt-0');
   });
 
   it('falls back to Math.random without Web Crypto', () => {
