@@ -93,7 +93,13 @@
       <div class="actions">
         <button class="btn" type="button" id="copy-code">Copy code</button>
         <button class="btn" type="button" id="copy-svg">Copy SVG</button>
-        <button class="btn" type="button" id="download">Download SVG</button>
+        <fieldset class="downloads" id="downloads">
+          <legend>Download</legend>
+          <button class="btn" type="button" data-format="svg">SVG</button>
+          <button class="btn" type="button" data-format="png">PNG</button>
+          <button class="btn" type="button" data-format="jpeg">JPG</button>
+          <button class="btn" type="button" data-format="gif">GIF</button>
+        </fieldset>
         <p class="status" id="status" role="status" aria-live="polite"></p>
       </div>
       <pre class="code"><code id="code"></code></pre>

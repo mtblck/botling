@@ -182,15 +182,45 @@ $('gallery').addEventListener('click', (e) => {
 });
 $('copy-code').addEventListener('click', () => copy(snippet(), 'Code'));
 $('copy-svg').addEventListener('click', () => copy(botling(state.seed, options()), 'SVG'));
-$('download').addEventListener('click', () => {
-  const url = URL.createObjectURL(new Blob([botling(state.seed, options())], { type: 'image/svg+xml' }));
-  const a = Object.assign(document.createElement('a'), {
-    href: url,
-    download: `botling-${state.seed.slice(0, 40) || 'robot'}.svg`,
-  });
-  a.click();
+function save(blob, name) {
+  const url = URL.createObjectURL(blob);
+  Object.assign(document.createElement('a'), { href: url, download: name }).click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-  track('downloaded');
+}
+/**
+ * The image as a file. PNG and JPG are the still robot at 512px; a 256px GIF moves if
+ * Motion is on. Their code loads on first use, so the page doesn't carry a GIF encoder
+ * for everyone.
+ */
+async function image(format) {
+  if (format === 'svg') return new Blob([botling(state.seed, options())], { type: 'image/svg+xml' });
+  // Drawn before the import, so the file is the robot on screen when the button was pressed.
+  const size = format === 'gif' ? 256 : 512;
+  const svg = botling(state.seed, { ...options({ size, title: null }), ...(format !== 'gif' && { animate: false }) });
+  const { gif, still } = await import('/export.js');
+  return format === 'gif' ? gif(svg, size) : still(svg, size, format);
+}
+let busy = false;
+$('downloads').addEventListener('click', async (e) => {
+  const format = e.target.closest('button[data-format]')?.dataset.format;
+  if (!format || busy) return;
+  const label =
+    format === 'gif' && state.motion === 'on' ? 'Animated GIF' : format === 'jpeg' ? 'JPG' : format.toUpperCase();
+  // Named now: the seed can change while a GIF is being made.
+  const name = `botling-${state.seed.slice(0, 40) || 'robot'}.${format === 'jpeg' ? 'jpg' : format}`;
+  busy = true;
+  $('downloads').setAttribute('aria-busy', 'true');
+  if (format !== 'svg') say(`Making the ${label}…`);
+  try {
+    save(await image(format), name);
+    say(`${label} downloaded`);
+    track('downloaded');
+  } catch {
+    say(`Couldn't make the ${label}; try the SVG instead`);
+  } finally {
+    busy = false;
+    $('downloads').removeAttribute('aria-busy');
+  }
 });
 document.querySelector('.theme').addEventListener('click', () => {
   const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';

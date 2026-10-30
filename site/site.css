@@ -382,6 +382,27 @@ legend {
   align-items: center;
   gap: 10px;
 }
+.downloads {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+/* Floated, the legend lays out as a flex item, in line with its buttons. */
+.downloads legend {
+  float: left;
+  margin: 0 4px 0 0;
+}
+/* On a phone the four formats fit on a line only without the legend beside them. */
+@media (max-width: 480px) {
+  .downloads legend {
+    width: 100%;
+    margin: 0 0 2px;
+  }
+}
+.downloads[aria-busy="true"] .btn {
+  cursor: progress;
+}
 .status {
   margin: 0;
   font-size: 0.9rem;
