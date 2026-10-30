@@ -2,49 +2,49 @@
 
 exports[`golden corpus > pins the circle markup, still and animated 1`] = `
 {
-  "full": "593eb2d8c3c49bbe",
-  "fullAnimated": "d33b1c67deb0b9a2",
-  "small": "8b47e4761159253f",
-  "smallAnimated": "7d973e94ea1cbde5",
+  "full": "551aa85c2201c52e",
+  "fullAnimated": "229014d4e4a534a9",
+  "small": "09f50ab98697517e",
+  "smallAnimated": "a01c10357ca2635a",
 }
 `;
 
 exports[`golden corpus > pins the circle pictures 1`] = `
 {
-  "full": "f6284d9ad4cfc879",
-  "small": "c7848659031aa5f7",
+  "full": "0c0026bebdf05865",
+  "small": "c5dd4e3a8ab7388e",
 }
 `;
 
 exports[`golden corpus > pins the diamond markup, still and animated 1`] = `
 {
-  "full": "529d0f318cf0e201",
-  "fullAnimated": "57a4bd6583919dcd",
-  "small": "b7202fbcdc2af9d1",
-  "smallAnimated": "669572631b3d52bb",
+  "full": "9ec89048a5e262c2",
+  "fullAnimated": "052cce183e6ca95c",
+  "small": "4902acb1c2edb2ce",
+  "smallAnimated": "53b595cd9d34b343",
 }
 `;
 
 exports[`golden corpus > pins the diamond pictures 1`] = `
 {
-  "full": "24283254ecafa60b",
-  "small": "c7848659031aa5f7",
+  "full": "cdb74d24e91b90f6",
+  "small": "c5dd4e3a8ab7388e",
 }
 `;
 
 exports[`golden corpus > pins the square markup, still and animated 1`] = `
 {
-  "full": "44104b5f70e4e9ef",
-  "fullAnimated": "b8f6e146e1031dd7",
-  "small": "66a67b1ed955da19",
-  "smallAnimated": "0beb4d74c052cbe4",
+  "full": "f93890bebbca1d84",
+  "fullAnimated": "5ec69eef937d3b86",
+  "small": "c5b267be0739f8a8",
+  "smallAnimated": "764a6f4fdd4b679f",
 }
 `;
 
 exports[`golden corpus > pins the square pictures 1`] = `
 {
-  "full": "24283254ecafa60b",
-  "small": "c7848659031aa5f7",
+  "full": "cdb74d24e91b90f6",
+  "small": "c5dd4e3a8ab7388e",
 }
 `;
 
@@ -52,16 +52,16 @@ exports[`golden corpus > pins the traits of every seed 1`] = `"eae0816403930e79"
 
 exports[`golden corpus > pins the triangle markup, still and animated 1`] = `
 {
-  "full": "8bb06fabc410fd65",
-  "fullAnimated": "8fcd7e1fa39d08ad",
-  "small": "883d5519c43aab12",
-  "smallAnimated": "bcac9f8e2a244eef",
+  "full": "165f95b647189dda",
+  "fullAnimated": "0c1b092708462458",
+  "small": "c0c1e12ca5292a1b",
+  "smallAnimated": "79fc189f0113b2ae",
 }
 `;
 
 exports[`golden corpus > pins the triangle pictures 1`] = `
 {
-  "full": "7fea0859a5dbbba3",
-  "small": "c7848659031aa5f7",
+  "full": "88d44b87e25c783e",
+  "small": "c5dd4e3a8ab7388e",
 }
 `;
