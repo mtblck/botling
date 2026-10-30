@@ -7,6 +7,10 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+### Added
+
+- The playground downloads the robot as SVG, PNG, JPG or GIF. PNG and JPG are the still robot at 512px (JPG puts white behind a rounded frame's corners); the GIF is 256px and, with Motion on, one seamless loop of the animation. The package itself is unchanged.
+
 ## [1.2.0] - 2026-10-30
 
 ### Added
