@@ -41,6 +41,19 @@ Use an opaque, stable id as the seed (a database id or UUID), not an email addre
 
 The seed is used as given, apart from Unicode normalisation (NFC), so `José` draws the same robot however the é was typed. It isn't trimmed or lowercased: `Ada` and `ada` are different robots, so tidy the seed first if your ids vary like that.
 
+### Random robots
+
+`randomSeed()` returns a readable random seed, like `plucky-servo-427`, for a "give me a new robot" button or a default for someone without an id. Store the seed: that's what brings the same robot back.
+
+```ts
+import { botling, randomSeed } from 'botling';
+
+const seed = randomSeed(); // save this with the user
+const svg = botling(seed);
+```
+
+There are 400,000 of these seeds, so two people can get the same one. To give every user their own robot, seed with their id. It uses `crypto.getRandomValues` where there is one (browsers, Node, edge runtimes) and `Math.random` otherwise, or pass your own source: `randomSeed(() => myRng())`.
+
 ### Options
 
 | Option | Type | Default | What it does |

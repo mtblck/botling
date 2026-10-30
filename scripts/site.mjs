@@ -37,7 +37,7 @@ const page = fs
 fs.writeFileSync(path.join(out, 'index.html'), page);
 fs.writeFileSync(path.join(out, 'icon.svg'), icon);
 fs.writeFileSync(path.join(out, 'og.png'), ogImage(lib));
-for (const f of ['site.css', 'site.js', 'snippet.js', 'words.js', 'theme.js', 'analytics.js', 'track.js']) {
+for (const f of ['site.css', 'site.js', 'snippet.js', 'theme.js', 'analytics.js', 'track.js']) {
   fs.copyFileSync(path.join(ROOT, 'site', f), path.join(out, f));
 }
 fs.cpSync(dist, path.join(out, 'lib'), { recursive: true, filter: (f) => !f.endsWith('.d.ts') && !f.endsWith('.map') });

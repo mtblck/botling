@@ -7,6 +7,13 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-30
+
+### Added
+
+- `randomSeed()` returns a readable random seed, like `plucky-servo-427`, to store and draw a robot from. It uses `crypto.getRandomValues` where available and takes an optional source of randomness. No existing seed's robot changes.
+- The playground's Random button and its gallery of robots use it; the words are the same, and the number now runs to 999.
+
 ## [1.0.0] - 2026-10-30
 
 The robot each seed draws is now frozen for the whole of 1.x: the same seed and options draw the same picture until 2.0. [ADR 0006](https://github.com/mtblck/botling/blob/main/docs/adr/0006-what-1-0-freezes.md) lists what is frozen and what a minor version may still change, and a golden corpus of 500 seeds checks it on every change.
@@ -62,7 +69,8 @@ First release.
 
 The playground site (`site/`, not part of the npm package) lets you try seeds, shapes and palettes and copy the code.
 
-[Unreleased]: https://github.com/mtblck/botling/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/mtblck/botling/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/mtblck/botling/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/mtblck/botling/compare/v0.2.0...v1.0.0
 [0.2.0]: https://github.com/mtblck/botling/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/mtblck/botling/releases/tag/v0.1.0
