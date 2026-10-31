@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vue · Seedkin docs</title>
+  <meta name="description" content="Seedkin avatars in Vue and Nuxt: an avatar component with a computed data URI." />
+  <link rel="canonical" href="https://seedkin.dev/docs/vue/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://seedkin.dev/docs/vue/" />
+  <meta property="og:title" content="Vue · Seedkin docs" />
+  <meta property="og:description" content="Seedkin avatars in Vue and Nuxt: an avatar component with a computed data URI." />
+  {{head}}
+  <script type="module" src="/docs.js"></script>
+</head>
+<body>
+  <a class="skip" href="#doc">Skip to the docs</a>
+  {{header}}
+
+  <main id="main" class="docs wrap">
+    {{docsnav}}
+    <article id="doc" class="prose" tabindex="-1">
+<h1>Vue</h1>
+<p class="lede">A computed data URI in a single-file component. It renders the same on the server, so it works in Nuxt as it is.</p>
+<h2 id="component">An avatar component</h2>
+<pre><code class="language-vue">&lt;script setup lang="ts"&gt;
+import { computed } from 'vue';
+import { botlingDataUri } from 'seedkin/botling';
+
+const props = withDefaults(defineProps&lt;{ id: string; size?: number }&gt;(), { size: 40 });
+const src = computed(() =&gt; botlingDataUri(props.id, { size: props.size, title: null }));
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;img :src="src" alt="" :width="size" :height="size" /&gt;
+&lt;/template&gt;
+</code></pre>
+<p>Use it as <code>&lt;Avatar :id="user.id" /&gt;</code>. <code>title: null</code> leaves the accessible name to the <code>&lt;img&gt;</code>: keep <code>alt=""</code> when the person's name is next to it, and describe it otherwise.</p>
+<h2 id="inline-svg">Inline SVG</h2>
+<pre><code class="language-vue">&lt;span v-html="botling(id, { size: 40, title: null })" /&gt;
+</code></pre>
+<p><code>v-html</code> is safe here: the seed never appears in the markup, and a <code>title</code> you pass is escaped. For animated avatars under a strict Content Security Policy, use the <code>&lt;img&gt;</code> (see <a href="/docs/botling/#animation">Animation</a>).</p>
+{{pager}}
+    </article>
+    {{toc}}
+  </main>
+
+  {{footer}}
+</body>
+</html>

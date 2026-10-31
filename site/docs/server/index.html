@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>On the server · Seedkin docs</title>
+  <meta name="description" content="Serve Seedkin avatars as image URLs from Next.js, Node or any edge runtime, cached for good." />
+  <link rel="canonical" href="https://seedkin.dev/docs/server/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://seedkin.dev/docs/server/" />
+  <meta property="og:title" content="On the server · Seedkin docs" />
+  <meta property="og:description" content="Serve Seedkin avatars as image URLs from Next.js, Node or any edge runtime, cached for good." />
+  {{head}}
+  <script type="module" src="/docs.js"></script>
+</head>
+<body>
+  <a class="skip" href="#doc">Skip to the docs</a>
+  {{header}}
+
+  <main id="main" class="docs wrap">
+    {{docsnav}}
+    <article id="doc" class="prose" tabindex="-1">
+<h1>On the server</h1>
+<p class="lede">Serve avatars as image URLs, such as <code>/avatar/123</code>, so any page or app can show them with a plain <code>&lt;img&gt;</code>. Seedkin makes no requests and keeps no state, so it runs anywhere JavaScript does, including edge runtimes.</p>
+<h2 id="route-handler">A route handler</h2>
+<p>In Next.js (App Router), as <code>app/avatar/[id]/route.ts</code>:</p>
+<pre><code class="language-ts">import { botling } from 'seedkin/botling';
+
+export async function GET(_request: Request, { params }: { params: Promise&lt;{ id: string }&gt; }) {
+  const { id } = await params;
+  return new Response(botling(id, { size: 96 }), {
+    headers: {
+      'Content-Type': 'image/svg+xml',
+      'Cache-Control': 'public, max-age=31536000, immutable',
+    },
+  });
+}
+</code></pre>
+<p>Any framework that returns a web <code>Response</code> (Hono, Remix, SvelteKit, Astro, Bun, Deno, Cloudflare Workers) looks the same. In Node without one:</p>
+<pre><code class="language-ts">import { createServer } from 'node:http';
+import { botling } from 'seedkin/botling';
+
+createServer((req, res) =&gt; {
+  const id = decodeURIComponent(new URL(req.url ?? '/', 'http://localhost').pathname.slice(1));
+  res.writeHead(200, { 'Content-Type': 'image/svg+xml', 'Cache-Control': 'public, max-age=31536000, immutable' });
+  res.end(botling(id, { size: 96 }));
+}).listen(3000);
+</code></pre>
+<h2 id="caching">Caching</h2>
+<p>A seed's picture never changes within a major version, so the response can be cached for good. Put the major version in the path (<code>/avatar/v2/123</code>) so that an upgrade to 3.0 gets new URLs rather than a mix of old and new pictures. Read options such as <code>size</code> or <code>frame</code> from the query, check them, and they cache the same way: Seedkin throws a <code>RangeError</code> on a bad one, which you can turn into a 400.</p>
+<h2 id="privacy">Privacy</h2>
+<p>An avatar URL puts its seed in logs, analytics and the <code>Referer</code> header. Seed with an opaque id, never an email address, so the URL gives nothing away.</p>
+<h2 id="email">Email</h2>
+<p>Many email clients, Gmail among them, don't show SVG images. For email, convert the SVG to a PNG on the server, for example with <code>@resvg/resvg-js</code>, and serve that instead.</p>
+{{pager}}
+    </article>
+    {{toc}}
+  </main>
+
+  {{footer}}
+</body>
+</html>
