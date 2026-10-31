@@ -1,4 +1,4 @@
-import { canvas, type Draw, dots, type Form, frames, pick, Role, rows, sway } from '../draw.js';
+import { canvas, type Draw, dots, type Form, frames, pick, Role, rows, sway } from './draw.js';
 
 const tip = (s: number, n: number) => (i: number) => (i < n ? Math.trunc((s * (n - i)) / 2) : 0);
 const EMBERS = frames('2,6 12,3 | 2,4 12,9 | 3,2 11,7 | 1,9 12,5');

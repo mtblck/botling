@@ -1,4 +1,4 @@
-import { type Canvas, canvas, type Draw, dots, type Form, frames, pick, Role, rows, span, sway } from '../draw.js';
+import { type Canvas, canvas, type Draw, dots, type Form, frames, pick, Role, rows, span, sway } from './draw.js';
 
 /** Speed lines, each ending in a little curl, drifting one cell per frame. */
 const GUSTS = frames(

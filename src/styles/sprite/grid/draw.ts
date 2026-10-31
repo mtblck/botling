@@ -1,5 +1,5 @@
-import { type Canvas, createCanvas } from '../../src/core/canvas.js';
-import { Role } from '../../src/core/types.js';
+import { type Canvas, createCanvas } from '../../../core/canvas.js';
+import { Role } from '../../../core/types.js';
 
 /** Where a form puts its face: the centre column, the eyes' distance from it, and the eye row. */
 export interface Anchor {
@@ -79,7 +79,7 @@ const SWAY = [0, 1, 0, -1] as const;
 export const sway = (f: number): number => SWAY[f % 4] as number;
 /** The item for frame `f`, cycling through the list. */
 export const pick = <T>(list: readonly T[], f: number): T => list[f % list.length] as T;
-/** A canvas of the given size, with an anchor helper. */
+/** An empty canvas of the given size. */
 export const canvas = (size: number): Canvas => createCanvas(size);
 
 export type { Canvas };

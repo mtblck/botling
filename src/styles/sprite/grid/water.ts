@@ -1,4 +1,4 @@
-import { canvas, type Draw, dots, type Form, frames, pick, Role, rows } from '../draw.js';
+import { canvas, type Draw, dots, type Form, frames, pick, Role, rows } from './draw.js';
 
 const BUBBLES = frames('12,11 2,5 | 12,9 1,3 | 13,7 2,1 | 12,5 1,12');
 const SMALL_BUBBLES = frames('8,6 | 8,4 | 7,2 | 8,0');

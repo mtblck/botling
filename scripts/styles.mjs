@@ -98,6 +98,31 @@ export const STYLES = [
     palette: "Index into Beastie's <code>PALETTES</code> (its hides), or a palette object.",
     options: [],
   },
+  {
+    name: 'sprite',
+    title: 'Sprite',
+    status: 'preview',
+    label: 'Sprite',
+    kind: 'sprite',
+    moves: 'Flips through four frames: flames sway, drops wobble, and embers, bubbles and stars drift around it.',
+    smallMoves: 'animated, it moves the same way',
+    defaultTitle: 'Sprite avatar',
+    shapeDefault: "<code>'square'</code>",
+    parts: [
+      ['ELEMENTS', 'elements'],
+      ['EYES', 'eyes'],
+      ['MOUTHS', 'mouths'],
+    ],
+    palette: "Index into Sprite's <code>PALETTES</code>, or a palette object. The seed picks from its element's.",
+    options: [
+      [
+        'element',
+        "<code>'fire' | 'water' | 'earth' | 'wind' | 'space'</code>",
+        'picked by the seed',
+        'The element. The rest of the seed stays the same: its form, face and palette choice.',
+      ],
+    ],
+  },
 ];
 
 const byName = (name) => {
@@ -140,14 +165,20 @@ export function styleTabs(name) {
  */
 export function playground(template, name) {
   const s = byName(name);
-  const note = `Below 40px it switches to a simpler version of the same ${s.label}, and animated, it only blinks and hovers.`;
+  const moves = s.smallMoves ?? 'animated, it only blinks and hovers';
+  const note = `Below 40px it switches to a simpler version of the same ${s.label}, and ${moves}.`;
   return template.replaceAll('{{label}}', s.label).replaceAll('{{small-note}}', note);
 }
 
 /** The options every style takes, then the style's own. */
 function optionRows(s) {
   const shared = [
-    ['shape', "<code>'square' | 'circle' | 'triangle' | 'diamond'</code>", 'picked by the seed', 'Cell shape.'],
+    [
+      'shape',
+      "<code>'square' | 'circle' | 'triangle' | 'diamond'</code>",
+      s.shapeDefault ?? 'picked by the seed',
+      'Cell shape.',
+    ],
     ['palette', '<code>number | Palette</code>', 'picked by the seed', s.palette],
     ['size', '<code>number</code>', '<code>96</code>', 'Width and height in pixels.'],
     [

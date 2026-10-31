@@ -23,6 +23,7 @@ export const DOCS = [
       ['snoot', 'Snoot'],
       ['noggin', 'Noggin'],
       ['beastie', 'Beastie'],
+      ['sprite', 'Sprite'],
     ],
   },
   {

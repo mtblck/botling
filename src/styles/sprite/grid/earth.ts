@@ -1,4 +1,4 @@
-import { canvas, type Draw, dots, type Form, frames, pick, Role, rows, span, sway } from '../draw.js';
+import { canvas, type Draw, dots, type Form, frames, pick, Role, rows, span, sway } from './draw.js';
 
 const PEBBLES = frames('1,8 | 2,4 | 13,7 | 12,3');
 

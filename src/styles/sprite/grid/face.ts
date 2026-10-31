@@ -1,15 +1,11 @@
+import type { Eyes, Mouth } from '../types.js';
 import { type Anchor, type Canvas, Role } from './draw.js';
 
-export const EYES = ['dots', 'round', 'happy', 'sleepy', 'wink'] as const;
-export const MOUTHS = ['none', 'dot', 'smile', 'grin'] as const;
-export type Eyes = (typeof EYES)[number];
-export type Mouth = (typeof MOUTHS)[number];
-
-/** A sprite's face. */
+/** What a face is made of. */
 export interface Face {
   eyes: Eyes;
   mouth: Mouth;
-  blush: boolean;
+  hasBlush: boolean;
 }
 
 type Cell = readonly [number, number];
@@ -31,6 +27,8 @@ const eyeCells = (eyes: Eyes, dx: number): Cell[] => {
         [dx - 1, 1],
         [dx + 1, 1],
       ];
+    case 'tiny':
+      return [[dx, 1]];
     case 'sleepy':
       return [
         [inner, 1],
@@ -76,5 +74,5 @@ export function paintFace(c: Canvas, at: Anchor, face: Face, small: boolean): vo
   for (const [ex, ey] of left) c.paint(x - ex, y + ey, Role.Glow);
   for (const [ex, ey] of right) c.paint(x + ex, y + ey, Role.Glow);
   for (const [mx, my] of MOUTH_CELLS[face.mouth]) c.paint(x + mx, y + my, Role.Glow);
-  if (face.blush) for (const s of [-1, 1]) c.paint(x + s * (dx + 2), y + 2, Role.Accent);
+  if (face.hasBlush) for (const s of [-1, 1]) c.paint(x + s * (dx + 2), y + 2, Role.Accent);
 }

@@ -6,6 +6,7 @@ import { beastie, beastieDataUri } from '/lib/styles/beastie/index.js';
 import { botling, botlingDataUri, randomSeed } from '/lib/styles/botling/index.js';
 import { noggin, nogginDataUri } from '/lib/styles/noggin/index.js';
 import { snoot, snootDataUri } from '/lib/styles/snoot/index.js';
+import { sprite, spriteDataUri } from '/lib/styles/sprite/index.js';
 import { PREVIEWS } from '/preview.js';
 
 // The landing page's Animate button. An animated avatar goes in an <img>, because the CSP's
@@ -22,7 +23,7 @@ const DRAW = {
   snoot: drawer(snoot, snootDataUri),
   noggin: drawer(noggin, nogginDataUri),
   beastie: drawer(beastie, beastieDataUri),
-  // Lab styles animate inline: their SVG moves with SMIL, which the CSP allows.
+  sprite: drawer(sprite, spriteDataUri),
   ...Object.fromEntries(
     PREVIEWS.map((p) => [p.name.toLowerCase(), (seed, size, frame) => p.render(seed, size, frame, animate)]),
   ),

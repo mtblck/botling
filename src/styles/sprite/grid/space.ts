@@ -1,4 +1,4 @@
-import { type Canvas, canvas, type Draw, dots, type Form, frames, pick, Role, rows, span } from '../draw.js';
+import { type Canvas, canvas, type Draw, dots, type Form, frames, pick, Role, rows, span } from './draw.js';
 
 const STARS = frames('2,2 12,12 | 12,1 2,12 | 12,2 1,13 | 2,12 13,1');
 const SMALL_STARS = frames('0,0 8,7 | 8,1 1,8 | 7,0 0,7 | 1,8 8,0');
