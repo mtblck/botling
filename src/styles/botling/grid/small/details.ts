@@ -1,5 +1,5 @@
+import type { Canvas } from '../../../../core/canvas.js';
 import { Role, type Traits } from '../../types.js';
-import type { Canvas } from '../canvas.js';
 import { slots } from '../slots.js';
 import type { SmallLayout } from './layout.js';
 

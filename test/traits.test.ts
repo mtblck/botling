@@ -11,7 +11,7 @@ import {
   SIDES,
   TOPS,
   traits,
-} from '../src/index.js';
+} from '../src/styles/botling/index.js';
 
 const SAMPLE = Array.from({ length: 3000 }, (_, i) => traits(`user-${i}`));
 

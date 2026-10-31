@@ -1,6 +1,6 @@
+import { createRng, int, maybePick, pick } from '../../core/random.js';
 import { PALETTES } from './palettes.js';
 import { ACCESSORIES, EYES, HEADS, MOUTHS, PATTERNS, QUIRKS, SHAPES, SIDES, TOPS } from './parts.js';
-import { createRng, int, maybePick, pick } from './random.js';
 import type { Traits } from './types.js';
 
 /**

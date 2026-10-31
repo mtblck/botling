@@ -1,4 +1,4 @@
-import { Role, type RoleGrid } from '../types.js';
+import { Role, type RoleGrid } from './types.js';
 
 /** Detailed grid width and height. Odd, so there is a true centre column. */
 export const GRID_SIZE = 15;

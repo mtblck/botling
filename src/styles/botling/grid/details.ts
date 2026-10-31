@@ -1,5 +1,5 @@
+import { type Canvas, CENTER } from '../../../core/canvas.js';
 import { Role, type Traits } from '../types.js';
-import { type Canvas, CENTER } from './canvas.js';
 import { antennaTip } from './extras.js';
 import type { Layout } from './layout.js';
 import { slots } from './slots.js';

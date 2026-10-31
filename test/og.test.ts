@@ -1,7 +1,7 @@
 import { inflateSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import { HEIGHT, ogImage, WIDTH } from '../scripts/og.mjs';
-import * as lib from '../src/index.js';
+import * as lib from '../src/styles/botling/index.js';
 
 /** The PNG's size and its RGB rows, read back from the one IDAT chunk ogImage writes. */
 function decode(png: Buffer): { width: number; height: number; at: (x: number, y: number) => string } {

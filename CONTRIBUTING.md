@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for looking. botling is a side project with one maintainer, so replies
+Thanks for looking. Seedkin is a side project with one maintainer, so replies
 can take a few days. A playground link or the exact `botling()` call that shows
 a problem is the most useful thing you can send.
 
@@ -65,6 +65,6 @@ Matt releases; `.github/workflows/release.yml` publishes on a version tag.
 The very first version has to be published by hand (`npm publish --access public`
 from a clean checkout of the tag), because npm only offers trusted publishing
 for a package that exists. Then set it up under the package's Settings ->
-Trusted publishers (GitHub Actions, `mtblck/botling`, `release.yml`). The
+Trusted publishers (GitHub Actions, `mtblck/seedkin`, `release.yml`). The
 workflow skips the publish for a version that's already on npm, so tagging
 that first version still makes its GitHub release.

@@ -4,7 +4,7 @@
  * for eyeballing art changes. Usage: npm run preview [count]
  */
 import { writeFileSync } from 'node:fs';
-import { botling, SHAPES } from '../src/index.js';
+import { botling, SHAPES } from '../src/styles/botling/index.js';
 
 const count = Number(process.argv[2] ?? 24);
 const sizes = [24, 32, 48, 96];

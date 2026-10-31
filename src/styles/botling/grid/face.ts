@@ -1,5 +1,5 @@
+import { type Canvas, CENTER, tagged } from '../../../core/canvas.js';
 import { Role, type Traits } from '../types.js';
-import { type Canvas, CENTER, tagged } from './canvas.js';
 import { drawExpressionEyes, drawExpressionMouth } from './expressions.js';
 import type { Layout } from './layout.js';
 

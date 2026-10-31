@@ -7,6 +7,10 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+### Changed
+
+- The package is now `seedkin`, a family of avatar styles, and the robots are its first style, Botling. Import them from `seedkin/botling`, which exports everything `botling` did and draws every seed exactly as `botling` 1.2.0 does. The root `seedkin` export holds what every style shares: `randomSeed`, `FRAMES`, `Role`, the grid sizes and the shared types. See ADR 0009.
+
 ### Added
 
 - The playground downloads the robot as SVG, PNG, JPG or GIF. PNG and JPG are the still robot at 512px (JPG puts white behind a rounded frame's corners); the GIF is 256px and, with Motion on, one seamless loop of the animation. The package itself is unchanged.

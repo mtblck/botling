@@ -10,7 +10,7 @@ import {
   randomSeed,
   resolveTraits,
   SHAPES,
-} from '/lib/index.js';
+} from '/lib/styles/botling/index.js';
 import { options as optionsFor, snippet as snippetFor } from '/snippet.js';
 import { arrival, track } from '/track.js';
 

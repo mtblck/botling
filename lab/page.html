@@ -1,0 +1,251 @@
+<title>Botling Families Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap">
+<style>
+/* Layout: one column on botling.me's dot grid. A seed bar, the four families side by side for that seed, then a wall per family, then the plan. */
+:root {
+  --paper: #f3f2f8;
+  --card: #fbfbfd;
+  --ink: #17151f;
+  --ink-2: #4c4a5c;
+  --rule: #d4d1e1;
+  --dot: #cdc9dc;
+  --accent: #3a26c9;
+  --accent-ink: #ffffff;
+  --accent-soft: rgb(58 38 201 / 0.1);
+  --good: #127a68;
+  --warn: #9a5b00;
+  --display: "Pixelify Sans", ui-sans-serif, system-ui, sans-serif;
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #14121c; --card: #1b1926; --ink: #ece9f6; --ink-2: #aaa6bd; --rule: #302c42; --dot: #2a2738;
+    --accent: #a99cff; --accent-ink: #14121c; --accent-soft: rgb(169 156 255 / 0.14); --good: #7ee8d0; --warn: #ffc46b;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #14121c; --card: #1b1926; --ink: #ece9f6; --ink-2: #aaa6bd; --rule: #302c42; --dot: #2a2738;
+  --accent: #a99cff; --accent-ink: #14121c; --accent-soft: rgb(169 156 255 / 0.14); --good: #7ee8d0; --warn: #ffc46b;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.4px);
+  background-size: 22px 22px;
+  color: var(--ink);
+  font: 15px/1.55 var(--sans);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+}
+main { max-width: 1080px; margin: 0 auto; display: grid; gap: 40px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(32px, 6vw, 52px); }
+h2 { font-size: 26px; }
+h3 { font-size: 20px; }
+p { margin: 0; max-width: 65ch; }
+.lede { color: var(--ink-2); font-size: 17px; }
+header { display: grid; gap: 12px; }
+.eyebrow { font: 600 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.bar {
+  display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end;
+  background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 16px;
+}
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+legend { padding: 0; margin-bottom: 4px; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field label, .field .label { font: 600 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+input[type="text"] {
+  font: 16px var(--mono); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--rule);
+  background: var(--paper); color: var(--ink); width: min(260px, 100%);
+}
+.seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.seg button, .btn {
+  font: 600 14px var(--sans); padding: 7px 12px; border-radius: 8px; border: 1px solid var(--rule);
+  background: var(--paper); color: var(--ink); cursor: pointer;
+}
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn:hover, .seg button:hover { border-color: var(--accent); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.five { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.five figure { margin: 0; display: grid; gap: 6px; justify-items: center; text-align: center; min-width: 0; }
+.five svg { width: 100%; max-width: 140px; height: auto; }
+.five figcaption { display: grid; gap: 2px; }
+.five strong { font-family: var(--display); font-size: 17px; font-weight: 600; }
+.five span { color: var(--ink-2); font-size: 12px; font-family: var(--mono); overflow-wrap: anywhere; }
+@media (max-width: 640px) { .five { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+section.family { display: grid; gap: 12px; padding-top: 8px; border-top: 1px solid var(--rule); }
+.family-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+.chip { font: 600 12px var(--mono); padding: 3px 8px; border-radius: 99px; border: 1px solid currentColor; }
+.chip.good { color: var(--good); }
+.chip.warn { color: var(--warn); }
+.wall { display: flex; flex-wrap: wrap; gap: 6px; }
+.wall button { padding: 0; border: 0; background: none; cursor: pointer; border-radius: 22%; line-height: 0; }
+.wall button svg { display: block; }
+.tiny { display: flex; flex-wrap: wrap; gap: 4px; }
+.notes { color: var(--ink-2); max-width: 75ch; }
+.plan { display: grid; gap: 14px; background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 20px; }
+.plan ol, .plan ul { margin: 0; padding-left: 22px; display: grid; gap: 8px; max-width: 75ch; }
+code { font: 13.5px var(--mono); background: var(--accent-soft); padding: 1px 5px; border-radius: 5px; overflow-wrap: anywhere; }
+.names { display: grid; gap: 0; border: 1px solid var(--rule); border-radius: 10px; overflow-x: auto; }
+.name-row { display: grid; grid-template-columns: 7rem 7rem minmax(12rem, 1.4fr) minmax(10rem, 1fr); gap: 12px; padding: 10px 14px; border-top: 1px solid var(--rule); min-width: 40rem; }
+.name-row:first-child { border-top: 0; }
+.name-row.head { font: 600 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+.name-row strong { font-family: var(--display); font-size: 17px; font-weight: 600; color: var(--accent); }
+.name-row.parked { color: var(--ink-2); }
+.name-row.parked strong { color: var(--ink-2); }
+pre { margin: 0; overflow-x: auto; background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; font: 13.5px/1.5 var(--mono); }
+pre code { background: none; padding: 0; }
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">Botling lab · prototype, not in the package · dinosaurs parked</div>
+    <h1>Botling Families Lab</h1>
+    <p class="lede">Three new avatar families built the way the robots are: a seed picks traits, the traits paint a 15×15 grid with five colour roles, and the package's own cell, path and frame code draws it. Type any seed to see it in every family. Click any avatar to make it the seed.</p>
+  </header>
+
+  <div class="bar">
+    <div class="field">
+      <label for="seed">Seed</label>
+      <input type="text" id="seed" value="matt@botling.me" autocomplete="off" spellcheck="false">
+    </div>
+    <fieldset class="field">
+      <legend class="label">Cell shape</legend>
+      <div class="seg" id="shape">
+        <button type="button" data-v="" aria-pressed="true">Seed's own</button>
+        <button type="button" data-v="square" aria-pressed="false">Square</button>
+        <button type="button" data-v="circle" aria-pressed="false">Circle</button>
+        <button type="button" data-v="triangle" aria-pressed="false">Triangle</button>
+        <button type="button" data-v="diamond" aria-pressed="false">Diamond</button>
+      </div>
+    </fieldset>
+    <fieldset class="field">
+      <legend class="label">Wall size</legend>
+      <div class="seg" id="size">
+        <button type="button" data-v="72" aria-pressed="true">72px</button>
+        <button type="button" data-v="48" aria-pressed="false">48px</button>
+        <button type="button" data-v="32" aria-pressed="false">32px</button>
+      </div>
+    </fieldset>
+    <button type="button" class="btn" id="shuffle">Shuffle the walls</button>
+  </div>
+
+  <div class="five" id="five" aria-live="polite"></div>
+
+  <div id="families"></div>
+
+  <section class="plan" aria-labelledby="names-h">
+    <h2 id="names-h">Names that fit Botling</h2>
+    <p>Botling is <em>bot</em> plus <em>-ling</em>, the old ending for something small and young (duckling, gosling). Every family can follow the same pattern: one short word for the creature, plus <em>-ling</em>. All of these names are unclaimed on npm today.</p>
+    <div class="names">
+      <div class="name-row head"><span>Family</span><span>Recommended</span><span>Why</span><span>Also considered</span></div>
+      <div class="name-row"><span>Robots</span><strong>Botling</strong><span>The original.</span><span>–</span></div>
+      <div class="name-row"><span>Animals</span><strong>Pawling</strong><span>Paws cover cats, dogs, bears and bunnies, and it sounds soft.</span><span>Critterling, Furling (a real word for rolling up a sail), Petling</span></div>
+      <div class="name-row"><span>People</span><strong>Folkling</strong><span>"Folk" is warm and plural-friendly, with no age or gender in it.</span><span>Humling, Peepling, Faceling</span></div>
+      <div class="name-row"><span>Monsters</span><strong>Gobling</strong><span>A goblin pun that already ends in -ling, and the shortest of the set.</span><span>Monsterling, Beastling, Monling</span></div>
+      <div class="name-row parked"><span>Dinosaurs</span><strong>Dinoling</strong><span>Parked with the dinosaurs for now.</span><span>Rexling</span></div>
+    </div>
+    <p>In code each name becomes the function and the import path: <code>pawling(seed)</code> from <code>botling/pawlings</code>. The playground could call the whole set "the Botlings" and switch between them with tabs.</p>
+  </section>
+
+  <section class="plan" aria-labelledby="plan-h">
+    <h2 id="plan-h">How families could join the package</h2>
+    <p>Recommendation: one package, one shared renderer, and each family as its own entry point. Robots stay exactly as 1.x froze them.</p>
+<pre><code>import { botling } from 'botling';          // robots, unchanged
+import { pawling } from 'botling/pawlings'; // animals, new and opt-in
+import { folkling } from 'botling/folklings'; // people
+import { gobling } from 'botling/goblings';   // monsters
+
+pawling('matt@botling.me', { size: 48, frame: 'circle', animate: true });</code></pre>
+    <ol>
+      <li><strong>Subpath exports, not a <code>kind</code> option.</strong> A <code>kind</code> switch on <code>botling()</code> would pull every family's art into every bundle, and it would blur the fact that each family has its own frozen picture. Separate entry points tree-shake, and robot-only users pay nothing.</li>
+      <li><strong>Not sibling npm packages, at least at first.</strong> Each would need its own releases, tags and copy of the renderer. One package keeps one release and one playground. A family could still graduate to its own package later if it gets its own brand.</li>
+      <li><strong>Pull the shared core out of the robot code.</strong> Cells, paths, frames, palette checks and the animation shell move to an internal module that every family uses. The golden corpus proves robots don't move by a pixel, so this is a 1.x minor under ADR 0006.</li>
+      <li><strong>Each family freezes on its own.</strong> It ships marked experimental until you pick its art, then gets its own ADR, golden corpus and contrast tests, and its own "picture is the API" promise from then on.</li>
+      <li><strong>Every family needs a 9×9 small version</strong> for 24px, the way the robots got one. The 32px wall here shows the 15×15 art shrunk, which is where it starts to blur.</li>
+      <li><strong>Seeds are salted per family</strong> (<code>animal:</code> + seed), so one user's robot and animal don't share hidden patterns. The playground would get a family switcher, with the family in the hash next to the seed.</li>
+    </ol>
+  </section>
+</main>
+<script>/*LAB*/</script>
+<script>
+(() => {
+  const L = window.Lab;
+  const families = [
+    {
+      key: 'animal', kind: L.animal, title: 'Animals', status: ['good', 'Strongest'],
+      notes: 'Ten species: cat, fox, bear, bunny, mouse, dog, panda, owl, frog and pig, in eight coats, with eye styles, markings (stripes, patch, mask, spots), cheeks, bows, flowers and whiskers. Ears carry the species, so they read even at 32px. The dog and frog are the weakest and need another pass.',
+    },
+    {
+      key: 'person', kind: L.person, title: 'People', status: ['good', 'Works, needs care'],
+      notes: 'Six skin tones, seven hair colours, ten hairstyles, beards and moustaches, glasses and shades, beanies, headbands and earrings, over a shirt. Hair is nudged off colours that vanish against the skin. People invite the most scrutiny: skin tone and hair choices need a deliberate, inclusive pass, and eyes on the darkest skin are still low contrast.',
+    },
+    {
+      key: 'monster', kind: L.monster, title: 'Monsters', status: ['good', 'Strongest'],
+      notes: 'Blob, tall, wide, ghost and box bodies with one, two or three eyes, eye stalks or tiny eyes, fangs, teeth and tongues, horns, antennae, spikes, arms and wings. Closest to the robots in spirit and colour, and they hold up in every cell shape.',
+    }
+  ];
+  const robotDesc = (s) => { const t = L.robotTraits(s); return [t.head, t.eyes, t.mouth].join(' · '); };
+  const state = { seed: '', shape: '', size: 72, seeds: [] };
+  const opts = (size) => { const o = { size }; if (state.shape) o.shape = state.shape; return o; };
+  const robot = (seed, size) => L.botling(seed, { ...opts(size), frame: 'rounded', title: 'Robot avatar' });
+  const draw = (f, seed, size) => L.renderKind(f.kind, seed, opts(size));
+  const freshSeeds = () => Array.from({ length: 24 }, () => L.randomSeed());
+
+  const five = document.getElementById('five');
+  const host = document.getElementById('families');
+
+  function renderFive() {
+    const s = state.seed;
+    const cards = [{ title: 'Robot', svg: robot(s, 140), desc: robotDesc(s) }].concat(
+      families.map((f) => ({ title: f.kind.name, svg: draw(f, s, 140), desc: f.kind.describe(f.kind.traits(s)) })),
+    );
+    five.innerHTML = cards.map((c) => `<figure>${c.svg}<figcaption><strong>${c.title}</strong><span>${c.desc}</span></figcaption></figure>`).join('');
+  }
+
+  function renderWalls() {
+    host.innerHTML = families.map((f) => `
+      <section class="family" aria-labelledby="h-${f.key}">
+        <div class="family-head"><h2 id="h-${f.key}">${f.title}</h2><span class="chip ${f.status[0]}">${f.status[1]}</span></div>
+        <p class="notes">${f.notes}</p>
+        <div class="wall">${state.seeds.map((s) => `<button type="button" data-seed="${s}" aria-label="Use seed ${s}">${draw(f, s, state.size)}</button>`).join('')}</div>
+        <div class="tiny" aria-label="The same seeds at 24px">${state.seeds.map((s) => draw(f, s, 24)).join('')}</div>
+      </section>`).join('');
+  }
+
+  const input = document.getElementById('seed');
+  state.seed = input.value;
+  input.addEventListener('input', () => { state.seed = input.value; renderFive(); });
+  function seg(id, key, cast) {
+    const el = document.getElementById(id);
+    el.addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      for (const x of el.querySelectorAll('button')) x.setAttribute('aria-pressed', String(x === b));
+      state[key] = cast(b.dataset.v);
+      renderFive();
+      renderWalls();
+    });
+  }
+  seg('shape', 'shape', String);
+  seg('size', 'size', Number);
+  document.getElementById('shuffle').addEventListener('click', () => { state.seeds = freshSeeds(); renderWalls(); });
+  host.addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-seed]');
+    if (!b) return;
+    input.value = state.seed = b.dataset.seed;
+    renderFive();
+    five.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+  });
+  state.seeds = Array.from({ length: 24 }, (_, i) => `seed-${i}`);
+  renderFive();
+  renderWalls();
+})();
+</script>

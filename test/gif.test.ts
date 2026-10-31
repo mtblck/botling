@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { encodeGif } from '../site/gif.js';
 import { frameAt, loopLength, periods } from '../site/motion.js';
-import { botling } from '../src/index.js';
+import { botling } from '../src/styles/botling/index.js';
 
 interface Decoded {
   width: number;

@@ -1,7 +1,14 @@
-# botling
+# Seedkin
 
-Seeded robot avatars drawn on a grid of squares, circles, triangles or diamonds.
-Try it at **[botling.me](https://botling.me)**.
+A family of seeded pixel avatars, drawn as SVG on a grid of squares, circles, triangles or diamonds. Plant a seed (a user id, any string) and the same avatar sprouts every time.
+
+The first style is **Botling**, the robots. Animals (Snoots), people (Noggins) and monsters (Beasties) are on the way. Each style has its own entry point, such as `seedkin/botling`, so an app only ships the styles it uses.
+
+> Seedkin isn't on npm yet. Until it is, `npm install botling` gives you the same robots: import from `'botling'` instead of `'seedkin/botling'`. Every seed draws the same robot in both.
+
+# Botling
+
+Seeded robot avatars. Try them at **[botling.me](https://botling.me)**.
 
 ![Rows of botling robots in square, circle, triangle and diamond cells](docs/hero.svg)
 
@@ -11,18 +18,18 @@ Try it at **[botling.me](https://botling.me)**.
 - **Small and self-contained.** Zero dependencies, returns an SVG string, no network requests, works in the browser, Node and edge runtimes.
 - **MIT licensed**, art included.
 
-> Stable since 1.0: the robot a seed draws only changes in a major version. See [Versioning](#versioning).
+> Stable since botling 1.0: the robot a seed draws only changes in a major version. See [Versioning](#versioning).
 
 ## Install
 
 ```sh
-npm install botling
+npm install seedkin
 ```
 
 ## Use
 
 ```ts
-import { botling, botlingDataUri } from 'botling';
+import { botling, botlingDataUri } from 'seedkin/botling';
 
 // An SVG string, for inlining.
 const svg = botling(user.id);
@@ -46,7 +53,7 @@ The seed is used as given, apart from Unicode normalisation (NFC), so `José` dr
 `randomSeed()` returns a readable random seed, like `plucky-servo-427`, for a "give me a new robot" button or a default for someone without an id. Store the seed: that's what brings the same robot back.
 
 ```ts
-import { botling, randomSeed } from 'botling';
+import { botling, randomSeed } from 'seedkin/botling';
 
 const seed = randomSeed(); // save this with the user
 const svg = botling(seed);
@@ -113,7 +120,7 @@ Below 40px the robot only blinks and hovers, since anything busier reads as flic
 `HOLIDAY_PALETTES` has New Year's, Valentine's, St Patrick's, Fourth of July, Halloween and Christmas. A seed never picks one, so everyday robots don't change; pass one in to dress the same robot up for the day:
 
 ```ts
-import { botling, HOLIDAY_PALETTES } from 'botling';
+import { botling, HOLIDAY_PALETTES } from 'seedkin/botling';
 
 botling(user.id, { palette: HOLIDAY_PALETTES.halloween });
 ```
@@ -123,7 +130,7 @@ botling(user.id, { palette: HOLIDAY_PALETTES.halloween });
 Everything that goes into a robot is exported, so you can offer users a choice:
 
 ```ts
-import { botling, PALETTES, SHAPES, traits } from 'botling';
+import { botling, PALETTES, SHAPES, traits } from 'seedkin/botling';
 
 // Let someone choose a shape and palette for their own seed.
 const options = SHAPES.flatMap((shape) => PALETTES.map((_, palette) => botling(user.id, { shape, palette, size: 48 })));
@@ -159,7 +166,7 @@ An accessory takes the place of what it covers: headphones replace the top piece
 
 ## Versioning
 
-The picture is the API. Within a major version, a seed with the same options always draws the same robot. Store a seed, shape and palette index, and you get the same robot through every 1.x release.
+The picture is the API. Within a major version, a seed with the same options always draws the same robot. Store a seed, shape and palette index, and you get the same robot through every 1.x release. The robots in `seedkin/botling` are the robots of `botling` 1.2.0, seed for seed ([ADR 0009](docs/adr/0009-seedkin-family.md)).
 
 - **Major:** anything that changes an existing seed's robot, at any size: art, palette colours, the order or length of any parts list, the 40px switch, which parts move when animated, and the output of `traits`, `grid` and `smallGrid`.
 - **Minor:** new holiday palettes, opt-in options and exports (seeds never pick them), smaller SVG markup that draws the same picture, and motion timing.
@@ -184,7 +191,7 @@ Look at `preview.html` for any art change, at 24px especially.
 
 ## Support
 
-botling is free and MIT licensed. If it's useful to you, you can [buy me a coffee on Ko-fi](https://ko-fi.com/mtblck) or [sponsor on GitHub](https://github.com/sponsors/mtblck).
+Seedkin is free and MIT licensed. If it's useful to you, you can [buy me a coffee on Ko-fi](https://ko-fi.com/mtblck) or [sponsor on GitHub](https://github.com/sponsors/mtblck).
 
 ## License
 

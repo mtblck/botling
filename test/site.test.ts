@@ -2,7 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { describe, expect, it, vi } from 'vitest';
 import { options, type PlaygroundState, snippet } from '../site/snippet.js';
 import { arrival, body, HOST, track } from '../site/track.js';
-import { botling, HOLIDAY_PALETTES } from '../src/index.js';
+import { botling, HOLIDAY_PALETTES } from '../src/styles/botling/index.js';
 
 const auto = { shape: 'auto', palette: 'auto', grid: 'auto' };
 

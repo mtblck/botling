@@ -1,6 +1,6 @@
-import { GRID_SIZE, type Part, SMALL_GRID_SIZE } from '../grid/index.js';
-import { createRng, int, type Rng } from '../random.js';
-import { Role, type Traits } from '../types.js';
+import { createRng, int, type Rng } from '../../core/random.js';
+import { GRID_SIZE, type Part, SMALL_GRID_SIZE } from './grid/index.js';
+import { Role, type Traits } from './types.js';
 
 /**
  * Ways a robot moves. Eyes blink, the top piece wobbles, ears and handles

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { botling, botlingDataUri, PALETTES, resolveTraits, SHAPES } from '../src/index.js';
+import { botling, botlingDataUri, PALETTES, resolveTraits, SHAPES } from '../src/styles/botling/index.js';
 
 describe('botling', () => {
   it('is stable for a seed', () => {

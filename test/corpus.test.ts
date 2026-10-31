@@ -18,7 +18,7 @@ import {
   smallGrid,
   TOPS,
   type Traits,
-} from '../src/index.js';
+} from '../src/styles/botling/index.js';
 
 // The 1.0 freeze (ADR 0006), checked over many seeds rather than one. A
 // change to a digest below means existing users get a different robot: a
