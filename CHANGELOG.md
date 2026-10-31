@@ -10,6 +10,7 @@ any change to the robot a seed draws is a major version.
 ### Site
 
 - The docs are now thirteen pages with a sidebar, an "On this page" list, previous and next links and an edit link: an introduction, guides for React, Vue, Svelte, plain HTML, serving avatars from a server and using them as a profile photo fallback, a page per style, How it works and Versioning. Old `/docs/#section` links go to the section's new page.
+- Every style page is built from one template (`scripts/styles.mjs`): the playground, then usage tabs (ESM, React, HTML, server), a details list with the entry point, status, gzipped size measured at build and the parts counted from the package, the style's options table, and links to the previous and next style. The Styles page links each style's playground and docs.
 
 ## [2.2.0] - 2026-10-31
 

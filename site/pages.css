@@ -903,3 +903,78 @@ ol.features > li::before {
   margin-top: 6px;
   transform: rotate(-135deg);
 }
+
+/* ---- style pages: "Use it" ---- */
+.details {
+  margin: 0 0 16px;
+}
+.details div {
+  display: grid;
+  grid-template-columns: 7.5em minmax(0, 1fr);
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.details dt {
+  font-weight: 600;
+}
+.details dd {
+  margin: 0;
+  color: var(--ink-2);
+}
+.details .badge {
+  margin-right: 6px;
+}
+.use #option-list {
+  margin-top: 40px;
+}
+.use .options-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.use .options-table th,
+.use .options-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--rule);
+  overflow-wrap: break-word;
+}
+.use .options-table tr:last-child td {
+  border-bottom: 0;
+}
+.use .options-table td:first-child {
+  white-space: nowrap;
+}
+.use .options-table td:not(:first-child) code {
+  overflow-wrap: anywhere;
+}
+.use .pager {
+  margin-top: 40px;
+}
+@media (max-width: 640px) {
+  .use .options-table thead {
+    display: none;
+  }
+  .use .options-table tr {
+    display: block;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .use .options-table td {
+    display: block;
+    padding: 2px 14px;
+    border: 0;
+  }
+  .use .options-table td[data-label]::before {
+    content: attr(data-label) ": ";
+    color: var(--ink-2);
+  }
+}
+.style .style-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 12px;
+}
