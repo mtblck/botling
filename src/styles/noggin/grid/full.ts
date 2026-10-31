@@ -92,10 +92,9 @@ function mouth(c: Canvas, t: NogginTraits, y: number, role: Role): void {
       c.paint(c.center, y + 1, Role.Accent);
       return;
     case 'smirk':
-      // Low on the left, the right corner raised; a dropped corner read as a frown.
-      c.paint(c.center - 1, y + 1, role);
+      // A small V: a narrower smile than 'smile'.
+      c.mirror(1, y, role);
       c.paint(c.center, y + 1, role);
-      c.paint(c.center + 1, y, role);
       return;
   }
 }
