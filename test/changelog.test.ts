@@ -33,5 +33,6 @@ describe('changelog page', () => {
   it("throws on Markdown it can't show, rather than mangle it", () => {
     expect(() => changelog('## [1.0.0]\n\n  - nested\n')).toThrow(/can't show/);
     expect(() => changelog('## [1.0.0]\n\n```ts\nx\n```\n')).toThrow(/can't show/);
+    expect(() => changelog('# Changelog\n\nNothing yet.\n')).toThrow(/no version headings/);
   });
 });

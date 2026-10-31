@@ -37,6 +37,7 @@ export function changelog(markdown) {
     }),
   );
   const start = lines.findIndex((l) => l.startsWith('## '));
+  if (start === -1) throw new Error('CHANGELOG.md has no version headings');
   const out = [];
   const versions = [];
   let list = false;
