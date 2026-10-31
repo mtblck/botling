@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Beastie: monster avatars from any string · Seedkin</title>
+  <meta name="description" content="Beastie turns any string into a monster avatar, the same one every time: blobs, ghosts and boxes with one to three eyes, fangs, horns and wings, in eight hides and four cell shapes. Readable at 24px, zero dependencies, MIT licensed." />
+  <link rel="canonical" href="https://seedkin.dev/styles/beastie/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://seedkin.dev/styles/beastie/" />
+  <meta property="og:title" content="Meet the Beasties" />
+  <meta property="og:description" content="Monster avatars from any string: same seed, same Beastie. One eye or three, fangs, horns and wings." />
+  {{head}}
+  <script type="module" src="/beastie.js"></script>
+  <link rel="modulepreload" href="/playground.js" />
+  <link rel="modulepreload" href="/snippet.js" />
+  {{preloads}}
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the playground</a>
+  {{header}}
+
+  <main id="main">
+    <section class="play-head wrap" aria-labelledby="hero-h">
+      <div>
+        <p class="eyebrow"><a href="/styles/">Styles</a> / Beastie <span class="badge">Preview</span></p>
+        <h1 id="hero-h">Meet the Beasties.</h1>
+        <p class="lede">Beasties grew in the Grid's dark corners, where the dots went unswept: one eye or three, fangs, horns, stalks and wings. They're friendlier than they look, and they never forget a face. Give one some text and it draws the same monster every time, on any machine, with nothing stored. Type anything to meet yours.</p>
+      </div>
+      <nav class="style-tabs" aria-label="Styles"><a href="/styles/botling/" data-to="botling">Botling</a><a href="/styles/snoot/" data-to="snoot">Snoot</a><a href="/styles/noggin/" data-to="noggin">Noggin</a><a href="/styles/beastie/" data-to="beastie" aria-current="page">Beastie</a></nav>
+    </section>
+
+    <section class="play wrap" aria-label="Playground">
+      <div class="preview">
+        <div class="stage card">
+          <form class="seed" id="seed-form">
+            <label for="seed">Seed</label>
+            <div class="seed-row">
+              <input id="seed" name="seed" type="text" autocomplete="off" spellcheck="false" maxlength="200" placeholder="Try your name…" />
+              <!-- Icon: Lucide (ISC licence), lucide.dev -->
+              <button class="btn" type="button" id="random"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg>Random</button>
+            </div>
+          </form>
+          <div class="big" id="big" role="img" aria-label="Your Beastie"></div>
+          <ul class="sizes" id="sizes" aria-label="The same Beastie at 96, 48, 32 and 24 pixels"></ul>
+          <p class="note">Below 40px it switches to a simpler version of the same Beastie.</p>
+        </div>
+        <div class="output card">
+          <pre class="code" data-nocopy><code id="code"></code></pre>
+          <div class="actions">
+            <button class="btn" type="button" id="copy-code">Copy code</button>
+            <button class="btn" type="button" id="copy-svg">Copy SVG</button>
+            <fieldset class="downloads" id="downloads">
+              <legend>Download</legend>
+              <button class="btn" type="button" data-format="svg">SVG</button>
+              <button class="btn" type="button" data-format="png">PNG</button>
+              <button class="btn" type="button" data-format="jpeg">JPG</button>
+              <button class="btn" type="button" data-format="gif">GIF</button>
+            </fieldset>
+          </div>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+      <section class="options card" id="options" aria-labelledby="options-h">
+        <div class="options-head">
+          <h2 id="options-h">Options</h2>
+          <button class="btn" type="button" id="reset">Reset</button>
+        </div>
+      </section>
+    </section>
+
+    <section class="crowd wrap" aria-labelledby="crowd-h">
+      <div class="head">
+        <h2 id="crowd-h">Same options, more seeds</h2>
+        <button class="btn" type="button" id="shuffle">Shuffle</button>
+      </div>
+      <ul class="gallery" id="gallery"></ul>
+    </section>
+
+    <section class="use wrap" id="use" aria-labelledby="use-h">
+      <h2 id="use-h">Use it</h2>
+      <div class="cols">
+        <div>
+          <h3>Install</h3>
+          <pre class="code"><code>npm install seedkin</code></pre>
+          <p class="note">Beastie is a Preview style: until it's marked stable, the Beastie a seed draws can change in a minor version.</p>
+          <h3>Draw one</h3>
+          <pre class="code"><code>import { beastie, beastieDataUri } from 'seedkin/beastie';
+
+// An SVG string, to inline
+const svg = beastie(user.id);
+
+// A data: URI, for an img src or CSS url()
+const src = beastieDataUri(user.id, { size: 40 });</code></pre>
+        </div>
+        <div>
+          <h3>Good to know</h3>
+          <ul class="facts">
+            <li><strong>Same seed, same Beastie.</strong> Nothing to store; the monster is computed from the string.</li>
+            <li><strong>A Beastie isn't your Botling.</strong> Each style salts the seed, so one id gets an unrelated robot and monster.</li>
+            <li><strong>Seed with an opaque id</strong>, like a database id, not an email: anyone can draw the Beastie for a guessed email and compare.</li>
+            <li><strong>Picker-ready.</strong> <code>SHAPES</code>, <code>PALETTES</code> and <code>traits()</code> are exported, so people can choose their own look.</li>
+          </ul>
+          <p><a href="/docs/">Every option, in the docs</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {{footer}}
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
   "name": "seedkin",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Seedkin: a family of seeded pixel avatars (robots first) drawn as SVG. Zero dependencies.",
   "keywords": [
     "avatar",
@@ -35,6 +35,14 @@
     "./snoot": {
       "types": "./dist/styles/snoot/index.d.ts",
       "default": "./dist/styles/snoot/index.js"
+    },
+    "./beastie": {
+      "types": "./dist/styles/beastie/index.d.ts",
+      "default": "./dist/styles/beastie/index.js"
+    },
+    "./noggin": {
+      "types": "./dist/styles/noggin/index.d.ts",
+      "default": "./dist/styles/noggin/index.js"
     },
     "./package.json": "./package.json"
   },
