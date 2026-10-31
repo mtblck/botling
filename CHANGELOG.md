@@ -15,6 +15,12 @@ any change to the robot a seed draws is a major version.
 - Search the site from the header (or press `/`): docs, styles and pages, matched as you type, built into `search.json` at build time.
 - Code samples are syntax highlighted at build time, in both themes, and the playground's code as it changes. The site still loads no highlighter library.
 
+## [2.4.1] - 2026-10-31
+
+### Fixed
+
+- An animated Noggin no longer moves part of an eye when it talks. When a smile or smirk's corner lands on a tall, winking or closed eye (about a quarter of Noggins), that cell now blinks with the eye instead of talking with the mouth. Still Noggins are unchanged, and so is every other style.
+
 ## [2.4.0] - 2026-10-31
 
 ### Added
@@ -145,7 +151,8 @@ First release.
 
 The playground site (`site/`, not part of the npm package) lets you try seeds, shapes and palettes and copy the code.
 
-[Unreleased]: https://github.com/mtblck/seedkin/compare/v2.4.0...HEAD
+[Unreleased]: https://github.com/mtblck/seedkin/compare/v2.4.1...HEAD
+[2.4.1]: https://github.com/mtblck/seedkin/compare/v2.4.0...v2.4.1
 [2.4.0]: https://github.com/mtblck/seedkin/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/mtblck/seedkin/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/mtblck/seedkin/compare/v2.1.0...v2.2.0

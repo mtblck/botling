@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { botling } from '../src/styles/botling/index.js';
+import { drawGrid } from '../src/styles/noggin/grid/full.js';
 import {
   EYES,
   EYEWEAR,
@@ -133,5 +134,12 @@ describe('noggin', () => {
     [{ frame: 'star' }, 'unknown frame'],
   ])('rejects %j', (opts, message) => {
     expect(() => noggin('x', opts as never)).toThrow(new RegExp(`^noggin: ${message}`));
+  });
+
+  it('keeps an eye whole when a mouth corner lands on it, so talking never moves part of an eye', () => {
+    // chrome-piston-108 has tall eyes and a smirk whose corner sits on the right eye.
+    const c = drawGrid(resolveTraits('chrome-piston-108', { palette: 1 }));
+    expect(c.parts[7]?.[c.center + 2]).toBe('eyes');
+    expect(c.parts[8]?.[c.center + 1]).toBe('mouth');
   });
 });
