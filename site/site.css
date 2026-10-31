@@ -18,7 +18,7 @@
   --ink-2: #4c4a5c;
   --rule: #d4d1e1;
   --control-edge: #7d7a93; /* outlines of things you can press: 3:1 on paper and card */
-  --dot: #cdc9dc;
+  --dot: #dfdcea; /* the grid stays a texture: about 1.2:1 on paper */
   --accent: #3a26c9;
   --accent-ink: #ffffff;
   --accent-soft: rgb(58 38 201 / 0.1);
