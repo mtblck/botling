@@ -7,6 +7,10 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+### Site
+
+- Each style's docs page shows its status next to its name: Stable for Botling, Snoot, Noggin and Beastie, Preview for Sprite.
+
 ## [2.5.0] - 2026-10-31
 
 ### Added
