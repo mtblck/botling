@@ -8,6 +8,7 @@ export type Species = 'cat' | 'fox' | 'bear' | 'bunny' | 'mouse' | 'dog' | 'pand
 export type Eyes = 'dot' | 'tall' | 'shine' | 'sleepy' | 'happy';
 export type Marking = 'none' | 'stripes' | 'patch' | 'mask' | 'spots';
 export type Extra = 'none' | 'bow' | 'flower' | 'whiskers';
+export type Mouth = 'smile' | 'tongue' | 'open';
 
 /** Every choice that makes up one Snoot. */
 export interface SnootTraits {
@@ -23,6 +24,7 @@ export interface SnootTraits {
   isTall: boolean;
   hasCheeks: boolean;
   shape: Shape;
+  mouth: Mouth;
 }
 
 /** Options for `snoot()`. */

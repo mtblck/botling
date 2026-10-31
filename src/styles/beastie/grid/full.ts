@@ -1,5 +1,5 @@
 import { blob, stamp } from '../../../core/art.js';
-import { type Canvas, createCanvas } from '../../../core/canvas.js';
+import { type Canvas, createCanvas, tagged } from '../../../core/canvas.js';
 import { type BeastieTraits, Role } from '../types.js';
 
 /** Row half-widths for each body, top to bottom. */
@@ -31,7 +31,8 @@ export function drawGrid(t: BeastieTraits): Canvas {
   const top = t.body === 'tall' ? 3 : 4;
   const bottom = top + r.length - 1;
   const hw = Math.max(...r);
-  sides(c, t, top, hw);
+  // Tagged parts move when animated: sides twitch, tops wobble, eyes blink, mouths talk.
+  tagged(c, 'sides', () => sides(c, t, top, hw));
   blob(c, top, r, Role.Body, Role.Shade);
   if (t.body === 'ghost') for (let dx = 1; dx <= hw; dx += 2) c.mirror(dx, bottom, Role.Empty);
   else for (const dx of [Math.max(1, hw - 3), Math.max(2, hw - 2)]) c.mirror(dx, bottom + 1, Role.Shade);
@@ -42,10 +43,10 @@ export function drawGrid(t: BeastieTraits): Canvas {
       [-1, 6],
     ] as const)
       c.paint(c.center + dx, top + dy, Role.Accent);
-  topPiece(c, t, top, r[0] ?? hw);
+  tagged(c, 'top', () => topPiece(c, t, top, r[0] ?? hw));
   const eyeRow = top + 2;
-  eyes(c, t, eyeRow, hw);
-  mouth(c, t, eyeRow + 3, hw);
+  tagged(c, 'eyes', () => eyes(c, t, eyeRow, hw));
+  tagged(c, 'mouth', () => mouth(c, t, eyeRow + 3, hw));
   return c;
 }
 

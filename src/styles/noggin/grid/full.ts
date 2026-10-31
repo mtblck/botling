@@ -1,5 +1,5 @@
 import { blob } from '../../../core/art.js';
-import { type Canvas, createCanvas } from '../../../core/canvas.js';
+import { type Canvas, createCanvas, tagged } from '../../../core/canvas.js';
 import { type NogginTraits, Role } from '../types.js';
 import { drawHair, TOP } from './hair.js';
 
@@ -29,12 +29,13 @@ export function drawGrid(t: NogginTraits): Canvas {
     c.mirror(hw, 7, Role.Shade);
   }
   if (t.facial === 'mustache') blob(c, 8, [1], Role.Shade);
-  eyes(c, t);
+  // Tagged parts move when animated: eyes blink and the mouth talks.
+  tagged(c, 'eyes', () => eyes(c, t));
   if (t.hasBrows && t.eyewear !== 'shades') {
     c.mirror(EYE_X, EYE_ROW - 1, Role.Shade);
     c.mirror(EYE_X + 1, EYE_ROW - 1, Role.Shade);
   }
-  mouth(c, t, mouthRow, t.facial === 'beard' ? Role.Body : Role.Glow);
+  tagged(c, 'mouth', () => mouth(c, t, mouthRow, t.facial === 'beard' ? Role.Body : Role.Glow));
   if (t.hasCheeks && t.facial !== 'beard') c.mirror(EYE_X + 1, EYE_ROW + 1, Role.Accent);
   eyewear(c, t);
   headwear(c, t, hw);

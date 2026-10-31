@@ -4,7 +4,7 @@ public: true
 
 # 0009: Botling becomes the first style of Seedkin
 
-- **Status:** Accepted
+- **Status:** Accepted; Preview ended for Snoot, Noggin and Beastie in [0011](0011-every-style-stable.md)
 - **Date:** 2026-10-30
 - **PR:** <link once opened>
 

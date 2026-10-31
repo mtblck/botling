@@ -134,3 +134,31 @@ export function drawMuzzle(c: Canvas, t: SnootTraits, y: number, hw: number, bot
   c.paint(c.center, y + 1, Role.Glow);
   m(1, y + 2 < bottom ? y + 2 : y + 1, Role.Glow);
 }
+
+/**
+ * Adds the mouth to the muzzle: a smile is the muzzle as drawn; a tongue
+ * pokes out below the nose, and an open mouth closes the smile's gap.
+ *
+ * @param c - Canvas to draw on
+ * @param t - The Snoot's traits
+ * @param y - Muzzle row
+ * @param bottom - Head's last row
+ */
+export function drawMouth(c: Canvas, t: SnootTraits, y: number, bottom: number): void {
+  if (t.mouth === 'smile' || t.species === 'owl') return;
+  const tongue = t.mouth === 'tongue';
+  switch (t.species) {
+    case 'frog':
+      if (tongue) c.paint(c.center, y + 1, Role.Accent);
+      return;
+    case 'pig':
+      c.mirror(1, y + 2, Role.Glow);
+      c.paint(c.center, y + 2, tongue ? Role.Accent : Role.Glow);
+      return;
+    case 'fox':
+      c.paint(c.center, y + 1, tongue ? Role.Accent : Role.Glow);
+      return;
+  }
+  // The smile's corners sit on the muzzle's last row, around a gap below the nose.
+  c.paint(c.center, y + 2 < bottom ? y + 2 : y + 1, tongue ? Role.Accent : Role.Glow);
+}

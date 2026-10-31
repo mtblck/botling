@@ -23,6 +23,13 @@ export interface CommonOptions {
   background?: boolean;
   /** Accessible name; `null` marks the image decorative. */
   title?: string | null;
+  /**
+   * Bring the avatar to life with a small CSS animation inside the SVG. Below
+   * 40px it only blinks and hovers. It holds still for anyone who prefers
+   * reduced motion, and the still frame is the avatar drawn without it.
+   * Default false.
+   */
+  animate?: boolean;
 }
 
 /** {@link CommonOptions} checked and settled for one render. */
@@ -32,6 +39,7 @@ export interface Settled {
   showGrid: boolean;
   frame: Frame;
   look: Look;
+  animate: boolean;
 }
 
 /** Below this size the 15x15 avatar reads as noise, so `'auto'` draws the small one without its grid. */
@@ -44,9 +52,12 @@ const DETAILS: readonly Detail[] = ['auto', 'full', 'small'];
  *
  * @param style - The style's name, for error messages
  * @param opts - Caller options
- * @returns Size, detail, grid, frame and look to draw with
+ * @returns Size, detail, grid, frame, look and motion to draw with
  */
 export function settle(style: string, opts: CommonOptions): Settled {
+  if (opts.animate !== undefined && typeof opts.animate !== 'boolean') {
+    throw new RangeError(`${style}: animate must be true or false`);
+  }
   const size = opts.size ?? 96;
   if (typeof size !== 'number' || !Number.isFinite(size) || size <= 0) {
     throw new RangeError(`${style}: size must be a positive, finite number`);
@@ -60,7 +71,7 @@ export function settle(style: string, opts: CommonOptions): Settled {
   const showGrid = !isSmall && look === 'gapped' && (auto ? size >= AUTO_FULL_MIN_SIZE : opts.showGrid === true);
   const frame = opts.frame ?? 'square';
   if (!FRAMES.includes(frame)) throw new RangeError(`${style}: unknown frame "${String(frame)}"`);
-  return { size, isSmall, showGrid, frame, look };
+  return { size, isSmall, showGrid, frame, look, animate: opts.animate === true };
 }
 
 const HEX = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;

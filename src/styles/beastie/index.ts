@@ -1,6 +1,6 @@
 /**
- * seedkin/beastie: the Beasties, seeded monster avatars. A Preview style: the
- * Beastie a seed draws can still change in a minor version.
+ * seedkin/beastie: the Beasties, seeded monster avatars. A seed draws
+ * the same Beastie in every 2.x release.
  *
  * @packageDocumentation
  */

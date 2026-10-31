@@ -20,6 +20,47 @@ export interface Picture {
 const escapeXml = (s: string): string => s.replace(/[&<>"']/g, (ch) => `&#${ch.charCodeAt(0)};`);
 
 /**
+ * Maps each role to its palette colour.
+ *
+ * @param p - The palette
+ * @returns A colour for every role but empty
+ */
+export function roleColours(p: Palette): Record<number, string> {
+  return {
+    [Role.Body]: p.body,
+    [Role.Screen]: p.screen,
+    [Role.Glow]: p.glow,
+    [Role.Accent]: p.accent,
+    [Role.Shade]: p.shade,
+  };
+}
+
+/**
+ * Wraps drawn cells in the SVG document: the frame, background, size and accessible name.
+ *
+ * @param pic - The picture, for its shape, palette and title
+ * @param s - Settled options
+ * @param fit - The frame's fit
+ * @param cells - The drawn cells
+ * @param css - A `<style>` to put first, if any
+ * @returns A standalone SVG document
+ */
+export function svgDocument(
+  pic: Picture,
+  s: Settled,
+  fit: ReturnType<typeof frameFit>,
+  cells: string,
+  css = '',
+): string {
+  const n = pic.cells.length;
+  const pad = padding(pic.shape);
+  const span = n + 2 * pad;
+  const a11y = pic.title === null ? 'aria-hidden="true"' : `role="img" aria-label="${escapeXml(pic.title)}"`;
+  const body = framed(s.frame, fit, n, pad, pic.background ? pic.palette.bg : null, cells);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-pad} ${-pad} ${span} ${span}" width="${s.size}" height="${s.size}" ${a11y}>${css}${body}</svg>`;
+}
+
+/**
  * Draws a grid of roles as a standalone SVG: one path per colour, in the
  * cell shape and look, inside the frame. Small avatars draw touching cells.
  *
@@ -29,13 +70,7 @@ const escapeXml = (s: string): string => s.replace(/[&<>"']/g, (ch) => `&#${ch.c
  */
 export function stillSvg(pic: Picture, s: Settled): string {
   const p = pic.palette;
-  const colours: Record<number, string> = {
-    [Role.Body]: p.body,
-    [Role.Screen]: p.screen,
-    [Role.Glow]: p.glow,
-    [Role.Accent]: p.accent,
-    [Role.Shade]: p.shade,
-  };
+  const colours = roleColours(p);
   const n = pic.cells.length;
   const pad = padding(pic.shape);
   const fit = frameFit(s.frame, pic.shape, n, pad);
@@ -72,8 +107,5 @@ export function stillSvg(pic: Picture, s: Settled): string {
   cells = silhouette(s.look, pic.shape === 'circle', pathData(drawn), ink) + cells;
   cells += innerLines(s.look, pic.shape, g, ink);
   if (s.look === 'sticker' && cells) cells = stickerGroup(n, cells);
-  const span = n + 2 * pad;
-  const a11y = pic.title === null ? 'aria-hidden="true"' : `role="img" aria-label="${escapeXml(pic.title)}"`;
-  const body = framed(s.frame, fit, n, pad, pic.background ? p.bg : null, cells);
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-pad} ${-pad} ${span} ${span}" width="${s.size}" height="${s.size}" ${a11y}>${body}</svg>`;
+  return svgDocument(pic, s, fit, cells);
 }

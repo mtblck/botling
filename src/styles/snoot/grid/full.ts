@@ -1,7 +1,7 @@
 import { blob, stamp } from '../../../core/art.js';
-import { type Canvas, createCanvas } from '../../../core/canvas.js';
+import { type Canvas, createCanvas, tagged } from '../../../core/canvas.js';
 import { Role, type SnootTraits } from '../types.js';
-import { drawEyes, drawMarking, drawMuzzle } from './face.js';
+import { drawEyes, drawMarking, drawMouth, drawMuzzle } from './face.js';
 
 /** Ears for each species, as left-half art whose last row sits on the head's top row. Outer edge first. */
 const EARS: Readonly<Partial<Record<string, { art: readonly string[]; ox: number }>>> = {
@@ -50,9 +50,11 @@ export function drawGrid(t: SnootTraits): Canvas {
   const left = c.center - hw;
   blob(c, TOP, rows, Role.Body, Role.Shade);
   const ear = EARS[t.species];
-  if (ear) ears(c, ear.art, left + ear.ox, TOP);
-  if (isFrog) ears(c, FROG_EYES[t.eyes] ?? [], left + 1, TOP);
-  if (t.species === 'dog') ears(c, ['SSS', 'SSS', 'SS.', 'SS.', 'SS.', '.S.'], left - 1, TOP + 4);
+  // Tagged parts move when animated: ears twitch and eyes blink.
+  if (ear) tagged(c, 'top', () => ears(c, ear.art, left + ear.ox, TOP));
+  if (isFrog) tagged(c, 'eyes', () => ears(c, FROG_EYES[t.eyes] ?? [], left + 1, TOP));
+  if (t.species === 'dog')
+    tagged(c, 'sides', () => ears(c, ['SSS', 'SSS', 'SS.', 'SS.', 'SS.', '.S.'], left - 1, TOP + 4));
   const eyeRow = TOP + 2;
   const eyeX = Math.min(hw - 2, 2 + (hw > 4 ? 1 : 0));
   drawMarking(c, t, { top: TOP, eyeRow, eyeX, hw });
@@ -60,8 +62,9 @@ export function drawGrid(t: SnootTraits): Canvas {
     for (const dx of [eyeX - 1, eyeX, eyeX + 1])
       for (let y = eyeRow - 1; y <= eyeRow + 1; y++) c.mirror(dx, y, Role.Screen);
   }
-  if (!isFrog) drawEyes(c, t, eyeRow, eyeX);
+  if (!isFrog) tagged(c, 'eyes', () => drawEyes(c, t, eyeRow, eyeX));
   drawMuzzle(c, t, eyeRow + 2, hw, TOP + rows.length - 1);
+  drawMouth(c, t, eyeRow + 2, TOP + rows.length - 1);
   if (t.hasCheeks && t.species !== 'owl') c.mirror(eyeX + 1, eyeRow + 2, Role.Accent);
   if (t.extra === 'bow') stamp(c, ['A.A', 'AAA', 'A.A'], c.center - hw - 1, TOP - 2);
   else if (t.extra === 'flower') stamp(c, ['.A.', 'ACA', '.A.'], c.center + hw - 1, TOP - 2);

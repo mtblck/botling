@@ -1,11 +1,10 @@
-import { centreRows } from '../../core/canvas.js';
 import { type CommonOptions, checkPalette, settle } from '../../core/options.js';
-import { stillSvg } from '../../core/render/svg.js';
+import { avatarSvg } from '../../core/render/animated.js';
 import { drawGrid, drawSmallGrid } from './grid/index.js';
 import { PALETTES } from './palettes.js';
 import { SHAPES } from './parts.js';
 import { traits } from './traits.js';
-import type { BeastieOptions, BeastieTraits, Palette } from './types.js';
+import { type BeastieOptions, type BeastieTraits, type Palette, Role } from './types.js';
 
 /**
  * Applies the `shape` and numeric `palette` options to a seed's traits,
@@ -31,8 +30,8 @@ export function resolveTraits(seed: string, opts: BeastieOptions = {}): BeastieT
 }
 
 /**
- * Renders the Beastie for a seed as an SVG string. Beastie is a Preview style:
- * until it's marked stable, the Beastie a seed draws can change in a minor.
+ * Renders the Beastie for a seed as an SVG string. A seed draws
+ * the same Beastie in every 2.x release.
  *
  * @param seed - Any string, such as a user id
  * @param opts - Rendering options
@@ -44,9 +43,14 @@ export function beastie(seed: string, opts: BeastieOptions = {}): string {
     typeof opts.palette === 'object' ? checkPalette('beastie', opts.palette) : (PALETTES[t.palette] as Palette);
   const s = settle('beastie', opts as CommonOptions);
   const c = s.isSmall ? drawSmallGrid(t) : drawGrid(t);
-  centreRows(c, t.shape === 'triangle');
   const title = opts.title === undefined ? 'Monster avatar' : opts.title;
-  return stillSvg({ cells: c.cells, shape: t.shape, palette, background: opts.background !== false, title }, s);
+  const pic = { shape: t.shape, palette, background: opts.background !== false, title };
+  return avatarSvg(c, pic, s, {
+    style: 'beastie',
+    seed: `beastie:${seed}`,
+    moves: { eyes: 'blink', mouth: 'talk', top: 'wobble', sides: 'twitch' },
+    lid: Role.Body,
+  });
 }
 
 /**

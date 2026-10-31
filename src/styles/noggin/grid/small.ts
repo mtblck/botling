@@ -1,5 +1,5 @@
 import { blob } from '../../../core/art.js';
-import { type Canvas, createCanvas, SMALL_GRID_SIZE } from '../../../core/canvas.js';
+import { type Canvas, createCanvas, SMALL_GRID_SIZE, tagged } from '../../../core/canvas.js';
 import { type NogginTraits, Role } from '../types.js';
 
 /** The 9x9 head: its top row, rows of half-widths, eye row and eye column. */
@@ -91,7 +91,8 @@ export function drawSmallGrid(t: NogginTraits): Canvas {
     blob(c, 5, [3, 2], Role.Shade);
     c.paint(c.center, 5, Role.Body);
   } else if (t.facial === 'mustache') c.mirror(0, 5, Role.Shade);
-  eyes(c, t);
+  // Tagged eyes blink when animated.
+  tagged(c, 'eyes', () => eyes(c, t));
   const mouthRow = t.facial === 'mustache' ? 6 : 5;
   if (t.facial !== 'beard') {
     c.paint(c.center, mouthRow, t.mouth === 'open' ? Role.Accent : Role.Glow);

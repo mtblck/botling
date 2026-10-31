@@ -93,7 +93,7 @@ describe('snoot', () => {
 
   it.each([
     [{ shape: 'hexagon' }, 'unknown shape'],
-    [{ palette: 8 }, 'palette must be an integer from 0 to 7'],
+    [{ palette: PALETTES.length }, `palette must be an integer from 0 to ${PALETTES.length - 1}`],
     [{ palette: 1.5 }, 'palette must be an integer'],
     [{ palette: null }, 'palette must be an index'],
     [{ palette: { ...PALETTES[0], body: 'red' } }, 'palette.body must be a hex colour'],

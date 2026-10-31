@@ -1,6 +1,6 @@
 /**
- * seedkin/noggin: the Noggins, seeded people avatars. A Preview style: the
- * Noggin a seed draws can still change in a minor version.
+ * seedkin/noggin: the Noggins, seeded people avatars. A seed draws
+ * the same Noggin in every 2.x release.
  *
  * @packageDocumentation
  */

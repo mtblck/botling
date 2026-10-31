@@ -20,9 +20,8 @@
   <main id="main" class="docs wrap">
     {{docsnav}}
     <article id="doc" class="prose" tabindex="-1">
-<h1>Noggin <span class="badge">Preview</span></h1>
+<h1>Noggin</h1>
 <p class="lede">Seeded people avatars in seven skin tones, with twelve hairstyles (including afros and locs), glasses, beards, hats and headscarves, in six outfits. <a href="/styles/noggin/">Try them in the playground</a>.</p>
-<p class="callout">Until Noggin is marked stable, the Noggin a seed draws can change in a minor version, so pin the minor (<code>~2.2.0</code>) if you store seeds and need the same person back.</p>
 <h2 id="use">Use</h2>
 <pre><code class="language-ts">import { noggin, nogginDataUri } from 'seedkin/noggin';
 
@@ -34,6 +33,8 @@ const src = nogginDataUri(user.id, { size: 40, skin: 4 });
 <p><code>noggin()</code> takes the same options as <a href="/docs/snoot/#options"><code>snoot()</code></a>, plus <code>skin</code>. <code>palette</code> picks one of the six outfits in <code>PALETTES</code>, or takes a whole palette object; <code>title</code> defaults to <code>'Person avatar'</code>. Below 40px it draws a simpler 9x9 Noggin from the same traits.</p>
 <h2 id="skin-tones">Skin tones</h2>
 <p><code>skin</code> is an index into <code>SKIN_TONES</code>, lightest first, so people can pick their own. A seed's hair colour and outfit always stand out from its skin; pick another skin tone and they move to the next colours that do.</p>
+<h2 id="animation">Animation</h2>
+<p>With <code>animate: true</code> a Noggin hovers, blinks and talks. Closed eyes and shades don't blink and beards don't talk. Below 40px it only blinks and hovers.</p>
 <h2 id="exports">Exports</h2>
 <p><code>traits</code>, <code>resolveTraits</code>, <code>grid</code>, <code>smallGrid</code>, <code>paletteFor</code>, <code>SKIN_TONES</code>, <code>HAIR_COLOURS</code>, <code>HAIRS</code>, <code>EYES</code>, <code>MOUTHS</code>, <code>FACIAL</code>, <code>EYEWEAR</code>, <code>HEADWEAR</code> and <code>SHAPES</code> are exported as for Botling (see <a href="/docs/botling/#advanced">Advanced</a>).</p>
 {{pager}}

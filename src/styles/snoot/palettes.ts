@@ -20,5 +20,9 @@ export const PALETTES: readonly Palette[] = Object.freeze(
     coat('Mint', '#fdf6ec', '#f1e6d6', '#7fd1b9', '#4fa98f', '#e8fff6', '#173a31', '#ff8fab'),
     coat('Lilac', '#1a1626', '#272137', '#b9a3e3', '#8e74c9', '#efe7ff', '#1a1626', '#ffb3c7'),
     coat('Stone', '#fff4d6', '#f5e6bf', '#9aa3ad', '#6f7882', '#e9edf1', '#16191d', '#ff8fa3'),
+    coat('Rose', '#1f1420', '#2e1f30', '#f4a7b9', '#d27891', '#ffe6ec', '#2a1219', '#e85d84'),
+    coat('Sky', '#fff7ea', '#f3e8d4', '#8fc7f0', '#5b9bd1', '#eaf6ff', '#10243a', '#ff8fab'),
+    coat('Sand', '#18222b', '#24313d', '#e6cfa3', '#c2a774', '#fff6e3', '#2b2012', '#ff8f8f'),
+    coat('Midnight', '#eef1f8', '#dde3ef', '#3b4a78', '#27325a', '#c8d0ea', '#ffd166', '#ff9ab0'),
   ].map((p) => Object.freeze(p)),
 );
