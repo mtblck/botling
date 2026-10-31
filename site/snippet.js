@@ -23,19 +23,20 @@ export function options(state, extra = {}, holidays = {}) {
 }
 
 /**
- * The call a developer would write for the robot on screen.
+ * The call a developer would write for the avatar on screen.
  *
  * @param {{ seed: string, shape: string, frame?: string, palette: string, grid: string, motion?: string }} state - The playground's choices
- * @returns {string} A botling(...) call in single-quoted JavaScript
+ * @param {string} [name] - The style's function, such as snoot
+ * @returns {string} A botling(...) call, or the style's, in single-quoted JavaScript
  */
-export function snippet(state) {
+export function snippet(state, name = 'botling') {
   const opts = options(state);
   const args = Object.entries(opts).map(([k, v]) => `${k}: ${JSON.stringify(v).replaceAll('"', "'")}`);
   // The object would print as a wall of hex; name it the way a developer would.
   if (isHoliday(state.palette))
     args.splice(Number('shape' in opts) + Number('frame' in opts), 0, `palette: HOLIDAY_PALETTES.${state.palette}`);
   const seed = JSON.stringify(state.seed).replaceAll("'", "\\'").replace(/^"|"$/g, "'");
-  return `botling(${seed}${args.length ? `, { ${args.join(', ')} }` : ''})`;
+  return `${name}(${seed}${args.length ? `, { ${args.join(', ')} }` : ''})`;
 }
 
 /** Holiday keys are names; built-in palettes are numbers. */

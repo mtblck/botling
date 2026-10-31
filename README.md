@@ -2,9 +2,9 @@
 
 A family of seeded pixel avatars, drawn as SVG on a grid of squares, circles, triangles or diamonds. Plant a seed (a user id, any string) and the same avatar sprouts every time.
 
-The first style is **Botling**, the robots. Animals (Snoots), people (Noggins) and monsters (Beasties) are on the way. Each style has its own entry point, such as `seedkin/botling`, so an app only ships the styles it uses.
+The first style is **Botling**, the robots. **Snoot**, the animals, is in Preview, and people (Noggins) and monsters (Beasties) are on the way. Each style has its own entry point, such as `seedkin/botling`, so an app only ships the styles it uses.
 
-> Seedkin isn't on npm yet. Until it is, `npm install botling` gives you the same robots: import from `'botling'` instead of `'seedkin/botling'`. Every seed draws the same robot in both.
+> Coming from the `botling` package? Import from `'seedkin/botling'` instead of `'botling'`: every seed draws the same robot as `botling` 1.2.0.
 
 # Botling
 
@@ -173,7 +173,24 @@ The picture is the API. Within a major version, a seed with the same options alw
 
 Don't compare or cache robots by their SVG string across versions; the markup can change while the picture stays put. [ADR 0006](docs/adr/0006-what-1-0-freezes.md) has the full list. Snapshot tests guard it.
 
-## Developing
+# Snoot
+
+Seeded animal avatars: cats, foxes, bears, bunnies, mice, dogs, pandas, owls, frogs and pigs. Try them at **[seedkin.dev](https://seedkin.dev/styles/snoot/)**.
+
+> **Preview.** Snoot is in the package, but until it's marked stable, the Snoot a seed draws can change in a minor version. Pin the minor (`~2.1.0`) if you store seeds and need the same animal back.
+
+```ts
+import { snoot, snootDataUri } from 'seedkin/snoot';
+
+const svg = snoot(user.id);
+const src = snootDataUri(user.id, { size: 40 });
+```
+
+`snoot()` takes the same options as `botling()` except `animate`: `shape`, `palette` (an index into Snoot's own eight `PALETTES`, or a palette object), `size`, `detail`, `showGrid`, `frame`, `background` and `title` (default `'Animal avatar'`). Below 40px it draws a simpler 9x9 Snoot from the same traits, keeping the species' ears, the eyes, muzzle, markings and cheeks.
+
+The seed is salted, so `snoot(id)` and `botling(id)` are unrelated: one user's robot and animal don't share colours or features. `traits`, `resolveTraits`, `grid`, `smallGrid`, `SPECIES`, `EYES`, `MARKINGS`, `EXTRAS` and `SHAPES` are exported as for Botling.
+
+# Developing
 
 ```sh
 npm install
@@ -189,10 +206,10 @@ npm run hosting:check  # fails if the CSP or security headers regress
 
 Look at `preview.html` for any art change, at 24px especially.
 
-## Support
+# Support
 
 Seedkin is free and MIT licensed. If it's useful to you, you can [buy me a coffee on Ko-fi](https://ko-fi.com/mtblck) or [sponsor on GitHub](https://github.com/sponsors/mtblck).
 
-## License
+# License
 
 [MIT](LICENSE)

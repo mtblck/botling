@@ -1,11 +1,13 @@
 // The family pages: the landing page's seed box, which grows one seed in every style, and
-// the style strips on /styles/. Botling comes from the package build (/lib); the preview
-// styles from lab/preview.ts, bundled to /preview.js. Seeds stay in the URL hash.
+// the style strips on /styles/. Packaged styles come from the package build (/lib); the
+// lab ones from lab/preview.ts, bundled to /preview.js. Seeds stay in the URL hash.
 import { botling, randomSeed } from '/lib/styles/botling/index.js';
+import { snoot } from '/lib/styles/snoot/index.js';
 import { PREVIEWS } from '/preview.js';
 
 const DRAW = {
   botling: (seed, size) => botling(seed, { size, title: null }),
+  snoot: (seed, size) => snoot(seed, { size, title: null }),
   ...Object.fromEntries(PREVIEWS.map((p) => [p.name.toLowerCase(), p.render])),
 };
 const $ = (id) => document.getElementById(id);
@@ -17,8 +19,9 @@ function grow(seed) {
     // Decorative: the style's name is next to it.
     el.firstElementChild?.setAttribute('aria-hidden', 'true');
   }
-  const link = document.querySelector('[data-to="botling"]');
-  if (link) link.href = `/styles/botling/#${new URLSearchParams({ seed })}`;
+  for (const link of document.querySelectorAll('[data-to]')) {
+    link.href = `/styles/${link.dataset.to}/#${new URLSearchParams({ seed })}`;
+  }
 }
 
 // Safari throttles history calls, so typing updates the hash in a debounce.

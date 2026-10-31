@@ -7,6 +7,13 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-10-31
+
+### Added
+
+- `seedkin/snoot`, the Snoots: seeded animal avatars (cats, foxes, bears, bunnies, mice, dogs, pandas, owls, frogs and pigs) in eight coats, with `snoot()`, `snootDataUri()` and the same options as `botling()` bar `animate`. Below 40px it draws a simpler 9x9 Snoot from the same traits. Snoot is a Preview style: the Snoot a seed draws can change in a minor version until it's marked stable (ADR 0009). Botling is unchanged.
+- seedkin.dev has a Snoot playground at `/styles/snoot/`, and the landing and Styles pages draw Snoots from the package.
+
 ## [2.0.0] - 2026-10-31
 
 The first release of `seedkin`. It carries on from `botling` 1.2.0, the last release under that name, so its versions start at 2.0.0; everything below this is `botling`.
@@ -89,7 +96,8 @@ First release.
 
 The playground site (`site/`, not part of the npm package) lets you try seeds, shapes and palettes and copy the code.
 
-[Unreleased]: https://github.com/mtblck/seedkin/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/mtblck/seedkin/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/mtblck/seedkin/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/mtblck/seedkin/compare/v1.2.0...v2.0.0
 [1.2.0]: https://github.com/mtblck/seedkin/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/mtblck/seedkin/compare/v1.0.0...v1.1.0

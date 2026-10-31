@@ -1,7 +1,7 @@
 # seedkin
 
 A family of seeded pixel avatars as SVG: zero runtime dependencies, ESM only,
-TypeScript, MIT. The npm package is `seedkin` (not yet published), with one
+TypeScript, MIT. The npm package is `seedkin` (2.0.0 and up), with one
 entry point per style; Botling (robots, `seedkin/botling`) is the first, and the
 old `botling` package stays frozen at 1.2.0 on npm. Public repo `mtblck/seedkin`
 (renamed from `mtblck/botling`); the playground site is `site/`. Shared code is
