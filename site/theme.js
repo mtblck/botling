@@ -2,7 +2,7 @@
 (() => {
   var t = null;
   try {
-    t = localStorage.getItem('botling-theme');
+    t = localStorage.getItem('seedkin-theme');
   } catch {
     /* storage blocked */
   }

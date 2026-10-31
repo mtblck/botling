@@ -13,6 +13,7 @@ any change to the robot a seed draws is a major version.
 
 ### Added
 
+- The site moves to seedkin.dev and grows from one playground into a family site: a landing page that grows your seed in every style, a Styles page, the Botling playground at `/styles/botling/` under "Meet the Botlings", and the docs at `/docs/`. Snoots, Noggins and Beasties show there as previews; they aren't in the package yet. botling.me redirects to the Botling playground.
 - The playground downloads the robot as SVG, PNG, JPG or GIF. PNG and JPG are the still robot at 512px (JPG puts white behind a rounded frame's corners); the GIF is 256px and, with Motion on, one seamless loop of the animation. The package itself is unchanged.
 
 ## [1.2.0] - 2026-10-30

@@ -4,6 +4,17 @@
   "installCommand": "npm ci --ignore-scripts",
   "buildCommand": "npm run site",
   "outputDirectory": "dist-site",
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "botling.me" }],
+      "destination": "https://seedkin.dev/styles/botling/",
+      "permanent": true
+    },
+    { "source": "/styles", "destination": "/styles/", "permanent": true },
+    { "source": "/styles/botling", "destination": "/styles/botling/", "permanent": true },
+    { "source": "/docs", "destination": "/docs/", "permanent": true }
+  ],
   "rewrites": [{ "source": "/_mb/events", "destination": "https://mattblack.space/boards/api/events" }],
   "headers": [
     {

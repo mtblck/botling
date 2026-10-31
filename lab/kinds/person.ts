@@ -177,7 +177,7 @@ function hat(c: Canvas, t: PersonTraits, hw: number): void {
 
 /** People: skin tones, hair, faces, glasses and hats over a shirt. */
 export const person: Kind<PersonTraits> = {
-  name: 'Person',
+  name: 'Noggin',
   traits,
   draw,
   palette: (t): Palette => {

@@ -36,11 +36,18 @@ const events = config.rewrites?.find((r) => r.source === '/_mb/events');
 if (events?.destination !== 'https://mattblack.space/boards/api/events')
   fail('vercel.json must rewrite /_mb/events to https://mattblack.space/boards/api/events');
 
-const html = read('site/index.html');
-for (const tag of html.match(/<script\b[^>]*>/g) ?? [])
-  if (!/\bsrc=/.test(tag)) fail(`inline script in site/index.html: ${tag}`);
-if (/\son[a-z]+\s*=/i.test(html)) fail('inline event handler in site/index.html');
-if (/\sstyle\s*=/i.test(html)) fail("style attribute in site/index.html (style-src is 'self')");
+// Every page and partial under site/.
+const htmlFiles = fs
+  .readdirSync(path.join(root, 'site'), { recursive: true })
+  .filter((f) => f.endsWith('.html'))
+  .map((f) => `site/${f.split(path.sep).join('/')}`);
+for (const file of htmlFiles) {
+  const html = read(file);
+  for (const tag of html.match(/<script\b[^>]*>/g) ?? [])
+    if (!/\bsrc=/.test(tag)) fail(`inline script in ${file}: ${tag}`);
+  if (/\son[a-z]+\s*=/i.test(html)) fail(`inline event handler in ${file}`);
+  if (/\sstyle\s*=/i.test(html)) fail(`style attribute in ${file} (style-src is 'self')`);
+}
 
 // Markup the scripts build with innerHTML is held to the same rule as the page.
 for (const file of fs.readdirSync(path.join(root, 'site')).filter((f) => f.endsWith('.js'))) {

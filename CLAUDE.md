@@ -29,8 +29,11 @@ session. Marking it ready also triggers `.github/workflows/claude-review.yml`.
 - **Below 40px, the simpler 9x9 robot** (`src/styles/botling/grid/small/`) from the same traits, chosen
   by Matt from side-by-side options, so 24px avatars keep a face.
 - **Zero runtime dependencies**, no requests, no globals: the output is a string.
-- **Playground:** plain HTML/CSS/JS in `site/`, built by `scripts/site.mjs` into
-  `dist-site/` with the package's own `dist/` at `/lib`. CSP is `script-src 'self'` and
+- **Site (seedkin.dev):** plain HTML/CSS/JS in `site/`, built by `scripts/site.mjs` into
+  `dist-site/` with the package's own `dist/` at `/lib`. Every `index.html` under `site/` is
+  a page with `{{head}}`, `{{header}}` and `{{footer}}` from `site/partials/`; the Botling
+  playground is `site/styles/botling/`, and lab styles shown as previews come from
+  `lab/preview.ts`, bundled to `/preview.js`. CSP is `script-src 'self'` and
   `style-src 'self'`: no inline scripts, handlers or style attributes (`hosting:check`
   guards it). Seeds live in the URL hash, never the query, so they don't reach the
   server, and `site/analytics.js` strips the hash before Vercel Analytics sends a page

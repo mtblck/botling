@@ -20,7 +20,7 @@
   },
   "bugs": "https://github.com/mtblck/seedkin/issues",
   "funding": "https://ko-fi.com/mtblck",
-  "homepage": "https://botling.me",
+  "homepage": "https://seedkin.dev",
   "type": "module",
   "sideEffects": false,
   "exports": {

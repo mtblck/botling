@@ -8,7 +8,7 @@ The first style is **Botling**, the robots. Animals (Snoots), people (Noggins) a
 
 # Botling
 
-Seeded robot avatars. Try them at **[botling.me](https://botling.me)**.
+Seeded robot avatars. Try them at **[seedkin.dev](https://seedkin.dev/styles/botling/)**.
 
 ![Rows of botling robots in square, circle, triangle and diamond cells](docs/hero.svg)
 

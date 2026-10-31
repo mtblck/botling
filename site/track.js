@@ -4,7 +4,7 @@
 // Boards keeps daily totals per event and nothing about the person.
 
 /** The only host that counts, so localhost and preview deployments stay out. */
-export const HOST = 'botling.me';
+export const HOST = 'seedkin.dev';
 
 /**
  * Arrival fields for a page view: from another site (or none), it's a visit,
@@ -26,7 +26,7 @@ export function body(event, extra = {}) {
 }
 
 /**
- * Counts an event on botling.me; does nothing anywhere else. `sendBeacon` with a
+ * Counts an event on seedkin.dev; does nothing anywhere else. `sendBeacon` with a
  * string is a text/plain POST, so there's no CORS preflight, and a navigation
  * doesn't cancel it. /_mb/events is rewritten to Boards in vercel.json.
  */

@@ -176,7 +176,7 @@ function sides(c: Canvas, t: MonsterTraits, top: number, hw: number): void {
 
 /** Monsters: blobs, ghosts and boxes with one to three eyes, fangs, horns and wings. */
 export const monster: Kind<MonsterTraits> = {
-  name: 'Monster',
+  name: 'Beastie',
   traits,
   draw,
   palette: (t): Palette => HIDES[t.hide] as Palette,

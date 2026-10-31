@@ -26,6 +26,9 @@ http
       return res.writeHead(400).end('bad path');
     }
     if (file !== root && !file.startsWith(root + path.sep)) return res.writeHead(403).end();
+    // vercel.json's same-host redirects, such as /docs to /docs/.
+    const redirect = config.redirects?.find((r) => !r.has && r.source === url.pathname);
+    if (redirect) return res.writeHead(redirect.permanent ? 308 : 307, { Location: redirect.destination }).end();
     if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
     if (!fs.existsSync(file)) return res.writeHead(404).end('not found');
     for (const rule of config.headers) {

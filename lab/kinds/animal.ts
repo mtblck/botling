@@ -190,7 +190,7 @@ function extra(c: Canvas, t: AnimalTraits, top: number, hw: number, eyeRow: numb
 
 /** Animals: cats, foxes, bears, bunnies, mice, dogs, pandas, owls, frogs and pigs. */
 export const animal: Kind<AnimalTraits> = {
-  name: 'Animal',
+  name: 'Snoot',
   traits,
   draw,
   palette: (t): Palette => COATS[t.coat] as Palette,
