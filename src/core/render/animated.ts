@@ -37,7 +37,9 @@ export function animatedSvg(pic: Picture, parts: readonly (readonly Part[])[], a
   const add = (key: string, fill: string, cell: Outline): void => {
     const byColour = groups.get(key) ?? new Map<string, Outline[]>();
     groups.set(key, byColour);
-    byColour.set(fill, [...(byColour.get(fill) ?? []), cell]);
+    const list = byColour.get(fill);
+    if (list) list.push(cell);
+    else byColour.set(fill, [cell]);
   };
   for (let y = -reach; y < n + reach; y++) {
     for (let x = -reach; x < n + reach; x++) {
@@ -51,7 +53,9 @@ export function animatedSvg(pic: Picture, parts: readonly (readonly Part[])[], a
       const part = parts[y]?.[x] ?? null;
       const key = anim.classOf(role, part, x) ?? '';
       add(key, colours[role] as string, cell);
-      drawn.set(key, [...(drawn.get(key) ?? []), cell]);
+      const own = drawn.get(key);
+      if (own) own.push(cell);
+      else drawn.set(key, [cell]);
       for (const [copy, as] of anim.copies(role, part, x, y)) add(copy, colours[as] as string, cell);
     }
   }
