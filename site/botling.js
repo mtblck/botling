@@ -1,4 +1,4 @@
-// The playground. Imports botling straight from the package build (copied to /lib by
+// The Botling playground. Imports botling straight from the package build (copied to /lib by
 // scripts/site.mjs), so the page always shows what npm ships. State lives in the URL
 // hash, which never reaches the server or analytics: seeds stay in the browser.
 import {
@@ -12,7 +12,7 @@ import {
   SHAPES,
 } from '/lib/styles/botling/index.js';
 import { options as optionsFor, snippet as snippetFor } from '/snippet.js';
-import { arrival, track } from '/track.js';
+import { track } from '/track.js';
 
 const $ = (id) => document.getElementById(id);
 const DEFAULTS = { shape: 'auto', frame: 'square', palette: 'auto', grid: 'auto', motion: 'off' };
@@ -222,16 +222,6 @@ $('downloads').addEventListener('click', async (e) => {
     $('downloads').removeAttribute('aria-busy');
   }
 });
-document.querySelector('.theme').addEventListener('click', () => {
-  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  document.documentElement.dataset.theme = next;
-  try {
-    localStorage.setItem('botling-theme', next);
-  } catch {
-    /* storage blocked: the choice lasts for this page only */
-  }
-});
-
 /** Loads the state from the URL hash: on load, and when a shared link is opened in this tab. */
 function readHash() {
   const fromHash = new URLSearchParams(location.hash.slice(1));
@@ -248,4 +238,3 @@ function readHash() {
 window.addEventListener('hashchange', readHash);
 readHash();
 gallery();
-track('pageview', arrival(document.referrer, location.hostname));

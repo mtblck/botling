@@ -1,6 +1,6 @@
 {
   "name": "seedkin",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Seedkin: a family of seeded pixel avatars (robots first) drawn as SVG. Zero dependencies.",
   "keywords": [
     "avatar",
@@ -20,7 +20,7 @@
   },
   "bugs": "https://github.com/mtblck/seedkin/issues",
   "funding": "https://ko-fi.com/mtblck",
-  "homepage": "https://botling.me",
+  "homepage": "https://seedkin.dev",
   "type": "module",
   "sideEffects": false,
   "exports": {

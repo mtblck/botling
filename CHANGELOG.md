@@ -7,12 +7,17 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-10-31
+
+The first release of `seedkin`. It carries on from `botling` 1.2.0, the last release under that name, so its versions start at 2.0.0; everything below this is `botling`.
+
 ### Changed
 
-- The package is now `seedkin`, a family of avatar styles, and the robots are its first style, Botling. Import them from `seedkin/botling`, which exports everything `botling` did and draws every seed exactly as `botling` 1.2.0 does. The root `seedkin` export holds what every style shares: `randomSeed`, `FRAMES`, `Role`, the grid sizes and the shared types. See ADR 0009.
+- **Breaking:** the package is now `seedkin`, a family of avatar styles, and the robots are its first style, Botling. Import them from `seedkin/botling`, which exports everything `botling` did and draws every seed exactly as `botling` 1.2.0 does. The root `seedkin` export holds what every style shares: `randomSeed`, `FRAMES`, `Role`, the grid sizes and the shared types. See ADR 0009.
 
 ### Added
 
+- The site moves to seedkin.dev and grows from one playground into a family site: a landing page that grows your seed in every style, a Styles page, the Botling playground at `/styles/botling/` under "Meet the Botlings", and the docs at `/docs/`. Snoots, Noggins and Beasties show there as previews; they aren't in the package yet. botling.me redirects to the Botling playground.
 - The playground downloads the robot as SVG, PNG, JPG or GIF. PNG and JPG are the still robot at 512px (JPG puts white behind a rounded frame's corners); the GIF is 256px and, with Motion on, one seamless loop of the animation. The package itself is unchanged.
 
 ## [1.2.0] - 2026-10-30
@@ -31,7 +36,7 @@ any change to the robot a seed draws is a major version.
 
 ## [1.0.0] - 2026-10-30
 
-The robot each seed draws is now frozen for the whole of 1.x: the same seed and options draw the same picture until 2.0. [ADR 0006](https://github.com/mtblck/botling/blob/main/docs/adr/0006-what-1-0-freezes.md) lists what is frozen and what a minor version may still change, and a golden corpus of 500 seeds checks it on every change.
+The robot each seed draws is now frozen for the whole of 1.x: the same seed and options draw the same picture until 2.0. [ADR 0006](https://github.com/mtblck/seedkin/blob/main/docs/adr/0006-what-1-0-freezes.md) lists what is frozen and what a minor version may still change, and a golden corpus of 500 seeds checks it on every change.
 
 ### Changed
 
@@ -84,9 +89,10 @@ First release.
 
 The playground site (`site/`, not part of the npm package) lets you try seeds, shapes and palettes and copy the code.
 
-[Unreleased]: https://github.com/mtblck/botling/compare/v1.2.0...HEAD
-[1.2.0]: https://github.com/mtblck/botling/compare/v1.1.0...v1.2.0
-[1.1.0]: https://github.com/mtblck/botling/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/mtblck/botling/compare/v0.2.0...v1.0.0
-[0.2.0]: https://github.com/mtblck/botling/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/mtblck/botling/releases/tag/v0.1.0
+[Unreleased]: https://github.com/mtblck/seedkin/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/mtblck/seedkin/compare/v1.2.0...v2.0.0
+[1.2.0]: https://github.com/mtblck/seedkin/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/mtblck/seedkin/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/mtblck/seedkin/compare/v0.2.0...v1.0.0
+[0.2.0]: https://github.com/mtblck/seedkin/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/mtblck/seedkin/releases/tag/v0.1.0

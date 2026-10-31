@@ -1,10 +1,12 @@
-// npm run site: builds the playground into dist-site/ with Node only (Vercel runs this).
-// The page and its assets come from site/; botling itself is copied in from the package
-// build (dist/), so the playground always runs exactly what npm ships.
+// npm run site: builds seedkin.dev into dist-site/ (Vercel runs this). Every index.html
+// under site/ is a page, filled in from site/partials/. The package build (dist/) is copied
+// to /lib, so the playground always runs exactly what npm ships; the preview styles from
+// lab/ are bundled to /preview.js, since they aren't in the package yet.
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { buildSync } from 'esbuild';
 import { ogImage } from './og.mjs';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -30,26 +32,41 @@ const preloads = fs
   .sort()
   .map((f) => `<link rel="modulepreload" href="/lib/${f.split(path.sep).join('/')}" />`)
   .join('\n  ');
-const page = fs
-  .readFileSync(path.join(ROOT, 'site/index.html'), 'utf8')
-  .replace('{{logo}}', logo)
-  .replace('{{preloads}}', preloads);
-fs.writeFileSync(path.join(out, 'index.html'), page);
+const partials = Object.fromEntries(
+  ['head', 'header', 'footer'].map((name) => [
+    name,
+    fs.readFileSync(path.join(ROOT, `site/partials/${name}.html`), 'utf8').trim(),
+  ]),
+);
+const site = path.join(ROOT, 'site');
+const pages = fs
+  .readdirSync(site, { recursive: true })
+  .filter((f) => path.basename(f) === 'index.html')
+  .sort();
+for (const file of pages) {
+  const page = fs
+    .readFileSync(path.join(site, file), 'utf8')
+    .replace(/{{(head|header|footer)}}/g, (_, name) => partials[name])
+    .replaceAll('{{logo}}', logo)
+    .replaceAll('{{preloads}}', preloads);
+  if (page.includes('{{')) throw new Error(`site/${file} has a placeholder the build doesn't fill`);
+  fs.mkdirSync(path.dirname(path.join(out, file)), { recursive: true });
+  fs.writeFileSync(path.join(out, file), page);
+}
 fs.writeFileSync(path.join(out, 'icon.svg'), icon);
 fs.writeFileSync(path.join(out, 'og.png'), ogImage(lib));
-for (const f of [
-  'site.css',
-  'site.js',
-  'snippet.js',
-  'theme.js',
-  'analytics.js',
-  'track.js',
-  'export.js',
-  'gif.js',
-  'motion.js',
-]) {
-  fs.copyFileSync(path.join(ROOT, 'site', f), path.join(out, f));
+for (const f of fs.readdirSync(site).filter((f) => /\.(js|css)$/.test(f))) {
+  fs.copyFileSync(path.join(site, f), path.join(out, f));
 }
+buildSync({
+  entryPoints: [path.join(ROOT, 'lab/preview.ts')],
+  outfile: path.join(out, 'preview.js'),
+  bundle: true,
+  format: 'esm',
+  minify: true,
+  target: 'es2020',
+  legalComments: 'none',
+});
 fs.cpSync(dist, path.join(out, 'lib'), { recursive: true, filter: (f) => !f.endsWith('.d.ts') && !f.endsWith('.map') });
 
 // Fonts, self-hosted: the CSP allows font-src 'self' only.

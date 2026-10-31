@@ -11,3 +11,6 @@ or published (`files` is `dist` only) and none of it touches the robots.
 - `node lab/page.mjs out.html`: the interactive comparison page (seed box, shapes, walls, plan).
 
 Seeds are salted per family (`animal:` + seed). The art is unfrozen: change anything.
+
+The families are named Snoot (animals), Noggin (people) and Beastie (monsters); dinosaurs
+are parked. `preview.ts` is what the site bundles to show them as Preview styles.

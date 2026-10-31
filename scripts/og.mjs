@@ -19,15 +19,14 @@ const ROBOTS = [
   { seed: 'pixel-pal-7', shape: 'circle', palette: 'Bubblegum', size: 180 },
 ];
 
-// The word "botling", 5 cells wide (fewer for narrow letters) and 9 tall with a descender.
+// The word "seedkin", 5 cells wide (fewer for narrow letters) and 9 tall.
 const GLYPHS = {
-  b: ['1....', '1....', '1111.', '1...1', '1...1', '1...1', '1111.', '.....', '.....'],
-  o: ['.....', '.....', '.111.', '1...1', '1...1', '1...1', '.111.', '.....', '.....'],
-  t: ['.1..', '.1..', '1111', '.1..', '.1..', '.1..', '..11', '....', '....'],
-  l: ['11.', '.1.', '.1.', '.1.', '.1.', '.1.', '111', '...', '...'],
+  s: ['.....', '.....', '.1111', '1....', '.111.', '....1', '1111.', '.....', '.....'],
+  e: ['.....', '.....', '.111.', '1...1', '11111', '1....', '.1111', '.....', '.....'],
+  d: ['....1', '....1', '.1111', '1...1', '1...1', '1...1', '.1111', '.....', '.....'],
+  k: ['1....', '1....', '1..1.', '1.1..', '11...', '1.1..', '1..1.', '.....', '.....'],
   i: ['.1.', '...', '11.', '.1.', '.1.', '.1.', '111', '...', '...'],
   n: ['.....', '.....', '1111.', '1...1', '1...1', '1...1', '1...1', '.....', '.....'],
-  g: ['.....', '.....', '.1111', '1...1', '1...1', '1...1', '.1111', '....1', '.111.'],
 };
 
 const rgb = (hex) => {
@@ -98,9 +97,9 @@ function robot(lib, paint, { seed, shape, palette, size }, left, top) {
   }
 }
 
-/** The word "botling" in square cells, centred on x at a top edge. */
+/** The word "seedkin" in square cells, centred on x at a top edge. */
 function wordmark(paint, centre, top, u) {
-  const letters = [...'botling'].map((ch) => GLYPHS[ch]);
+  const letters = [...'seedkin'].map((ch) => GLYPHS[ch]);
   const width = letters.reduce((w, g) => w + g[0].length + 1, -1) * u;
   let left = centre - width / 2;
   for (const g of letters) {
@@ -154,7 +153,7 @@ function png(px) {
 /**
  * Draws the link preview card: five robots in a row above the wordmark.
  *
- * @param {object} lib - The botling package (its build, or the sources in a test)
+ * @param {object} lib - seedkin/botling (its build, or the sources in a test)
  * @returns {Buffer} A 1200x630 PNG
  */
 export function ogImage(lib) {
