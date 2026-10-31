@@ -7,6 +7,13 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+### Site
+
+- seedkin.dev has a fuller header (Playground, Styles, Docs, About) that folds into a menu on phones, a footer with Explore, Docs, Project and Versions columns, and a 404 page.
+- The landing page gains calls to action, an at-a-glance strip with figures measured at build time, mock-ups of comments, a leaderboard and a team list drawn with real avatars, and a Why Seedkin grid.
+- New `/about/` page: the four promises, how Seedkin compares with similar libraries, and the Grid's backstory.
+- Every code sample has a Copy button, and install commands have npm, pnpm, yarn and bun tabs.
+
 ## [2.1.0] - 2026-10-31
 
 ### Added

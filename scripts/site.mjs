@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { gzipSync } from 'node:zlib';
 import { buildSync } from 'esbuild';
 import { ogImage } from './og.mjs';
 
@@ -32,6 +33,15 @@ const preloads = fs
   .sort()
   .map((f) => `<link rel="modulepreload" href="/lib/${f.split(path.sep).join('/')}" />`)
   .join('\n  ');
+// Figures the pages quote, measured here so they can't drift: the package version, and what
+// one style costs an app (its entry point bundled, minified and gzipped).
+const { version } = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+const kb = (entry) => {
+  const { outputFiles } = buildSync({ entryPoints: [entry], bundle: true, minify: true, format: 'esm', write: false });
+  return (gzipSync(outputFiles[0].contents).length / 1024).toFixed(1);
+};
+const figures = { version, 'botling-kb': kb(path.join(dist, 'styles/botling/index.js')) };
+
 const partials = Object.fromEntries(
   ['head', 'header', 'footer'].map((name) => [
     name,
@@ -41,14 +51,15 @@ const partials = Object.fromEntries(
 const site = path.join(ROOT, 'site');
 const pages = fs
   .readdirSync(site, { recursive: true })
-  .filter((f) => path.basename(f) === 'index.html')
+  .filter((f) => path.basename(f) === 'index.html' || f === '404.html')
   .sort();
 for (const file of pages) {
   const page = fs
     .readFileSync(path.join(site, file), 'utf8')
     .replace(/{{(head|header|footer)}}/g, (_, name) => partials[name])
     .replaceAll('{{logo}}', logo)
-    .replaceAll('{{preloads}}', preloads);
+    .replaceAll('{{preloads}}', preloads)
+    .replace(/{{(version|botling-kb)}}/g, (_, name) => figures[name]);
   if (page.includes('{{')) throw new Error(`site/${file} has a placeholder the build doesn't fill`);
   fs.mkdirSync(path.dirname(path.join(out, file)), { recursive: true });
   fs.writeFileSync(path.join(out, file), page);

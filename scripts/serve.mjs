@@ -30,12 +30,18 @@ http
     const redirect = config.redirects?.find((r) => !r.has && r.source === url.pathname);
     if (redirect) return res.writeHead(redirect.permanent ? 308 : 307, { Location: redirect.destination }).end();
     if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
-    if (!fs.existsSync(file)) return res.writeHead(404).end('not found');
+    // Like Vercel, an unknown path gets the site's 404 page.
+    let status = 200;
+    if (!fs.existsSync(file)) {
+      file = path.join(root, '404.html');
+      status = 404;
+      if (!fs.existsSync(file)) return res.writeHead(404).end('not found');
+    }
     for (const rule of config.headers) {
       if (new RegExp(`^${rule.source}$`).test(url.pathname))
         for (const h of rule.headers) res.setHeader(h.key, h.value);
     }
-    res.setHeader('Content-Type', TYPES[path.extname(file)] ?? 'application/octet-stream');
+    res.writeHead(status, { 'Content-Type': TYPES[path.extname(file)] ?? 'application/octet-stream' });
     fs.createReadStream(file).pipe(res);
   })
   .listen(port, () => console.log(`serving dist-site on http://localhost:${port}`));
