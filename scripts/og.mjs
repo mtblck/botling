@@ -5,7 +5,7 @@ import zlib from 'node:zlib';
 
 export const WIDTH = 1200;
 export const HEIGHT = 630;
-const PAGE = '#f3f2f8';
+const PAGE = '#f6f3ec';
 const INK = '#14121c';
 /** Samples per pixel along each axis, for anti-aliased edges. */
 const AA = 4;
