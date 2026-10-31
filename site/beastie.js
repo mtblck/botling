@@ -3,6 +3,7 @@ import {
   beastie,
   beastieDataUri,
   FRAMES,
+  LOOKS,
   PALETTES,
   randomSeed,
   resolveTraits,
@@ -27,7 +28,7 @@ function describe(seed, options) {
   return `Beastie for "${seed}": a ${t.body} body, ${parts.join(', ')}`;
 }
 
-const shared = sharedGroups({ SHAPES, FRAMES });
+const shared = sharedGroups({ SHAPES, FRAMES, LOOKS });
 playground({
   name: 'beastie',
   noun: 'beastie',
@@ -38,6 +39,7 @@ playground({
   swatch: (p) => [p.bg, p.body, p.screen, p.accent],
   groups: [
     shared.cells,
+    shared.look,
     shared.frame,
     {
       name: 'palette',

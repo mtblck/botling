@@ -1,5 +1,14 @@
 // The Snoot playground, drawn from the package build at /lib; site/playground.js does the rest.
-import { FRAMES, PALETTES, randomSeed, resolveTraits, SHAPES, snoot, snootDataUri } from '/lib/styles/snoot/index.js';
+import {
+  FRAMES,
+  LOOKS,
+  PALETTES,
+  randomSeed,
+  resolveTraits,
+  SHAPES,
+  snoot,
+  snootDataUri,
+} from '/lib/styles/snoot/index.js';
 import { playground, sharedGroups } from '/playground.js';
 
 /** Names the big Snoot for screen readers, so a change of seed or option is heard. */
@@ -11,7 +20,7 @@ function describe(seed, options) {
   return `Snoot for "${seed}": a ${t.species}, ${parts.join(', ')}`;
 }
 
-const shared = sharedGroups({ SHAPES, FRAMES });
+const shared = sharedGroups({ SHAPES, FRAMES, LOOKS });
 playground({
   name: 'snoot',
   noun: 'snoot',
@@ -22,6 +31,7 @@ playground({
   swatch: (p) => [p.bg, p.body, p.screen, p.accent],
   groups: [
     shared.cells,
+    shared.look,
     shared.frame,
     {
       name: 'palette',

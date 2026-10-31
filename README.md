@@ -70,6 +70,7 @@ There are 400,000 of these seeds, so two people can get the same one. To give ev
 | `size` | `number` | `96` | Width and height in pixels. The SVG scales cleanly to any size. |
 | `detail` | `'auto' \| 'full' \| 'small'` | `'auto'` | `'full'` is the detailed 15x15 robot. `'small'` is a simpler 9x9 robot from the same traits, with touching cells, made to read at 24px. `'auto'` draws `'small'` below 40px. |
 | `showGrid` | `boolean \| 'auto'` | `'auto'` | Draw the empty grid cells. `'auto'` draws them from 40px up; below that they read as noise. The small robot never draws them. |
+| `look` | `'gapped' \| 'flat' \| 'inked' \| 'soft' \| 'soft-inked' \| 'sticker'` | `'gapped'` | How the cells are drawn: apart, or merged into flat shapes. See [Looks](#looks). |
 | `frame` | `'square' \| 'rounded' \| 'squircle' \| 'circle'` | `'square'` | The outline of the background. See [Frames](#frames). |
 | `background` | `boolean` | `true` | Draw the palette's background. |
 | `title` | `string \| null` | `'Robot avatar'` | Accessible name. `null` marks the image decorative (`aria-hidden`). |
@@ -93,6 +94,23 @@ botling(user.id, { frame: 'circle' });
 The grid behind the robot keeps only whole cells inside the frame, so its edge steps round the curve, and in a squircle it fills the room the smaller robot leaves. `FRAMES` lists the four, for a picker. A seed never picks a frame, so store the one a user chooses with their seed.
 
 Every frame but `'square'` clips with a `<clipPath>`. Its id names the frame and its size (`botling-circle-500-16000`), so robots inlined on one page share identical clip paths instead of clashing. In an `<img>` or a `data:` URI each robot is its own document, so ids never meet.
+
+### Looks
+
+```ts
+botling(user.id, { look: 'soft' });
+```
+
+`look` sets how the cells are drawn. The same seed draws the same picture in every look; only the drawing changes.
+
+- **`'gapped'`** (the default) draws each cell apart, over a faint grid, like pixels on a display.
+- **`'flat'`** closes the gap, so cells merge into solid shapes. Circles become touching beads, and diamonds and triangles tile into facets.
+- **`'inked'`** is flat with a dark outline round the avatar and thin lines between colours, like a cel-shaded cartoon.
+- **`'soft'`** rounds the outer corners of each patch of colour and curves its inner ones, so the avatar reads as vector shapes.
+- **`'soft-inked'`** is soft with the dark outline.
+- **`'sticker'`** is soft with a white die-cut border and a drop shadow. The avatar draws at 86% to make room for them.
+
+Only `'gapped'` has a grid, so `showGrid` does nothing in the other looks. Rounded corners and the lines between colours need square cells: with circles, triangles or diamonds, `'soft'` draws like `'flat'`, and `'inked'` and `'sticker'` keep their outline and border. Small avatars, below 40px, already draw their cells touching, so there `'flat'` changes nothing and the other looks add their outline, corners or border. The ink is the palette's `shade` colour darkened. `LOOKS` lists the six, for a picker. A seed never picks a look, so store the one a user chooses with their seed. Every style takes `look`; animated robots keep their outline on their moving parts.
 
 ### Animation
 
@@ -139,7 +157,7 @@ const options = SHAPES.flatMap((shape) => PALETTES.map((_, palette) => botling(u
 traits(user.id); // { head: 'tv', eyes: 'visor', mouth: 'grille', top: 'antenna', ... }
 ```
 
-Store the user's chosen `shape`, `palette` and `frame` next to their seed, and pass them back in. `FRAMES` lists the frames, as `SHAPES` lists the cells.
+Store the user's chosen `shape`, `palette`, `look` and `frame` next to their seed, and pass them back in. `LOOKS` and `FRAMES` list the looks and frames, as `SHAPES` lists the cells.
 
 ### Advanced
 
@@ -186,7 +204,7 @@ const svg = snoot(user.id);
 const src = snootDataUri(user.id, { size: 40 });
 ```
 
-`snoot()` takes the same options as `botling()` except `animate`: `shape`, `palette` (an index into Snoot's own eight `PALETTES`, or a palette object), `size`, `detail`, `showGrid`, `frame`, `background` and `title` (default `'Animal avatar'`). Below 40px it draws a simpler 9x9 Snoot from the same traits, keeping the species' ears, the eyes, muzzle, markings and cheeks.
+`snoot()` takes the same options as `botling()` except `animate`: `shape`, `palette` (an index into Snoot's own eight `PALETTES`, or a palette object), `size`, `detail`, `showGrid`, `look`, `frame`, `background` and `title` (default `'Animal avatar'`). Below 40px it draws a simpler 9x9 Snoot from the same traits, keeping the species' ears, the eyes, muzzle, markings and cheeks.
 
 The seed is salted, so `snoot(id)` and `botling(id)` are unrelated: one user's robot and animal don't share colours or features. `traits`, `resolveTraits`, `grid`, `smallGrid`, `SPECIES`, `EYES`, `MARKINGS`, `EXTRAS` and `SHAPES` are exported as for Botling.
 
@@ -220,7 +238,7 @@ const svg = beastie(user.id);
 const src = beastieDataUri(user.id, { size: 40 });
 ```
 
-`beastie()` takes the same options as `snoot()`: `shape`, `palette` (an index into Beastie's own eight `PALETTES`, or a palette object), `size`, `detail`, `showGrid`, `frame`, `background` and `title` (default `'Monster avatar'`). Below 40px it draws a simpler 9x9 Beastie from the same traits, keeping the body, eyes, mouth, top and sides.
+`beastie()` takes the same options as `snoot()`: `shape`, `palette` (an index into Beastie's own eight `PALETTES`, or a palette object), `size`, `detail`, `showGrid`, `look`, `frame`, `background` and `title` (default `'Monster avatar'`). Below 40px it draws a simpler 9x9 Beastie from the same traits, keeping the body, eyes, mouth, top and sides.
 
 The seed is salted, so one id's Botling, Snoot and Beastie are unrelated. `traits`, `resolveTraits`, `grid`, `smallGrid`, `BODIES`, `EYES`, `MOUTHS`, `TOPS`, `SIDES` and `SHAPES` are exported as for Botling.
 

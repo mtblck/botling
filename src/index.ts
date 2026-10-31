@@ -7,6 +7,7 @@
  */
 export { CENTER, GRID_SIZE, SMALL_GRID_SIZE } from './core/canvas.js';
 export { FRAMES } from './core/render/frame.js';
+export { LOOKS } from './core/render/look.js';
 export { randomSeed } from './core/seed.js';
-export type { Detail, Frame, Palette, RoleGrid, Shape } from './core/types.js';
+export type { Detail, Frame, Look, Palette, RoleGrid, Shape } from './core/types.js';
 export { Role } from './core/types.js';

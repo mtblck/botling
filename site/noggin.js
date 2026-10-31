@@ -1,6 +1,7 @@
 // The Noggin playground, drawn from the package build at /lib; site/playground.js does the rest.
 import {
   FRAMES,
+  LOOKS,
   noggin,
   nogginDataUri,
   PALETTES,
@@ -22,7 +23,7 @@ function describe(seed, options) {
   return `Noggin for "${seed}": ${parts.join(', ')}, in a ${PALETTES[t.palette].name.toLowerCase()} shirt`;
 }
 
-const shared = sharedGroups({ SHAPES, FRAMES });
+const shared = sharedGroups({ SHAPES, FRAMES, LOOKS });
 playground({
   name: 'noggin',
   noun: 'noggin',
@@ -33,6 +34,7 @@ playground({
   swatch: (p) => [p.bg, p.screen, p.screen, p.accent],
   groups: [
     shared.cells,
+    shared.look,
     shared.frame,
     {
       name: 'skin',

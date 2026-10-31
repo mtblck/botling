@@ -7,8 +7,15 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-10-31
+
+### Added
+
+- A `look` option for every style: `'gapped'` (the default, unchanged), `'flat'` (no gap, so cells merge into solid shapes), `'inked'` (flat with a dark outline and lines between colours), `'soft'` (rounded, vector-like shapes), `'soft-inked'` and `'sticker'` (a white border and a drop shadow). `LOOKS` lists them. A seed draws the same picture in every look, and no existing output changes (ADR 0010).
+
 ### Site
 
+- Every playground has a Look picker, and the copied code includes the look.
 - The docs are now thirteen pages with a sidebar, an "On this page" list, previous and next links and an edit link: an introduction, guides for React, Vue, Svelte, plain HTML, serving avatars from a server and using them as a profile photo fallback, a page per style, How it works and Versioning. Old `/docs/#section` links go to the section's new page.
 - Every style page is built from one template (`scripts/styles.mjs`): the playground, then usage tabs (ESM, React, HTML, server), a details list with the entry point, status, gzipped size measured at build and the parts counted from the package, the style's options table, and links to the previous and next style. The Styles page links each style's playground and docs.
 
@@ -117,7 +124,9 @@ First release.
 
 The playground site (`site/`, not part of the npm package) lets you try seeds, shapes and palettes and copy the code.
 
-[Unreleased]: https://github.com/mtblck/seedkin/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/mtblck/seedkin/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/mtblck/seedkin/compare/v2.2.0...v2.3.0
+[2.2.0]: https://github.com/mtblck/seedkin/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/mtblck/seedkin/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/mtblck/seedkin/compare/v1.2.0...v2.0.0
 [1.2.0]: https://github.com/mtblck/seedkin/compare/v1.1.0...v1.2.0
