@@ -64,8 +64,6 @@ export interface SpriteTraits {
   palette: Palette;
   /** Milliseconds each of the four frames holds. */
   beats: number[];
-  /** Seconds in one flicker cycle. */
-  flicker: number;
 }
 
 /** Picks a sprite's traits. Seeds are salted, so a sprite doesn't echo its robot. */
@@ -78,7 +76,7 @@ export function spriteTraits(seed: string, element?: Element): SpriteTraits {
   const palette = e.palettes[Math.floor(rng() * e.palettes.length)] as Palette;
   const base = 150 + Math.floor(rng() * 90);
   const beats = [0, 1, 2, 3].map(() => base + Math.floor(rng() * 80));
-  return { element: el, form, palette, beats, flicker: 2.4 + Math.round(rng() * 20) / 10 };
+  return { element: el, form, palette, beats };
 }
 
 /** Options for {@link sprite}. */
@@ -96,8 +94,8 @@ export interface SpriteOptions {
 const inner = (svg: string): string => svg.replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '');
 
 /**
- * Draws a sprite: four frames swapped with SMIL, plus a slow flicker that
- * dims it and brings it back. Never fully out, so the avatar stays there.
+ * Draws a sprite: four frames swapped with SMIL, so a flame sways, a drop
+ * wobbles and the motes around it drift. The sprite itself never dims.
  */
 export function sprite(seed: string, o: SpriteOptions = {}): string {
   const t = spriteTraits(seed, o.element);
@@ -131,6 +129,5 @@ export function sprite(seed: string, o: SpriteOptions = {}): string {
       return `<g visibility="${f === 0 ? 'visible' : 'hidden'}">${anim}${inner(stillSvg(pic(f, false), s))}</g>`;
     })
     .join('');
-  const dim = `<animate attributeName="opacity" values="1;1;.4;.9;.55;1;1" keyTimes="0;.55;.6;.64;.68;.74;1" dur="${t.flicker}s" repeatCount="indefinite"/>`;
-  return `${open}${inner(base)}<g>${dim}${frames}</g></svg>`;
+  return `${open}${inner(base)}${frames}</svg>`;
 }

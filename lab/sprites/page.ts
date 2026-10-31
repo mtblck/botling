@@ -26,7 +26,7 @@ const NOTES: Record<Element, { verdict: string; tone: string; note: string }> = 
   fire: {
     verdict: 'Reads at 24px',
     tone: 'good',
-    note: 'The flame outline plus warm colour is a symbol everyone knows, and a flicker is what fire does anyway. The tip sways and embers drift up.',
+    note: 'The flame outline plus warm colour is a symbol everyone knows, and when animated the tip sways and embers drift up.',
   },
   space: {
     verdict: 'Reads at 24px',
