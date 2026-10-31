@@ -1,8 +1,7 @@
-import { type Canvas, Role } from './art.js';
+import type { Canvas } from '../../../core/canvas.js';
+import { type Hair, Role } from '../types.js';
 
-export const HAIRS = ['bald', 'buzz', 'short', 'spiky', 'bob', 'long', 'bun', 'mohawk', 'curly', 'sidepart'] as const;
-export type Hair = (typeof HAIRS)[number];
-/** The head's top row. */
+/** The detailed head's top row. */
 export const TOP = 3;
 
 /**
@@ -64,6 +63,21 @@ export function drawHair(c: Canvas, style: Hair, hw: number): void {
     case 'sidepart':
       short();
       for (let dx = 1; dx <= hw; dx++) c.paint(c.center - dx, TOP + 1, Role.Shade);
+      return;
+    case 'afro':
+      row(TOP - 3, 0, hw - 1);
+      row(TOP - 2, 0, hw + 1);
+      row(TOP - 1, 0, hw + 2);
+      row(TOP, 0, hw + 2);
+      row(TOP + 1, hw, hw + 2);
+      row(TOP + 2, hw + 1, hw + 2);
+      row(TOP + 3, hw + 1, hw + 2);
+      h(hw + 1, TOP + 4);
+      return;
+    case 'locs':
+      short();
+      for (let y = TOP; y <= 11; y++) h(hw + 1, y);
+      for (let y = TOP + 1; y <= 12; y += 2) h(hw + 2, y);
       return;
   }
 }

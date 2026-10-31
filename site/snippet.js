@@ -5,7 +5,7 @@
 /**
  * Options for botling() from the playground state, leaving out anything on auto.
  *
- * @param {{ shape: string, frame?: string, palette: string, grid: string, motion?: string }} state - The playground's choices
+ * @param {{ shape: string, frame?: string, palette: string, skin?: string, grid: string, motion?: string }} state - The playground's choices
  * @param {object} [extra] - Options to add, such as size
  * @param {Record<string, object>} [holidays] - HOLIDAY_PALETTES, to look holiday keys up in
  * @returns {object} botling() options
@@ -17,6 +17,7 @@ export function options(state, extra = {}, holidays = {}) {
   if (isHoliday(state.palette)) {
     if (holidays[state.palette]) o.palette = holidays[state.palette];
   } else if (state.palette !== 'auto') o.palette = Number(state.palette);
+  if (state.skin && state.skin !== 'auto') o.skin = Number(state.skin);
   if (state.grid !== 'auto') o.showGrid = state.grid === 'on';
   if (state.motion === 'on') o.animate = true;
   return o;

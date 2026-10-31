@@ -40,6 +40,10 @@
       "types": "./dist/styles/beastie/index.d.ts",
       "default": "./dist/styles/beastie/index.js"
     },
+    "./noggin": {
+      "types": "./dist/styles/noggin/index.d.ts",
+      "default": "./dist/styles/noggin/index.js"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",

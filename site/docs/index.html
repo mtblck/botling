@@ -35,12 +35,13 @@
         <li><a href="#how-it-works">How it works</a></li>
         <li><a href="#versioning">Versioning</a></li>
         <li><a href="#snoot">Snoot</a></li>
+        <li><a href="#noggin">Noggin</a></li>
         <li><a href="#beastie">Beastie</a></li>
       </ul>
     </nav>
     <article class="prose">
       <h1>Docs</h1>
-      <p class="lede">Every Seedkin style has its own entry point, so an app only ships the styles it uses. Botling, the robots, is the first: <code>seedkin/botling</code>. Snoot, the animals, and Beastie, the monsters, are in Preview at <code>seedkin/snoot</code> and <code>seedkin/beastie</code>, and Noggins will follow the same shape.</p>
+      <p class="lede">Every Seedkin style has its own entry point, so an app only ships the styles it uses. Botling, the robots, is the first: <code>seedkin/botling</code>. Snoot (animals), Noggin (people) and Beastie (monsters) are in Preview at <code>seedkin/snoot</code>, <code>seedkin/noggin</code> and <code>seedkin/beastie</code>.</p>
       <p class="callout">Coming from the <code>botling</code> package? Import from <code>'seedkin/botling'</code> instead of <code>'botling'</code>: every seed draws the same robot as <code>botling</code> 1.2.0.</p>
 <h2 id="install">Install</h2>
 <pre><code class="language-sh">npm install seedkin
@@ -235,6 +236,15 @@ const src = snootDataUri(user.id, { size: 40 });
 </code></pre>
 <p><code>snoot()</code> takes the same options as <code>botling()</code> except <code>animate</code>: <code>shape</code>, <code>palette</code> (an index into Snoot&#39;s own eight <code>PALETTES</code>, or a palette object), <code>size</code>, <code>detail</code>, <code>showGrid</code>, <code>frame</code>, <code>background</code> and <code>title</code> (default <code>&#39;Animal avatar&#39;</code>). Below 40px it draws a simpler 9x9 Snoot from the same traits.</p>
 <p>The seed is salted, so <code>snoot(id)</code> and <code>botling(id)</code> are unrelated. <code>traits</code>, <code>resolveTraits</code>, <code>grid</code>, <code>smallGrid</code>, <code>SPECIES</code>, <code>EYES</code>, <code>MARKINGS</code>, <code>EXTRAS</code> and <code>SHAPES</code> are exported as for Botling. <a href="/styles/snoot/">Try them in the playground</a>.</p>
+<h2 id="noggin">Noggin <span class="badge">Preview</span></h2>
+<p>Seeded people avatars in seven skin tones, with twelve hairstyles (including afros and locs), glasses, beards, hats and headscarves. Until Noggin is marked stable, the Noggin a seed draws can change in a minor version, so pin the minor (<code>~2.2.0</code>) if you store seeds and need the same person back.</p>
+<pre><code class="language-ts">import { noggin, nogginDataUri } from &#39;seedkin/noggin&#39;;
+
+const svg = noggin(user.id);
+const src = nogginDataUri(user.id, { size: 40, skin: 4 });
+</code></pre>
+<p><code>noggin()</code> takes the same options as <code>snoot()</code>, plus <code>skin</code>, an index into <code>SKIN_TONES</code> (lightest first), so people can pick their own. <code>palette</code> picks one of the six outfits in <code>PALETTES</code>, or takes a whole palette object; <code>title</code> defaults to <code>&#39;Person avatar&#39;</code>. A seed&#39;s hair colour and outfit always stand out from its skin; pick another skin tone and they move to the next colours that do. Below 40px it draws a simpler 9x9 Noggin from the same traits.</p>
+<p><code>traits</code>, <code>resolveTraits</code>, <code>grid</code>, <code>smallGrid</code>, <code>paletteFor</code>, <code>SKIN_TONES</code>, <code>HAIR_COLOURS</code>, <code>HAIRS</code>, <code>EYES</code>, <code>MOUTHS</code>, <code>FACIAL</code>, <code>EYEWEAR</code>, <code>HEADWEAR</code> and <code>SHAPES</code> are exported as for Botling. <a href="/styles/noggin/">Try them in the playground</a>.</p>
 <h2 id="beastie">Beastie <span class="badge">Preview</span></h2>
 <p>Seeded monster avatars: blobs, ghosts, boxes, tall and wide bodies with one to three eyes, fangs, horns and wings. Until Beastie is marked stable, the Beastie a seed draws can change in a minor version, so pin the minor (<code>~2.2.0</code>) if you store seeds and need the same monster back.</p>
 <pre><code class="language-ts">import { beastie, beastieDataUri } from &#39;seedkin/beastie&#39;;

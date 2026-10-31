@@ -26,6 +26,7 @@ describe('playground snippet', () => {
 
   it("names the style's function", () => {
     expect(snippet({ seed: 'abc', ...auto, palette: '2' }, 'snoot')).toBe("snoot('abc', { palette: 2 })");
+    expect(snippet({ seed: 'abc', ...auto, skin: '3' }, 'noggin')).toBe("noggin('abc', { skin: 3 })");
   });
 
   it('copies the frame unless it is the default square', () => {

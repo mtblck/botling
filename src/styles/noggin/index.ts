@@ -1,0 +1,32 @@
+/**
+ * seedkin/noggin: the Noggins, seeded people avatars. A Preview style: the
+ * Noggin a seed draws can still change in a minor version.
+ *
+ * @packageDocumentation
+ */
+
+export { FRAMES } from '../../core/render/frame.js';
+export { randomSeed } from '../../core/seed.js';
+export { CENTER, GRID_SIZE, grid, SMALL_GRID_SIZE, smallGrid } from './grid/index.js';
+export { HAIR_COLOURS, PALETTES, paletteFor, SKIN_TONES } from './palettes.js';
+export { EYES, EYEWEAR, FACIAL, HAIRS, HEADWEAR, MOUTHS, SHAPES } from './parts.js';
+export { noggin, nogginDataUri, resolveTraits } from './svg.js';
+export { traits } from './traits.js';
+export type {
+  Detail,
+  Eyes,
+  Eyewear,
+  Facial,
+  Frame,
+  Hair,
+  Headwear,
+  Mouth,
+  NogginOptions,
+  NogginTraits,
+  Outfit,
+  Palette,
+  RoleGrid,
+  Shape,
+  SkinTone,
+} from './types.js';
+export { Role } from './types.js';
