@@ -10,7 +10,8 @@ any change to the robot a seed draws is a major version.
 ### Site
 
 - seedkin.dev has a `sitemap.xml`, a `robots.txt` and an `llms.txt` for AI assistants, all built from the pages themselves; JSON-LD on the home page; and its own link preview image for each style page.
-- The home page has an Animate button again, next to Random, which sets the Botling moving, and a shorter seed box. Each style card shows its Preview badge in its top right corner.
+- The home page has an Animate button again, next to Random, which sets every style moving, and a shorter seed box. Each style card shows its Stable badge in its top right corner.
+- Every playground has a Motion toggle, and its GIF download moves for every style. Snoot, Noggin and Beastie are marked Stable across the site, and each style's options table lists `animate`.
 - Search the site from the header (or press `/`): docs, styles and pages, matched as you type, built into `search.json` at build time.
 - Code samples are syntax highlighted at build time, in both themes, and the playground's code as it changes. The site still loads no highlighter library.
 

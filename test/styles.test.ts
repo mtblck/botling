@@ -30,7 +30,9 @@ describe('style pages', () => {
 
   it("puts the style's words into the playground", () => {
     const html = playground('<p>{{label}}</p><p>{{small-note}}</p>', 'snoot');
-    expect(html).toBe('<p>Snoot</p><p>Below 40px it switches to a simpler version of the same Snoot.</p>');
+    expect(html).toBe(
+      '<p>Snoot</p><p>Below 40px it switches to a simpler version of the same Snoot, and animated, it only blinks and hovers.</p>',
+    );
   });
 
   it('counts parts from what each style exports, leaving out none', () => {
@@ -41,9 +43,16 @@ describe('style pages', () => {
 
   it("lists the style's own options and default title", () => {
     expect(styleGuide('noggin', noggin, '1.0')).toContain('<code>skin</code>');
-    expect(styleGuide('botling', botling, '1.0')).toContain('<code>animate</code>');
-    expect(styleGuide('snoot', snoot, '1.0')).not.toContain('<code>animate</code>');
+    expect(styleGuide('snoot', snoot, '1.0')).not.toContain('<code>skin</code>');
     expect(styleGuide('beastie', beastie, '1.0')).toContain("'Monster avatar'");
+  });
+
+  it('lists animate for every style, with what it does', () => {
+    for (const s of STYLES) {
+      const html = styleGuide(s.name, LIBS[s.name] ?? {}, '1.0');
+      expect(html, s.name).toContain('<code>animate</code>');
+      expect(html, s.name).toContain(s.moves);
+    }
   });
 
   it('gives the default title each style really draws', () => {

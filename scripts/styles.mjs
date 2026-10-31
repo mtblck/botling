@@ -5,7 +5,7 @@
 
 /**
  * Every style in the order the site shows them. `label` names one avatar on the page
- * ('robot', 'Snoot'); `kind` is what it is ('robot', 'animal'); `parts` are the exported lists
+ * ('robot', 'Snoot'); `kind` is what it is ('robot', 'animal'); `moves` is what `animate` does; `parts` are the exported lists
  * the Details count, as [export, plural]; `options` are the style's own options for the table.
  */
 export const STYLES = [
@@ -15,9 +15,8 @@ export const STYLES = [
     status: 'stable',
     label: 'robot',
     kind: 'robot',
+    moves: 'Hovers, blinks and talks; its top piece wobbles, its side pieces twitch and a scanline sweeps its screen.',
     defaultTitle: 'Robot avatar',
-    smallNote:
-      'Below 40px it switches to a simpler version of the same robot, and animated, it only blinks and hovers.',
     parts: [
       ['HEADS', 'heads'],
       ['EYES', 'eyes'],
@@ -34,21 +33,15 @@ export const STYLES = [
         'The <code>botling</code> package. Import from <code>seedkin/botling</code> instead: every seed draws the same robot.',
       ],
     ],
-    options: [
-      [
-        'animate',
-        '<code>boolean</code>',
-        '<code>false</code>',
-        'Hover, blink, talk and wobble, in CSS inside the SVG. Still for anyone who asks for reduced motion.',
-      ],
-    ],
+    options: [],
   },
   {
     name: 'snoot',
     title: 'Snoot',
-    status: 'preview',
+    status: 'stable',
     label: 'Snoot',
     kind: 'animal',
+    moves: 'Hovers, blinks and twitches its ears.',
     defaultTitle: 'Animal avatar',
     parts: [
       ['SPECIES', 'species'],
@@ -62,9 +55,10 @@ export const STYLES = [
   {
     name: 'noggin',
     title: 'Noggin',
-    status: 'preview',
+    status: 'stable',
     label: 'Noggin',
     kind: 'person',
+    moves: 'Hovers, blinks and talks.',
     defaultTitle: 'Person avatar',
     parts: [
       ['SKIN_TONES', 'skin tones'],
@@ -89,9 +83,10 @@ export const STYLES = [
   {
     name: 'beastie',
     title: 'Beastie',
-    status: 'preview',
+    status: 'stable',
     label: 'Beastie',
     kind: 'monster',
+    moves: 'Hovers, blinks and talks; horns and antennae wobble, arms and wings twitch.',
     defaultTitle: 'Monster avatar',
     parts: [
       ['BODIES', 'bodies'],
@@ -145,7 +140,7 @@ export function styleTabs(name) {
  */
 export function playground(template, name) {
   const s = byName(name);
-  const note = s.smallNote ?? `Below 40px it switches to a simpler version of the same ${s.label}.`;
+  const note = `Below 40px it switches to a simpler version of the same ${s.label}, and animated, it only blinks and hovers.`;
   return template.replaceAll('{{label}}', s.label).replaceAll('{{small-note}}', note);
 }
 
@@ -180,6 +175,12 @@ function optionRows(s) {
       'The outline of the background. Outside it the image is transparent.',
     ],
     ['background', '<code>boolean</code>', '<code>true</code>', "Draw the palette's background."],
+    [
+      'animate',
+      '<code>boolean</code>',
+      '<code>false</code>',
+      `${s.moves} CSS inside the SVG, still for anyone who asks for reduced motion.`,
+    ],
     [
       'title',
       '<code>string | null</code>',

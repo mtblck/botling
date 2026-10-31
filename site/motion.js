@@ -1,16 +1,16 @@
-// Still frames of an animated robot, for the GIF export. The package animates with CSS
+// Still frames of an animated avatar, for the GIF export. The package animates with CSS
 // inside the SVG (ADR 0003): each moving group gets a rule like
-// `animation:botling-blink 3.4s -1.2s infinite`, every motion on its own seeded period.
+// `animation:snoot-blink 3.4s -1.2s infinite`, every motion on its own seeded period.
 // A GIF has to loop, so each period is nudged to divide one loop, and each frame pauses
 // every animation at its point in that loop.
 
-const RULE = /animation:(botling-[a-z0-9]+) ([\d.]+)s (-?[\d.]+)s([^;}]*?) infinite/g;
+const RULE = /animation:([a-z]+-[a-z0-9]+) ([\d.]+)s (-?[\d.]+)s([^;}]*?) infinite/g;
 const REDUCED = /<style>@media \(prefers-reduced-motion:no-preference\)\{(.*)\}<\/style>/s;
 
 /**
  * The period of every animation in an SVG.
  *
- * @param {string} svg - An animated botling
+ * @param {string} svg - An animated avatar from any style
  * @returns {number[]} Periods in seconds; empty for a still robot
  */
 export function periods(svg) {
@@ -42,7 +42,7 @@ export function loopLength(list) {
  * The robot paused `t` seconds into a loop of `loop` seconds. It ignores
  * prefers-reduced-motion, since asking for an animated GIF is asking for motion.
  *
- * @param {string} svg - An animated botling
+ * @param {string} svg - An animated avatar from any style
  * @param {number} loop - Seconds, from loopLength()
  * @param {number} t - Seconds into the loop
  * @returns {string} An SVG that draws that one frame

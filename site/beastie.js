@@ -47,5 +47,6 @@ playground({
       choices: [['auto', 'Seed picks'], ...PALETTES.map((p, i) => [String(i), p.name, p])],
     },
     shared.grid,
+    shared.motion,
   ],
 });

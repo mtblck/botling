@@ -6,7 +6,7 @@ export interface SiteStyle {
   label: string;
   kind: string;
   defaultTitle: string;
-  smallNote?: string;
+  moves: string;
   parts: [string, string][];
   palette: string;
   details?: [string, string][];

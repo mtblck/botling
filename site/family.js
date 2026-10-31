@@ -2,24 +2,26 @@
 // the style strips on /styles/. Packaged styles come from the package build (/lib); the
 // lab ones from lab/preview.ts, bundled to /preview.js. Seeds stay in the URL hash.
 
-import { beastie } from '/lib/styles/beastie/index.js';
+import { beastie, beastieDataUri } from '/lib/styles/beastie/index.js';
 import { botling, botlingDataUri, randomSeed } from '/lib/styles/botling/index.js';
-import { noggin } from '/lib/styles/noggin/index.js';
-import { snoot } from '/lib/styles/snoot/index.js';
+import { noggin, nogginDataUri } from '/lib/styles/noggin/index.js';
+import { snoot, snootDataUri } from '/lib/styles/snoot/index.js';
 import { PREVIEWS } from '/preview.js';
 
-// The landing page's Animate button. Only Botling moves; an animated robot goes in an <img>,
-// because the CSP's style-src 'self' would block the <style> inside an inlined SVG. It holds
-// still for anyone who asks for reduced motion.
+// The landing page's Animate button. An animated avatar goes in an <img>, because the CSP's
+// style-src 'self' would block the <style> inside an inlined SVG. It holds still for anyone
+// who asks for reduced motion.
 let animate = false;
+/** Draws a style still, inline, or animated, as an image. */
+const drawer = (draw, dataUri) => (seed, size, frame) =>
+  animate
+    ? `<img src="${dataUri(seed, { size, frame, animate: true, title: null })}" alt="" width="${size}" height="${size}">`
+    : draw(seed, { size, frame, title: null });
 const DRAW = {
-  botling: (seed, size, frame) =>
-    animate
-      ? `<img src="${botlingDataUri(seed, { size, frame, animate: true, title: null })}" alt="" width="${size}" height="${size}">`
-      : botling(seed, { size, frame, title: null }),
-  snoot: (seed, size, frame) => snoot(seed, { size, frame, title: null }),
-  noggin: (seed, size, frame) => noggin(seed, { size, frame, title: null }),
-  beastie: (seed, size, frame) => beastie(seed, { size, frame, title: null }),
+  botling: drawer(botling, botlingDataUri),
+  snoot: drawer(snoot, snootDataUri),
+  noggin: drawer(noggin, nogginDataUri),
+  beastie: drawer(beastie, beastieDataUri),
   ...Object.fromEntries(PREVIEWS.map((p) => [p.name.toLowerCase(), p.render])),
 };
 const $ = (id) => document.getElementById(id);
