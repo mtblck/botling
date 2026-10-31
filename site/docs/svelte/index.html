@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Svelte · Seedkin docs</title>
+  <meta name="description" content="Seedkin avatars in Svelte and SvelteKit: an avatar component with runes." />
+  <link rel="canonical" href="https://seedkin.dev/docs/svelte/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://seedkin.dev/docs/svelte/" />
+  <meta property="og:title" content="Svelte · Seedkin docs" />
+  <meta property="og:description" content="Seedkin avatars in Svelte and SvelteKit: an avatar component with runes." />
+  {{head}}
+  <script type="module" src="/docs.js"></script>
+</head>
+<body>
+  <a class="skip" href="#doc">Skip to the docs</a>
+  {{header}}
+
+  <main id="main" class="docs wrap">
+    {{docsnav}}
+    <article id="doc" class="prose" tabindex="-1">
+<h1>Svelte</h1>
+<p class="lede">A derived data URI in a Svelte 5 component. It renders the same on the server, so it works in SvelteKit as it is.</p>
+<h2 id="component">An avatar component</h2>
+<pre><code class="language-svelte">&lt;script lang="ts"&gt;
+  import { botlingDataUri } from 'seedkin/botling';
+
+  let { id, size = 40 }: { id: string; size?: number } = $props();
+  const src = $derived(botlingDataUri(id, { size, title: null }));
+&lt;/script&gt;
+
+&lt;img {src} alt="" width={size} height={size} /&gt;
+</code></pre>
+<p>Use it as <code>&lt;Avatar id={user.id} /&gt;</code>. <code>title: null</code> leaves the accessible name to the <code>&lt;img&gt;</code>: keep <code>alt=""</code> when the person's name is next to it, and describe it otherwise.</p>
+<p>On Svelte 4, take the props with <code>export let id: string;</code> and <code>export let size = 40;</code>, and derive with <code>$: src = botlingDataUri(id, { size, title: null });</code>.</p>
+<h2 id="inline-svg">Inline SVG</h2>
+<pre><code class="language-svelte">{@html botling(id, { size: 40, title: null })}
+</code></pre>
+<p><code>{@html}</code> is safe here: the seed never appears in the markup, and a <code>title</code> you pass is escaped. For animated avatars under a strict Content Security Policy, use the <code>&lt;img&gt;</code> (see <a href="/docs/botling/#animation">Animation</a>).</p>
+{{pager}}
+    </article>
+    {{toc}}
+  </main>
+
+  {{footer}}
+</body>
+</html>

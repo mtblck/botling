@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>React · Seedkin docs</title>
+  <meta name="description" content="Seedkin avatars in React: an avatar component, inline SVG, and Server Components." />
+  <link rel="canonical" href="https://seedkin.dev/docs/react/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://seedkin.dev/docs/react/" />
+  <meta property="og:title" content="React · Seedkin docs" />
+  <meta property="og:description" content="Seedkin avatars in React: an avatar component, inline SVG, and Server Components." />
+  {{head}}
+  <script type="module" src="/docs.js"></script>
+</head>
+<body>
+  <a class="skip" href="#doc">Skip to the docs</a>
+  {{header}}
+
+  <main id="main" class="docs wrap">
+    {{docsnav}}
+    <article id="doc" class="prose" tabindex="-1">
+<h1>React</h1>
+<p class="lede">An avatar is a pure function of its seed, so in React it's a small component with no state and no effects. It renders the same on the server and the client.</p>
+<h2 id="component">An avatar component</h2>
+<pre><code class="language-tsx">import { useMemo } from 'react';
+import { botlingDataUri } from 'seedkin/botling';
+
+export function Avatar({ id, size = 40 }: { id: string; size?: number }) {
+  const src = useMemo(() =&gt; botlingDataUri(id, { size, title: null }), [id, size]);
+  return &lt;img src={src} alt="" width={size} height={size} /&gt;;
+}
+</code></pre>
+<p><code>title: null</code> leaves the accessible name to the <code>&lt;img&gt;</code>. Keep <code>alt=""</code> when the person's name sits next to the avatar, so screen readers don't say it twice; otherwise describe it, such as <code>alt={`${user.name}'s avatar`}</code>.</p>
+<p>It has no hooks that need the browser, so it works as a Server Component in Next.js without <code>'use client'</code>. There, the <code>useMemo</code> can go.</p>
+<h2 id="inline-svg">Inline SVG</h2>
+<pre><code class="language-tsx">import { botling } from 'seedkin/botling';
+
+export function InlineAvatar({ id, size = 40 }: { id: string; size?: number }) {
+  return &lt;span dangerouslySetInnerHTML={&#123; __html: botling(id, { size, title: null }) }} /&gt;;
+}
+</code></pre>
+<p>Inlining is safe: the seed never appears in the markup, and a <code>title</code> you pass is escaped. Prefer the <code>&lt;img&gt;</code> for long lists, since the browser decodes each image once and keeps the DOM small, and for animated avatars on pages with a strict Content Security Policy (see <a href="/docs/botling/#animation">Animation</a>).</p>
+<h2 id="other-styles">Other styles</h2>
+<p>Swap the import for another style; the options are the same:</p>
+<pre><code class="language-tsx">import { snootDataUri } from 'seedkin/snoot';
+
+&lt;img src={snootDataUri(user.id, { size: 40, title: null })} alt="" width={40} height={40} /&gt;
+</code></pre>
+{{pager}}
+    </article>
+    {{toc}}
+  </main>
+
+  {{footer}}
+</body>
+</html>
