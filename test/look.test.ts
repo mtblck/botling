@@ -11,6 +11,14 @@ const STYLES = { botling, snoot, beastie, noggin } as const;
 const seeds = Array.from({ length: 60 }, (_, i) => `look-${i}`);
 
 describe('look', () => {
+  it.each(Object.entries(STYLES))('lays every shadow under every border on a moving %s sticker', (_, draw) => {
+    // A moving part's shadow drawn over the body's white border showed as a grey smear (lucky-gadget-959).
+    for (const seed of ['lucky-gadget-959', ...seeds.slice(0, 20)]) {
+      const svg = draw(seed, { look: 'sticker', animate: true });
+      expect(svg.lastIndexOf('opacity=".22"'), seed).toBeLessThan(svg.indexOf('fill="#fff" stroke="#fff"'));
+    }
+  });
+
   it.each(Object.entries(STYLES))('leaves %s exactly as it was by default', (_, draw) => {
     for (const seed of seeds.slice(0, 20)) {
       expect(draw(seed, { look: 'gapped' })).toBe(draw(seed));

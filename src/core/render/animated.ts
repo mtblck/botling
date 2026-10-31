@@ -3,7 +3,7 @@ import type { Settled } from '../options.js';
 import { Role } from '../types.js';
 import { cellStyle, type Outline, padding } from './cell.js';
 import { frameFit } from './frame.js';
-import { inkFor, innerLines, silhouette } from './ink.js';
+import { inkFor, innerLines, silhouetteLayers } from './ink.js';
 import { lookCell, softExtras, stickerGroup } from './look.js';
 import { type Animation, animation, type MotionPlan } from './motion.js';
 import { paintAttrs, pathData } from './path.js';
@@ -72,7 +72,11 @@ export function animatedSvg(pic: Picture, parts: readonly (readonly Part[])[], a
   const ink = inkFor(p.shade);
   const extras = softExtras(s.look, pic.shape, g);
   let avatar = '';
-  for (const [k, list] of drawn) avatar += wrap(k, silhouette(s.look, pic.shape === 'circle', pathData(list), ink));
+  // Every group's shadow goes beneath every group's border, as in the still picture.
+  const layers = [...drawn].map(
+    ([k, list]) => [k, silhouetteLayers(s.look, pic.shape === 'circle', pathData(list), ink)] as const,
+  );
+  for (const layer of [0, 1]) for (const [k, both] of layers) avatar += wrap(k, both[layer] ?? '');
   avatar += paths(extras.under) + paths(groups.get('')) + paths(extras.over);
   avatar += innerLines(s.look, pic.shape, g, ink);
   for (const k of moving) avatar += wrap(k, paths(groups.get(k)));

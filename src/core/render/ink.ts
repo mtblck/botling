@@ -39,17 +39,32 @@ export function inkFor(hex: string): string {
  * @returns SVG elements, or an empty string
  */
 export function silhouette(look: Look, isDot: boolean, d: string, ink: string): string {
-  if (!d || (look !== 'sticker' && look !== 'inked' && look !== 'soft-inked')) return '';
+  return silhouetteLayers(look, isDot, d, ink).join('');
+}
+
+/**
+ * The same as `silhouette`, split into the shadow and what goes over it, so
+ * an avatar drawn in groups can lay every group's shadow beneath every
+ * group's border, as one silhouette would.
+ *
+ * @param look - The look
+ * @param isDot - Cells are round dots, drawn as strokes
+ * @param d - Path data of the group's cells
+ * @param ink - The ink colour
+ * @returns The shadow, then the border or ink outline; either may be empty
+ */
+export function silhouetteLayers(look: Look, isDot: boolean, d: string, ink: string): [string, string] {
+  if (!d || (look !== 'sticker' && look !== 'inked' && look !== 'soft-inked')) return ['', ''];
   const dot = isDot ? 1000 : 0;
   const caps = isDot ? ' stroke-linecap="round"' : '';
   const stroke = (colour: string, width: number, extra = ''): string =>
     `<path${extra} fill="${colour}" stroke="${colour}" stroke-width="${num(width + dot)}" stroke-linejoin="round"${caps} d="${d}"/>`;
-  if (look !== 'sticker') return stroke(ink, INK);
+  if (look !== 'sticker') return ['', stroke(ink, INK)];
   const off = num(SHADOW);
-  return (
-    stroke('#000', BORDER, ` transform="translate(${off} ${off})" opacity="${num(SHADOW_OPACITY * 1000)}"`) +
-    stroke('#fff', BORDER)
-  );
+  return [
+    stroke('#000', BORDER, ` transform="translate(${off} ${off})" opacity="${num(SHADOW_OPACITY * 1000)}"`),
+    stroke('#fff', BORDER),
+  ];
 }
 
 /**
