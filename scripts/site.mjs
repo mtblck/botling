@@ -2,7 +2,8 @@
 // under site/ is a page, filled in from site/partials/. The package build (dist/) is copied
 // to /lib, so the playground always runs exactly what npm ships; the preview styles from
 // lab/ are bundled to /preview.js, since they aren't in the package yet. Docs pages also get
-// their sidebar, contents and previous/next links from scripts/docs.mjs.
+// their sidebar, contents and previous/next links from scripts/docs.mjs, and style pages
+// their playground and "Use it" section from scripts/styles.mjs.
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
@@ -11,6 +12,7 @@ import { gzipSync } from 'node:zlib';
 import { buildSync } from 'esbuild';
 import { docsNav, docsSlug, pager, toc } from './docs.mjs';
 import { ogImage } from './og.mjs';
+import { playground, STYLES, styleGuide, styleOf, styleTabs } from './styles.mjs';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const out = path.join(ROOT, 'dist-site');
@@ -42,10 +44,14 @@ const kb = (entry) => {
   const { outputFiles } = buildSync({ entryPoints: [entry], bundle: true, minify: true, format: 'esm', write: false });
   return (gzipSync(outputFiles[0].contents).length / 1024).toFixed(1);
 };
-const figures = { version, 'botling-kb': kb(path.join(dist, 'styles/botling/index.js')) };
+const styleKb = Object.fromEntries(STYLES.map(({ name }) => [name, kb(path.join(dist, `styles/${name}/index.js`))]));
+const figures = { version, 'botling-kb': styleKb.botling };
+const styleLibs = Object.fromEntries(
+  await Promise.all(STYLES.map(async ({ name }) => [name, await import(path.join(dist, `styles/${name}/index.js`))])),
+);
 
 const partials = Object.fromEntries(
-  ['head', 'header', 'footer'].map((name) => [
+  ['head', 'header', 'footer', 'playground'].map((name) => [
     name,
     fs.readFileSync(path.join(ROOT, `site/partials/${name}.html`), 'utf8').trim(),
   ]),
@@ -62,6 +68,13 @@ for (const file of pages) {
     .replaceAll('{{logo}}', logo)
     .replaceAll('{{preloads}}', preloads)
     .replace(/{{(version|botling-kb)}}/g, (_, name) => figures[name]);
+  const style = styleOf(file);
+  if (style) {
+    page = page
+      .replace('{{style-tabs}}', () => styleTabs(style))
+      .replace('{{playground}}', () => playground(partials.playground, style))
+      .replace('{{style-guide}}', () => styleGuide(style, styleLibs[style], styleKb[style]));
+  }
   const slug = docsSlug(file);
   if (slug !== undefined) {
     page = page
