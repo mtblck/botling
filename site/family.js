@@ -22,7 +22,10 @@ const DRAW = {
   snoot: drawer(snoot, snootDataUri),
   noggin: drawer(noggin, nogginDataUri),
   beastie: drawer(beastie, beastieDataUri),
-  ...Object.fromEntries(PREVIEWS.map((p) => [p.name.toLowerCase(), p.render])),
+  // Lab styles animate inline: their SVG moves with SMIL, which the CSP allows.
+  ...Object.fromEntries(
+    PREVIEWS.map((p) => [p.name.toLowerCase(), (seed, size, frame) => p.render(seed, size, frame, animate)]),
+  ),
 };
 const $ = (id) => document.getElementById(id);
 

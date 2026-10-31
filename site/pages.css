@@ -33,18 +33,26 @@
 }
 
 /* ---- landing: one seed in every style ---- */
+/* Five styles sit three over two: six tracks, each style spanning two, the second row centred. */
 .kin {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(2, 128px);
+  grid-template-columns: repeat(6, 54px);
   gap: 20px;
   padding: 0;
   margin: 0;
+}
+.kin li {
+  grid-column: span 2;
+}
+.kin li:nth-child(4) {
+  grid-column: 2 / span 2;
 }
 .kin li,
 .kin a {
   display: grid;
   justify-items: center;
+  align-content: start;
   gap: 8px;
   text-decoration: none;
   color: inherit;
@@ -94,8 +102,32 @@
   display: grid;
   gap: 20px;
 }
+/* Five families: three over two on wide screens, two a row (the last one wide) on tablets. */
 .cards {
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+.cards > li {
+  grid-column: span 2;
+}
+.cards > li:nth-child(n + 4) {
+  grid-column: span 3;
+}
+@media (max-width: 900px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cards > li,
+  .cards > li:nth-child(n + 4) {
+    grid-column: span 1;
+  }
+  .cards > li:last-child {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 560px) {
+  .cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 .card,
 .style {
@@ -335,7 +367,8 @@
 }
 @media (max-width: 480px) {
   .kin {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 16px 12px;
   }
   .kin-art {
     width: 100%;

@@ -75,7 +75,7 @@ export const ELEMENTS: Readonly<Record<Element, { forms: [FormName, FormName]; p
       { palette: p('Storm', '#1b2030', '#262d42', '#c9d3e6', '#8f9bb5', '#eef2fa', '#151a28', '#ffe066') },
       { palette: p('Gust', '#102320', '#1a332f', '#b8f2df', '#79c9ae', '#e9fff7', '#0b1f1a', '#5fe0b5') },
       { palette: p('Dusk', '#2a1f3d', '#382b50', '#f3d9ff', '#c9a3e6', '#fff4ff', '#241631', '#ffb3c7') },
-      { palette: p('Sand', '#f3ead8', '#e8dcc2', '#fffaf0', '#d8c39b', '#ffffff', '#4a3a1f', '#d8a24a') },
+      { palette: p('Sand', '#e6d5b3', '#dccaa5', '#fffaf0', '#c9ad7a', '#ffffff', '#4a3a1f', '#d8a24a') },
     ],
   },
   space: {
