@@ -2,11 +2,20 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { DOCS, docsNav, docsSlug, pager, toc } from '../scripts/docs.mjs';
+import { STYLES } from '../scripts/styles.mjs';
 
 const slugs = DOCS.flatMap((g) => g.pages.map(([slug]) => slug));
 const file = (slug: string): string => path.join('site/docs', slug, 'index.html');
 
 describe('docs pages', () => {
+  it("badges each style's page with its status", () => {
+    for (const s of STYLES) {
+      const badge =
+        s.status === 'stable' ? '<span class="badge stable">Stable</span>' : '<span class="badge">Preview</span>';
+      expect(fs.readFileSync(file(s.name), 'utf8'), s.name).toContain(`<h1>${s.title} ${badge}</h1>`);
+    }
+  });
+
   it('has a page for every entry in the table of contents, and no page without one', () => {
     for (const slug of slugs) expect(fs.existsSync(file(slug)), file(slug)).toBe(true);
     const pages = fs
