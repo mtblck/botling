@@ -191,7 +191,7 @@ The picture is the API. Within a major version, a seed with the same options alw
 
 Don't compare or cache robots by their SVG string across versions; the markup can change while the picture stays put. [ADR 0006](docs/adr/0006-what-1-0-freezes.md) has the full list. Snapshot tests guard it.
 
-Snoot, Noggin and Beastie follow the same rules from 2.4.0, when they left Preview ([ADR 0011](docs/adr/0011-every-style-stable.md)): a change to the animal, person or monster a seed draws is a major version.
+Snoot, Noggin and Beastie follow the same rules from 2.4.0, when they left Preview ([ADR 0011](docs/adr/0011-every-style-stable.md)): a change to the animal, person or monster a seed draws is a major version. Until an app depends on Seedkin, art that is plainly broken is fixed in a patch ([ADR 0012](docs/adr/0012-fixing-broken-art-before-adoption.md)).
 
 # Snoot
 
