@@ -15,6 +15,14 @@ any change to the robot a seed draws is a major version.
 - Search the site from the header (or press `/`): docs, styles and pages, matched as you type, built into `search.json` at build time.
 - Code samples are syntax highlighted at build time, in both themes, and the playground's code as it changes. The site still loads no highlighter library.
 
+## [2.4.2] - 2026-10-31
+
+### Fixed
+
+- Noggin mouths sit a row lower, so an eye never runs into the mouth (about a quarter of Noggins, such as a wink beside a smile). Narrow heads have a five-cell chin like wide ones, so a mouth on it never cuts the head from the neck; the `'smirk'` mouth is now a small V, a narrower smile, instead of dropping one corner, and a wink sits level with the open eye, drawn out to the side. This changes the still face of every Noggin, which is normally a major change; it is a fix to broken art, made in a patch while nobody depends on the faces yet.
+- An animated robot whose mouth runs into an eye now blinks that part of the mouth with the eye, so the two never move apart. Still robots are unchanged.
+- Blinks and talks no longer uncover a body-coloured lid where nothing was drawn behind, as above a Beastie's eye stalks; a squash now shows what was really underneath. Beastie stalks hold still and only the eyes on them blink. Still pictures are unchanged.
+
 ## [2.4.1] - 2026-10-31
 
 ### Fixed
@@ -153,7 +161,8 @@ First release.
 
 The playground site (`site/`, not part of the npm package) lets you try seeds, shapes and palettes and copy the code.
 
-[Unreleased]: https://github.com/mtblck/seedkin/compare/v2.4.1...HEAD
+[Unreleased]: https://github.com/mtblck/seedkin/compare/v2.4.2...HEAD
+[2.4.2]: https://github.com/mtblck/seedkin/compare/v2.4.1...v2.4.2
 [2.4.1]: https://github.com/mtblck/seedkin/compare/v2.4.0...v2.4.1
 [2.4.0]: https://github.com/mtblck/seedkin/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/mtblck/seedkin/compare/v2.2.0...v2.3.0

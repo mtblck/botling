@@ -46,6 +46,8 @@ export function drawGrid(t: BeastieTraits): Canvas {
   tagged(c, 'top', () => topPiece(c, t, top, r[0] ?? hw));
   const eyeRow = top + 2;
   tagged(c, 'eyes', () => eyes(c, t, eyeRow, hw));
+  // Stalks hold still; only the eyes on them blink.
+  if (t.eyes === 'stalks') tagged(c, null, () => stalks(c, eyeRow));
   tagged(c, 'mouth', () => mouth(c, t, eyeRow + 3, hw));
   return c;
 }
@@ -75,8 +77,8 @@ function eyes(c: Canvas, t: BeastieTraits, y: number, hw: number): void {
       c.mirror(Math.min(2, hw - 2), y + 1, Role.Glow);
       return;
     case 'stalks':
-      stamp(c, ['GG', 'GC', '.B', '.B'], mid - 3, y - 6);
-      stamp(c, ['GG', 'GC', '.B', '.B'], mid - 3, y - 6, true);
+      stamp(c, ['GG', 'GC'], mid - 3, y - 6);
+      stamp(c, ['GG', 'GC'], mid - 3, y - 6, true);
       c.mirror(1, y + 1, Role.Glow);
       return;
   }
@@ -113,6 +115,10 @@ function mouth(c: Canvas, t: BeastieTraits, y: number, hw: number): void {
       c.paint(c.center + 1, y + 2, Role.Accent);
       return;
   }
+}
+
+function stalks(c: Canvas, y: number): void {
+  for (const row of [y - 4, y - 3]) c.mirror(2, row, Role.Body);
 }
 
 function topPiece(c: Canvas, t: BeastieTraits, top: number, w: number): void {

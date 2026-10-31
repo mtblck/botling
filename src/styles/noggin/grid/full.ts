@@ -1,5 +1,5 @@
 import { blob } from '../../../core/art.js';
-import { type Canvas, createCanvas, keepTags, tagged } from '../../../core/canvas.js';
+import { type Canvas, createCanvas, tagged } from '../../../core/canvas.js';
 import { type NogginTraits, Role } from '../types.js';
 import { drawHair, TOP } from './hair.js';
 
@@ -19,13 +19,16 @@ export function drawGrid(t: NogginTraits): Canvas {
   blob(c, 12, [hw + 1, hw + 3, hw + 3], Role.Screen);
   c.paint(c.center, 12, Role.Body);
   blob(c, 11, [1], Role.Body);
-  blob(c, TOP, [hw - 1, hw, hw, hw, hw, hw, hw - 1, hw - 2], Role.Body);
+  // The chin is five cells on every head, so a mouth on it leaves skin either side.
+  const chin = Math.max(hw - 2, 2);
+  blob(c, TOP, [hw - 1, hw, hw, hw, hw, hw, hw - 1, chin], Role.Body);
   c.mirror(hw + 1, EYE_ROW, Role.Body);
   c.mirror(hw + 1, EYE_ROW + 1, Role.Body);
   if (t.headwear !== 'headscarf') drawHair(c, t.hair, hw);
-  const mouthRow = t.facial === 'mustache' ? 9 : 8;
+  // A row clear of the eyes, so no eye joins the mouth.
+  const mouthRow = 9;
   if (t.facial === 'beard') {
-    blob(c, 8, [hw, hw - 1, hw - 2], Role.Shade);
+    blob(c, 8, [hw, hw - 1, chin], Role.Shade);
     c.mirror(hw, 7, Role.Shade);
   }
   if (t.facial === 'mustache') blob(c, 8, [1], Role.Shade);
@@ -35,10 +38,7 @@ export function drawGrid(t: NogginTraits): Canvas {
     c.mirror(EYE_X, EYE_ROW - 1, Role.Shade);
     c.mirror(EYE_X + 1, EYE_ROW - 1, Role.Shade);
   }
-  // A smile or smirk corner can land on an eye; that cell stays with the eye.
-  keepTags(c, 'eyes', () =>
-    tagged(c, 'mouth', () => mouth(c, t, mouthRow, t.facial === 'beard' ? Role.Body : Role.Glow)),
-  );
+  tagged(c, 'mouth', () => mouth(c, t, mouthRow, t.facial === 'beard' ? Role.Body : Role.Glow));
   if (t.hasCheeks && t.facial !== 'beard') c.mirror(EYE_X + 1, EYE_ROW + 1, Role.Accent);
   eyewear(c, t);
   headwear(c, t, hw);
@@ -63,8 +63,8 @@ function eyes(c: Canvas, t: NogginTraits): void {
       return;
     case 'wink':
       c.paint(c.center - x, EYE_ROW, Role.Glow);
-      c.paint(c.center + x, EYE_ROW + 1, Role.Glow);
-      c.paint(c.center + x + 1, EYE_ROW + 1, Role.Glow);
+      c.paint(c.center + x, EYE_ROW, Role.Glow);
+      c.paint(c.center + x + 1, EYE_ROW, Role.Glow);
       return;
     case 'closed':
       e(x, EYE_ROW + 1);
@@ -76,9 +76,9 @@ function eyes(c: Canvas, t: NogginTraits): void {
 function mouth(c: Canvas, t: NogginTraits, y: number, role: Role): void {
   switch (t.mouth) {
     case 'smile':
-      c.mirror(0, y, role);
-      c.mirror(1, y, role);
-      c.mirror(2, y - 1, role);
+      c.mirror(0, y + 1, role);
+      c.mirror(1, y + 1, role);
+      c.mirror(2, y, role);
       return;
     case 'line':
       c.mirror(0, y, role);
@@ -89,9 +89,9 @@ function mouth(c: Canvas, t: NogginTraits, y: number, role: Role): void {
       c.paint(c.center, y + 1, Role.Accent);
       return;
     case 'smirk':
-      c.mirror(0, y, role);
-      c.paint(c.center + 1, y, role);
-      c.paint(c.center + 2, y - 1, role);
+      // A small V: a narrower smile than 'smile'.
+      c.mirror(1, y, role);
+      c.paint(c.center, y + 1, role);
       return;
   }
 }

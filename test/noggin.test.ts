@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Role } from '../src/core/types.js';
 import { botling } from '../src/styles/botling/index.js';
 import { drawGrid } from '../src/styles/noggin/grid/full.js';
 import {
@@ -136,10 +137,28 @@ describe('noggin', () => {
     expect(() => noggin('x', opts as never)).toThrow(new RegExp(`^noggin: ${message}`));
   });
 
-  it('keeps an eye whole when a mouth corner lands on it, so talking never moves part of an eye', () => {
-    // chrome-piston-108 has tall eyes and a smirk whose corner sits on the right eye.
-    const c = drawGrid(resolveTraits('chrome-piston-108', { palette: 1 }));
-    expect(c.parts[7]?.[c.center + 2]).toBe('eyes');
-    expect(c.parts[8]?.[c.center + 1]).toBe('mouth');
+  it('draws the mouth a row clear of the eyes, so they never join', () => {
+    // chrome-piston-108 has tall eyes and a smirk; jolly-spark-867 a wink and a smile.
+    for (const seed of ['chrome-piston-108', 'jolly-spark-867']) {
+      const c = drawGrid(resolveTraits(seed));
+      expect(c.parts.slice(6, 8).flat()).toContain('eyes');
+      expect(c.parts.slice(8).flat()).not.toContain('eyes');
+      expect(c.parts[9]).toContain('mouth');
+    }
+  });
+
+  it('draws a wink on the eye row, its closed eye out to the side', () => {
+    const c = drawGrid(resolveTraits('jolly-spark-867'));
+    for (const dx of [-2, 2, 3]) expect(c.parts[6]?.[c.center + dx]).toBe('eyes');
+    expect(c.parts[7]).not.toContain('eyes');
+  });
+
+  it('keeps the chin joined to the neck under every mouth', () => {
+    // n11 is a narrow head with a smile, whose chin row was all mouth.
+    for (const seed of ['n11', ...Array.from({ length: 300 }, (_, i) => `chin-${i}`)]) {
+      const c = drawGrid(resolveTraits(seed));
+      const chin = c.cells[10]?.filter((role, x) => role !== Role.Empty && c.parts[10]?.[x] !== 'mouth');
+      expect(chin?.length, seed).toBeGreaterThanOrEqual(2);
+    }
   });
 });

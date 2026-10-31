@@ -3,9 +3,9 @@
 exports[`beastie golden corpus > pins the markup, still and animated 1`] = `
 {
   "full": "8f2c936c25b426d5",
-  "fullAnimated": "8a62e08406d387fd",
+  "fullAnimated": "9a9d2f53e196db65",
   "small": "efa0d7a536a8d986",
-  "smallAnimated": "4fcdc50b00e698b6",
+  "smallAnimated": "b40630796a7c59f0",
 }
 `;
 
@@ -20,18 +20,18 @@ exports[`beastie golden corpus > pins the traits, grids and colours 1`] = `
 
 exports[`noggin golden corpus > pins the markup, still and animated 1`] = `
 {
-  "full": "7550b213f6716426",
-  "fullAnimated": "2cf63c1c93ba2e20",
-  "small": "c77f0ae7959b07c6",
-  "smallAnimated": "607846e7a065f583",
+  "full": "dbd27c26a14eb04a",
+  "fullAnimated": "87c2aac3778da893",
+  "small": "a749b7c2dd42bc3a",
+  "smallAnimated": "7623dd1d36de4388",
 }
 `;
 
 exports[`noggin golden corpus > pins the traits, grids and colours 1`] = `
 {
   "colours": "2d34d89670a4a2bb",
-  "full": "d9d63b02b4aa4daa",
-  "small": "a15ac0a86ed1e0f6",
+  "full": "46b72ccafcf5620f",
+  "small": "d864dda3e4ac7140",
   "traits": "892ad95e8a57a93d",
 }
 `;
@@ -39,9 +39,9 @@ exports[`noggin golden corpus > pins the traits, grids and colours 1`] = `
 exports[`snoot golden corpus > pins the markup, still and animated 1`] = `
 {
   "full": "a9427d79e909d40c",
-  "fullAnimated": "22da81e40d7a09cd",
+  "fullAnimated": "9a5ed99babecf3b1",
   "small": "264a760d02726fe0",
-  "smallAnimated": "199165725ab124f4",
+  "smallAnimated": "0032974eabdbf9b1",
 }
 `;
 

@@ -93,7 +93,8 @@ export function drawSmallGrid(t: NogginTraits): Canvas {
   } else if (t.facial === 'mustache') c.mirror(0, 5, Role.Shade);
   // Tagged eyes blink when animated.
   tagged(c, 'eyes', () => eyes(c, t));
-  const mouthRow = t.facial === 'mustache' ? 6 : 5;
+  // The head's last row, clear of the eyes.
+  const mouthRow = 6;
   if (t.facial !== 'beard') {
     c.paint(c.center, mouthRow, t.mouth === 'open' ? Role.Accent : Role.Glow);
     if (t.mouth === 'smile') c.mirror(1, mouthRow, Role.Glow);

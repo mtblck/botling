@@ -4,7 +4,7 @@ import { drawGrid, drawSmallGrid } from './grid/index.js';
 import { PALETTES } from './palettes.js';
 import { SHAPES } from './parts.js';
 import { traits } from './traits.js';
-import { type BeastieOptions, type BeastieTraits, type Palette, Role } from './types.js';
+import type { BeastieOptions, BeastieTraits, Palette } from './types.js';
 
 /**
  * Applies the `shape` and numeric `palette` options to a seed's traits,
@@ -49,7 +49,6 @@ export function beastie(seed: string, opts: BeastieOptions = {}): string {
     style: 'beastie',
     seed: `beastie:${seed}`,
     moves: { eyes: 'blink', mouth: 'talk', top: 'wobble', sides: 'twitch' },
-    lid: Role.Body,
   });
 }
 
