@@ -2,6 +2,7 @@
 // column, and the options beside it. A style page passes its functions and option groups
 // (site/botling.js, site/snoot.js). State lives in the URL hash, which never reaches the
 // server or analytics: seeds stay in the browser.
+import { highlight } from '/highlight.js';
 import { options as optionsFor, snippet as snippetFor } from '/snippet.js';
 import { track } from '/track.js';
 
@@ -83,7 +84,7 @@ export function playground(style) {
     $('big').innerHTML = avatar(240);
     $('big').setAttribute('aria-label', style.describe(state.seed, options()));
     $('sizes').innerHTML = [96, 48, 32, 24].map((size) => `<li>${avatar(size)}<span>${size}px</span></li>`).join('');
-    $('code').textContent = snippet();
+    $('code').innerHTML = highlight(snippet(), 'js');
     for (const input of document.querySelectorAll('.choices input')) input.checked = state[input.name] === input.value;
     for (const link of document.querySelectorAll('[data-to]')) {
       link.href = `/styles/${link.dataset.to}/#${new URLSearchParams({ seed: state.seed })}`;

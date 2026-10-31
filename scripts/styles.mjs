@@ -237,7 +237,12 @@ export async function GET(_request, { params }) {
 }`,
     ],
   ];
-  const blocks = tabs.map(([tab, code]) => `<pre class="code" data-tab="${tab}"><code>${code}</code></pre>`).join('\n');
+  const lang = { ESM: 'js', React: 'jsx', HTML: 'html', Server: 'js' };
+  const blocks = tabs
+    .map(
+      ([tab, code]) => `<pre class="code" data-tab="${tab}"><code class="language-${lang[tab]}">${code}</code></pre>`,
+    )
+    .join('\n');
   return `<div class="tabs" data-label="Usage" data-sync="usage">\n${blocks}\n</div>`;
 }
 
@@ -287,10 +292,10 @@ export function styleGuide(name, lib, kb) {
         <div>
           <h3>Install</h3>
           <div class="tabs" data-label="Package manager" data-sync="pm">
-<pre class="code" data-tab="npm"><code>npm install seedkin</code></pre>
-<pre class="code" data-tab="pnpm"><code>pnpm add seedkin</code></pre>
-<pre class="code" data-tab="yarn"><code>yarn add seedkin</code></pre>
-<pre class="code" data-tab="bun"><code>bun add seedkin</code></pre>
+<pre class="code" data-tab="npm"><code class="language-sh">npm install seedkin</code></pre>
+<pre class="code" data-tab="pnpm"><code class="language-sh">pnpm add seedkin</code></pre>
+<pre class="code" data-tab="yarn"><code class="language-sh">yarn add seedkin</code></pre>
+<pre class="code" data-tab="bun"><code class="language-sh">bun add seedkin</code></pre>
           </div>
           <h3>Draw one</h3>
           ${usage(s)}

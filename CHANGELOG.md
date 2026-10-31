@@ -12,6 +12,7 @@ any change to the robot a seed draws is a major version.
 - seedkin.dev has a `sitemap.xml`, a `robots.txt` and an `llms.txt` for AI assistants, all built from the pages themselves; JSON-LD on the home page; and its own link preview image for each style page.
 - The home page has an Animate button again, next to Random, which sets the Botling moving, and a shorter seed box. Each style card shows its Preview badge in its top right corner.
 - Search the site from the header (or press `/`): docs, styles and pages, matched as you type, built into `search.json` at build time.
+- Code samples are syntax highlighted at build time, in both themes, and the playground's code as it changes. The site still loads no highlighter library.
 
 ## [2.4.0] - 2026-10-31
 
