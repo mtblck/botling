@@ -50,6 +50,7 @@
   color: inherit;
 }
 .kin svg,
+.kin img,
 .card-art svg {
   display: block;
   width: 100%;
@@ -1000,4 +1001,14 @@ ol.features > li::before {
   position: absolute;
   top: 20px;
   right: 20px;
+}
+
+/* The home page's seed box is short: the seed, Random and Animate on one line. */
+.hero .seed-row {
+  max-width: 460px;
+}
+@media (min-width: 481px) {
+  .hero .seed-row input {
+    flex-basis: 10rem;
+  }
 }

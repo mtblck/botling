@@ -3,13 +3,20 @@
 // lab ones from lab/preview.ts, bundled to /preview.js. Seeds stay in the URL hash.
 
 import { beastie } from '/lib/styles/beastie/index.js';
-import { botling, randomSeed } from '/lib/styles/botling/index.js';
+import { botling, botlingDataUri, randomSeed } from '/lib/styles/botling/index.js';
 import { noggin } from '/lib/styles/noggin/index.js';
 import { snoot } from '/lib/styles/snoot/index.js';
 import { PREVIEWS } from '/preview.js';
 
+// The landing page's Animate button. Only Botling moves; an animated robot goes in an <img>,
+// because the CSP's style-src 'self' would block the <style> inside an inlined SVG. It holds
+// still for anyone who asks for reduced motion.
+let animate = false;
 const DRAW = {
-  botling: (seed, size, frame) => botling(seed, { size, frame, title: null }),
+  botling: (seed, size, frame) =>
+    animate
+      ? `<img src="${botlingDataUri(seed, { size, frame, animate: true, title: null })}" alt="" width="${size}" height="${size}">`
+      : botling(seed, { size, frame, title: null }),
   snoot: (seed, size, frame) => snoot(seed, { size, frame, title: null }),
   noggin: (seed, size, frame) => noggin(seed, { size, frame, title: null }),
   beastie: (seed, size, frame) => beastie(seed, { size, frame, title: null }),
@@ -64,6 +71,11 @@ if (input) {
     input.value = randomSeed();
     grow(input.value);
     saveHash(input.value);
+  });
+  $('animate')?.addEventListener('click', (e) => {
+    animate = !animate;
+    e.currentTarget.setAttribute('aria-pressed', String(animate));
+    grow(input.value);
   });
   window.addEventListener('hashchange', readHash);
   readHash();
