@@ -20,8 +20,8 @@ exports[`beastie golden corpus > pins the traits, grids and colours 1`] = `
 
 exports[`noggin golden corpus > pins the markup, still and animated 1`] = `
 {
-  "full": "dc1fa91a811ff549",
-  "fullAnimated": "96fa00c0e721e806",
+  "full": "02a4920260a0e579",
+  "fullAnimated": "131685297ac7c4e7",
   "small": "a749b7c2dd42bc3a",
   "smallAnimated": "7623dd1d36de4388",
 }
@@ -30,7 +30,7 @@ exports[`noggin golden corpus > pins the markup, still and animated 1`] = `
 exports[`noggin golden corpus > pins the traits, grids and colours 1`] = `
 {
   "colours": "2d34d89670a4a2bb",
-  "full": "6088c45bf3f79c84",
+  "full": "ff9d5b51ed727ff1",
   "small": "d864dda3e4ac7140",
   "traits": "892ad95e8a57a93d",
 }

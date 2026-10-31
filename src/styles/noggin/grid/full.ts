@@ -92,9 +92,8 @@ function mouth(c: Canvas, t: NogginTraits, y: number, role: Role): void {
       c.paint(c.center, y + 1, Role.Accent);
       return;
     case 'smirk':
-      c.paint(c.center - 1, y + 1, role);
-      c.paint(c.center, y, role);
-      c.paint(c.center + 1, y, role);
+      // Three cells straight across; a dropped corner read as a frown.
+      for (let dx = -1; dx <= 1; dx++) c.paint(c.center + dx, y, role);
       return;
   }
 }

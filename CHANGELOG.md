@@ -19,7 +19,7 @@ any change to the robot a seed draws is a major version.
 
 ### Fixed
 
-- Noggin mouths sit a row lower, so an eye never runs into the mouth (about a quarter of Noggins, such as a wink beside a smile). On a narrow head the smile is a cell narrower each side, so it never fills the chin. This changes the still face of every Noggin, which is normally a major change; it is a fix to broken art, made in a patch while nobody depends on the faces yet.
+- Noggin mouths sit a row lower, so an eye never runs into the mouth (about a quarter of Noggins, such as a wink beside a smile). On a narrow head the smile is a cell narrower each side, so it never fills the chin, and a smirk is now three cells straight across instead of dropping one corner. This changes the still face of every Noggin, which is normally a major change; it is a fix to broken art, made in a patch while nobody depends on the faces yet.
 - An animated robot whose mouth runs into an eye now blinks that part of the mouth with the eye, so the two never move apart. Still robots are unchanged.
 - Blinks and talks no longer uncover a body-coloured lid where nothing was drawn behind, as above a Beastie's eye stalks; a squash now shows what was really underneath. Beastie stalks hold still and only the eyes on them blink. Still pictures are unchanged.
 
