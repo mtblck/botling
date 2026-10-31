@@ -16,4 +16,4 @@ export function options(
   extra?: BotlingOptions,
   holidays?: Readonly<Record<string, Palette>>,
 ): BotlingOptions;
-export function snippet(state: PlaygroundState): string;
+export function snippet(state: PlaygroundState, name?: string): string;

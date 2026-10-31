@@ -24,6 +24,10 @@ describe('playground snippet', () => {
     },
   );
 
+  it("names the style's function", () => {
+    expect(snippet({ seed: 'abc', ...auto, palette: '2' }, 'snoot')).toBe("snoot('abc', { palette: 2 })");
+  });
+
   it('copies the frame unless it is the default square', () => {
     expect(snippet({ seed: 'abc', ...auto, frame: 'square' })).toBe("botling('abc')");
     const state: PlaygroundState = { seed: 'abc', ...auto, shape: 'diamond', frame: 'circle' };

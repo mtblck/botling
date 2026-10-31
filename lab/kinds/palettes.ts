@@ -5,18 +5,6 @@ const p = (name: string, ...c: [string, string, string, string, string, string, 
   return { name, bg, grid, body, shade, screen, glow, accent };
 };
 
-/** Animal coats. Body is fur, shade the ears and edge, screen the muzzle, glow the eyes and nose, accent inner ears and cheeks. */
-export const COATS: readonly Palette[] = [
-  p('Ginger', '#2b1d14', '#3a2a1e', '#e8873a', '#b85f22', '#fbe3c4', '#1e140d', '#ff9fae'),
-  p('Charcoal', '#e9ecf2', '#d8dce6', '#4a4e5a', '#2e3139', '#c9ccd6', '#f5d547', '#ff8fa3'),
-  p('Snow', '#1b2433', '#263246', '#f2f2f0', '#b9bec6', '#ffd9e0', '#1b2433', '#ff8fab'),
-  p('Cocoa', '#f6efe6', '#ece2d3', '#8a5a3b', '#5e3b24', '#e2c29f', '#1f130b', '#ff8f8f'),
-  p('Honey', '#14202a', '#1f2e3b', '#f0b73e', '#c0841a', '#fff0c9', '#2a1a08', '#ff7a59'),
-  p('Mint', '#fdf6ec', '#f1e6d6', '#7fd1b9', '#4fa98f', '#e8fff6', '#173a31', '#ff8fab'),
-  p('Lilac', '#1a1626', '#272137', '#b9a3e3', '#8e74c9', '#efe7ff', '#1a1626', '#ffb3c7'),
-  p('Stone', '#fff4d6', '#f5e6bf', '#9aa3ad', '#6f7882', '#e9edf1', '#16191d', '#ff8fa3'),
-];
-
 /** Clothes and backgrounds for people: screen is the shirt, accent the cheeks and glasses. */
 export const OUTFITS: readonly Omit<Palette, 'body' | 'shade' | 'glow'>[] = [
   { name: 'Teal', bg: '#14202a', grid: '#1f2e3b', screen: '#2bb3a3', accent: '#ff8a7a' },
