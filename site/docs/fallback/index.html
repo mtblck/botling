@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profile photo fallback · Seedkin docs</title>
+  <meta name="description" content="Show a seeded avatar when someone has no profile photo, or when theirs fails to load." />
+  <link rel="canonical" href="https://seedkin.dev/docs/fallback/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://seedkin.dev/docs/fallback/" />
+  <meta property="og:title" content="Profile photo fallback · Seedkin docs" />
+  <meta property="og:description" content="Show a seeded avatar when someone has no profile photo, or when theirs fails to load." />
+  {{head}}
+  <script type="module" src="/docs.js"></script>
+</head>
+<body>
+  <a class="skip" href="#doc">Skip to the docs</a>
+  {{header}}
+
+  <main id="main" class="docs wrap">
+    {{docsnav}}
+    <article id="doc" class="prose" tabindex="-1">
+<h1>Profile photo fallback</h1>
+<p class="lede">Most people never upload a photo. Show their avatar instead of a grey silhouette, and the list of faces in your app tells people apart at a glance.</p>
+<h2 id="no-photo">When there's no photo</h2>
+<pre><code class="language-tsx">import { botlingDataUri } from 'seedkin/botling';
+
+&lt;img src={user.photoUrl ?? botlingDataUri(user.id, { size: 40, title: null })} alt="" width={40} height={40} /&gt;
+</code></pre>
+<p>Seed with the same id everywhere, so the person keeps one avatar across the app.</p>
+<h2 id="broken-photo">When the photo won't load</h2>
+<p>A photo URL can break: a deleted file, an expired link, a blocked host. Swap in the avatar when it does:</p>
+<pre><code class="language-tsx">import { useState } from 'react';
+import { botlingDataUri } from 'seedkin/botling';
+
+export function UserAvatar({ user, size = 40 }: { user: { id: string; photoUrl?: string }; size?: number }) {
+  const [failed, setFailed] = useState(false);
+  const src = user.photoUrl &amp;&amp; !failed ? user.photoUrl : botlingDataUri(user.id, { size, title: null });
+  return &lt;img src={src} onError&#61;{() =&gt; setFailed(true)} alt="" width={size} height={size} /&gt;;
+}
+</code></pre>
+<p>Render it with <code>key={user.id}</code> in lists, so a failure for one person doesn't carry over to the next.</p>
+<h2 id="initials">Instead of initials</h2>
+<p>Coloured initials collide: two Alexes look the same. A seeded avatar comes from the whole id, so it doesn't. Keep the person's name next to it as text, which is what screen readers and search use.</p>
+{{pager}}
+    </article>
+    {{toc}}
+  </main>
+
+  {{footer}}
+</body>
+</html>

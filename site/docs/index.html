@@ -4,50 +4,36 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Docs · Seedkin</title>
-  <meta name="description" content="How to install Seedkin and draw Botling avatars: options, frames, animation, holiday palettes, pickers and versioning." />
+  <meta name="description" content="Get started with Seedkin: install it, draw your first avatar from a user id, and choose a good seed." />
   <link rel="canonical" href="https://seedkin.dev/docs/" />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content="article" />
   <meta property="og:url" content="https://seedkin.dev/docs/" />
   <meta property="og:title" content="Seedkin docs" />
-  <meta property="og:description" content="Install Seedkin and draw seeded pixel avatars: every option, frame and palette." />
+  <meta property="og:description" content="Get started with Seedkin: install it, draw your first avatar from a user id, and choose a good seed." />
   {{head}}
+  <script type="module" src="/docs.js"></script>
 </head>
 <body>
-  <a class="skip" href="#main">Skip to the docs</a>
+  <a class="skip" href="#doc">Skip to the docs</a>
   {{header}}
 
   <main id="main" class="docs wrap">
-    <nav class="toc" aria-label="On this page">
-      <p class="toc-h">On this page</p>
-      <ul>
-        <li><a href="#install">Install</a></li>
-        <li><a href="#use">Use</a>
-          <ul>
-            <li><a href="#random-robots">Random robots</a></li>
-            <li><a href="#options">Options</a></li>
-            <li><a href="#frames">Frames</a></li>
-            <li><a href="#animation">Animation</a></li>
-            <li><a href="#holiday-palettes">Holiday palettes</a></li>
-            <li><a href="#building-a-picker">Building a picker</a></li>
-            <li><a href="#advanced">Advanced</a></li>
-          </ul>
-        </li>
-        <li><a href="#how-it-works">How it works</a></li>
-        <li><a href="#versioning">Versioning</a></li>
-        <li><a href="#snoot">Snoot</a></li>
-        <li><a href="#noggin">Noggin</a></li>
-        <li><a href="#beastie">Beastie</a></li>
-      </ul>
-    </nav>
-    <article class="prose">
-      <h1>Docs</h1>
-      <p class="lede">Every Seedkin style has its own entry point, so an app only ships the styles it uses. Botling, the robots, is the first: <code>seedkin/botling</code>. Snoot (animals), Noggin (people) and Beastie (monsters) are in Preview at <code>seedkin/snoot</code>, <code>seedkin/noggin</code> and <code>seedkin/beastie</code>.</p>
-      <p class="callout">Coming from the <code>botling</code> package? Import from <code>'seedkin/botling'</code> instead of <code>'botling'</code>: every seed draws the same robot as <code>botling</code> 1.2.0.</p>
+    {{docsnav}}
+    <article id="doc" class="prose" tabindex="-1">
+<h1>Introduction</h1>
+<p class="lede">Seedkin turns any string, such as a user id, into a small pixel avatar, as an SVG string. The same seed always draws the same avatar, so there's nothing to store but the id you already have.</p>
+<p>Every style has its own entry point, so an app only ships the styles it uses. <a href="/docs/botling/">Botling</a>, the robots, is the first: <code>seedkin/botling</code>. <a href="/docs/snoot/">Snoot</a> (animals), <a href="/docs/noggin/">Noggin</a> (people) and <a href="/docs/beastie/">Beastie</a> (monsters) are in Preview.</p>
+<p class="callout">Coming from the <code>botling</code> package? Import from <code>'seedkin/botling'</code> instead of <code>'botling'</code>: every seed draws the same robot as <code>botling</code> 1.2.0.</p>
 <h2 id="install">Install</h2>
-<pre><code class="language-sh">npm install seedkin
-</code></pre>
+<div class="tabs" data-label="Package manager" data-sync="pm">
+<pre class="code" data-tab="npm"><code>npm install seedkin</code></pre>
+<pre class="code" data-tab="pnpm"><code>pnpm add seedkin</code></pre>
+<pre class="code" data-tab="yarn"><code>yarn add seedkin</code></pre>
+<pre class="code" data-tab="bun"><code>bun add seedkin</code></pre>
+</div>
+<p>Seedkin has no runtime dependencies and ships as ESM with TypeScript types. It runs in browsers, Node 22 and up, and edge runtimes. No build step? See <a href="/docs/html/">Plain HTML</a>.</p>
 <h2 id="use">Use</h2>
-<pre><code class="language-ts">import { botling, botlingDataUri } from &#39;seedkin/botling&#39;;
+<pre><code class="language-ts">import { botling, botlingDataUri } from 'seedkin/botling';
 
 // An SVG string, for inlining.
 const svg = botling(user.id);
@@ -55,206 +41,21 @@ const svg = botling(user.id);
 // A data: URI, for &lt;img src&gt; or CSS url().
 const src = botlingDataUri(user.id, { size: 48 });
 </code></pre>
-<p>React:</p>
-<pre><code class="language-tsx">&lt;img src={botlingDataUri(user.id, { size: 40, title: null })} alt=&quot;&quot; width={40} height={40} /&gt;
-</code></pre>
+<p>Every style has the same pair: <code>snoot()</code> and <code>snootDataUri()</code>, <code>noggin()</code> and <code>nogginDataUri()</code>, <code>beastie()</code> and <code>beastieDataUri()</code>. Each style salts the seed, so one id's robot, animal, person and monster are unrelated.</p>
+<h2 id="choosing-a-seed">Choosing a seed</h2>
 <p>Use an opaque, stable id as the seed (a database id or UUID), not an email address or username. The seed never appears in the SVG, but anyone can render the robot for a guessed email and compare.</p>
-<p>The seed is used as given, apart from Unicode normalisation (NFC), so <code>José</code> draws the same robot however the é was typed. It isn&#39;t trimmed or lowercased: <code>Ada</code> and <code>ada</code> are different robots, so tidy the seed first if your ids vary like that.</p>
-<h3 id="random-robots">Random robots</h3>
-<p><code>randomSeed()</code> returns a readable random seed, like <code>plucky-servo-427</code>, for a &quot;give me a new robot&quot; button or a default for someone without an id. Store the seed: that&#39;s what brings the same robot back.</p>
-<pre><code class="language-ts">import { botling, randomSeed } from &#39;seedkin/botling&#39;;
-
-const seed = randomSeed(); // save this with the user
-const svg = botling(seed);
-</code></pre>
-<p>There are 400,000 of these seeds, so two people can get the same one. To give every user their own robot, seed with their id. It uses <code>crypto.getRandomValues</code> where there is one (browsers, Node, edge runtimes) and <code>Math.random</code> otherwise, or pass your own source: <code>randomSeed(() =&gt; myRng())</code>.</p>
-<h3 id="options">Options</h3>
-<table>
-<thead>
-<tr>
-<th>Option</th>
-<th>Type</th>
-<th>Default</th>
-<th>What it does</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>shape</code></td>
-<td><code>&#39;square&#39; | &#39;circle&#39; | &#39;triangle&#39; | &#39;diamond&#39;</code></td>
-<td>picked by the seed</td>
-<td>Cell shape.</td>
-</tr>
-<tr>
-<td><code>palette</code></td>
-<td><code>number | Palette</code></td>
-<td>picked by the seed</td>
-<td>Index into <code>PALETTES</code> (0-15), or a palette object: one of <code>HOLIDAY_PALETTES</code>, or your own with hex colours.</td>
-</tr>
-<tr>
-<td><code>size</code></td>
-<td><code>number</code></td>
-<td><code>96</code></td>
-<td>Width and height in pixels. The SVG scales cleanly to any size.</td>
-</tr>
-<tr>
-<td><code>detail</code></td>
-<td><code>&#39;auto&#39; | &#39;full&#39; | &#39;small&#39;</code></td>
-<td><code>&#39;auto&#39;</code></td>
-<td><code>&#39;full&#39;</code> is the detailed 15x15 robot. <code>&#39;small&#39;</code> is a simpler 9x9 robot from the same traits, with touching cells, made to read at 24px. <code>&#39;auto&#39;</code> draws <code>&#39;small&#39;</code> below 40px.</td>
-</tr>
-<tr>
-<td><code>showGrid</code></td>
-<td><code>boolean | &#39;auto&#39;</code></td>
-<td><code>&#39;auto&#39;</code></td>
-<td>Draw the empty grid cells. <code>&#39;auto&#39;</code> draws them from 40px up; below that they read as noise. The small robot never draws them.</td>
-</tr>
-<tr>
-<td><code>frame</code></td>
-<td><code>&#39;square&#39; | &#39;rounded&#39; | &#39;squircle&#39; | &#39;circle&#39;</code></td>
-<td><code>&#39;square&#39;</code></td>
-<td>The outline of the background. See <a href="#frames">Frames</a>.</td>
-</tr>
-<tr>
-<td><code>background</code></td>
-<td><code>boolean</code></td>
-<td><code>true</code></td>
-<td>Draw the palette&#39;s background.</td>
-</tr>
-<tr>
-<td><code>title</code></td>
-<td><code>string | null</code></td>
-<td><code>&#39;Robot avatar&#39;</code></td>
-<td>Accessible name. <code>null</code> marks the image decorative (<code>aria-hidden</code>).</td>
-</tr>
-<tr>
-<td><code>animate</code></td>
-<td><code>boolean</code></td>
-<td><code>false</code></td>
-<td>The robot hovers, blinks and talks, its top piece wobbles, its ears twitch and a scanline sweeps its screen. Below 40px it only blinks and hovers. See <a href="#animation">Animation</a>.</td>
-</tr>
-</tbody></table>
-<p>Bad options (an unknown shape, an out-of-range palette, a palette colour that isn&#39;t hex, a size of 0) throw a <code>RangeError</code> rather than drawing nothing.</p>
-<h3 id="frames">Frames</h3>
-<pre><code class="language-ts">botling(user.id, { frame: &#39;circle&#39; });
-</code></pre>
-<p><code>frame</code> sets the outline of the background. Outside it the image is transparent, so a round avatar sits on any page colour without CSS.</p>
+<p>The seed is used as given, apart from Unicode normalisation (NFC), so <code>José</code> draws the same robot however the é was typed. It isn't trimmed or lowercased: <code>Ada</code> and <code>ada</code> are different robots, so tidy the seed first if your ids vary like that.</p>
+<p>For someone without an id, <code>randomSeed()</code> gives a readable one, like <code>plucky-servo-427</code>. Store it: that's what brings the same avatar back. See <a href="/docs/botling/#random-robots">Random robots</a>.</p>
+<h2 id="next-steps">Next steps</h2>
 <ul>
-<li><strong><code>&#39;square&#39;</code></strong> (the default) fills the image, as every robot did before frames.</li>
-<li><strong><code>&#39;rounded&#39;</code></strong> has corners a fifth of its width round. The robot keeps its size; the small robot can lose a sliver of a shoulder at the corners.</li>
-<li><strong><code>&#39;squircle&#39;</code></strong> is a smooth app-icon curve. Wide shoulders reach into the corners it cuts, so the robot draws at 92% to fit, the same for every seed so a list of avatars lines up.</li>
-<li><strong><code>&#39;circle&#39;</code></strong> crops the robot to a circle at full size. Shoulders run off the edge like a portrait, and so can the tips of the widest antennas and ears.</li>
+<li><strong>Your framework:</strong> <a href="/docs/react/">React</a>, <a href="/docs/vue/">Vue</a>, <a href="/docs/svelte/">Svelte</a>, <a href="/docs/html/">plain HTML</a>, or <a href="/docs/server/">on the server</a> as an image URL.</li>
+<li><strong>Every option:</strong> sizes, cell shapes, palettes, frames and animation, in <a href="/docs/botling/">Botling</a>.</li>
+<li><strong>Behind a profile photo:</strong> <a href="/docs/fallback/">use an avatar when there's no photo</a>.</li>
+<li><strong>Try it:</strong> the <a href="/styles/botling/">playground</a> writes the code for the avatar on screen.</li>
 </ul>
-<p>The grid behind the robot keeps only whole cells inside the frame, so its edge steps round the curve, and in a squircle it fills the room the smaller robot leaves. <code>FRAMES</code> lists the four, for a picker. A seed never picks a frame, so store the one a user chooses with their seed.</p>
-<p>Every frame but <code>&#39;square&#39;</code> clips with a <code>&lt;clipPath&gt;</code>. Its id names the frame and its size (<code>botling-circle-500-16000</code>), so robots inlined on one page share identical clip paths instead of clashing. In an <code>&lt;img&gt;</code> or a <code>data:</code> URI each robot is its own document, so ids never meet.</p>
-<h3 id="animation">Animation</h3>
-<pre><code class="language-ts">botling(user.id, { animate: true });
-</code></pre>
-<p><code>animate: true</code> adds a small CSS animation inside the SVG, so it moves wherever an SVG image does: inlined, in an <code>&lt;img&gt;</code>, as a CSS <code>url()</code> or a <code>data:</code> URI, with no script. Every robot moves:</p>
-<ul>
-<li><strong>Hover.</strong> The whole robot bobs up and down over its background.</li>
-<li><strong>Blink.</strong> Every 2 to 4.5 seconds, and about a third of robots blink twice. A lid in the face colour closes over the eye, so robots without a screen blink too. A wink blinks its open eye, an angry brow stays put, and sleepy eyes, already shut, don&#39;t blink.</li>
-<li><strong>Wobble.</strong> The antenna or other top piece sways from its base and settles; twin antennas and horns sway as a mirrored pair.</li>
-<li><strong>Twitch.</strong> Ears, handles and bolts hop up twice every 2 to 3 seconds, the right a beat after the left.</li>
-<li><strong>Talk.</strong> The mouth squashes like a short sentence, then rests.</li>
-<li><strong>Scanline.</strong> A glowing band sweeps down the screen every 3 to 5 seconds.</li>
-</ul>
-<p>Below 40px the robot only blinks and hovers, since anything busier reads as flicker at 24px. Timing comes from the seed, so a page of robots doesn&#39;t move in unison.</p>
-<ul>
-<li><strong>Reduced motion.</strong> It all sits inside <code>@media (prefers-reduced-motion: no-preference)</code>, so the robot holds still for anyone who has asked for less motion, and that still robot is the one drawn without <code>animate</code>. Motion that runs on its own for more than five seconds should also be stoppable from the page (WCAG 2.2.2), so offer a still option, as the playground does.</li>
-<li><strong>A strict CSP.</strong> An inlined SVG&#39;s <code>&lt;style&gt;</code> counts as an inline style, so a page with <code>style-src &#39;self&#39;</code> blocks it and shows the still robot. An <code>&lt;img&gt;</code> is its own document, so <code>botlingDataUri(id, { animate: true })</code> animates under any CSP that allows <code>data:</code> images.</li>
-<li><strong>Cost.</strong> About 2.4 KB more per robot at full size (up to 4.5 KB with a big screen to scan), half a kilobyte below 40px. Each animated robot keeps its image repainting, so animate the few that matter (a profile, a hero, the current speaker) rather than a list of 50.</li>
-</ul>
-<h3 id="holiday-palettes">Holiday palettes</h3>
-<p><code>HOLIDAY_PALETTES</code> has New Year&#39;s, Valentine&#39;s, St Patrick&#39;s, Fourth of July, Halloween and Christmas. A seed never picks one, so everyday robots don&#39;t change; pass one in to dress the same robot up for the day:</p>
-<pre><code class="language-ts">import { botling, HOLIDAY_PALETTES } from &#39;seedkin/botling&#39;;
-
-botling(user.id, { palette: HOLIDAY_PALETTES.halloween });
-</code></pre>
-<h3 id="building-a-picker">Building a picker</h3>
-<p>Everything that goes into a robot is exported, so you can offer users a choice:</p>
-<pre><code class="language-ts">import { botling, PALETTES, SHAPES, traits } from &#39;seedkin/botling&#39;;
-
-// Let someone choose a shape and palette for their own seed.
-const options = SHAPES.flatMap((shape) =&gt; PALETTES.map((_, palette) =&gt; botling(user.id, { shape, palette, size: 48 })));
-
-// Or show what a seed is made of.
-traits(user.id); // { head: &#39;tv&#39;, eyes: &#39;visor&#39;, mouth: &#39;grille&#39;, top: &#39;antenna&#39;, ... }
-</code></pre>
-<p>Store the user&#39;s chosen <code>shape</code>, <code>palette</code> and <code>frame</code> next to their seed, and pass them back in. <code>FRAMES</code> lists the frames, as <code>SHAPES</code> lists the cells.</p>
-<h3 id="advanced">Advanced</h3>
-<p>These are exported for drawing a robot some other way, such as onto a canvas or into a PNG (the playground&#39;s link preview does this). They follow the same versioning as the SVG: a seed&#39;s traits and grids only change in a major version.</p>
-<table>
-<thead>
-<tr>
-<th>Export</th>
-<th>What it is</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>traits(seed)</code></td>
-<td>Every choice that makes up the seed&#39;s robot (<code>Traits</code>).</td>
-</tr>
-<tr>
-<td><code>resolveTraits(seed, options)</code></td>
-<td><code>traits</code> with the <code>shape</code> and numeric <code>palette</code> options applied, checked the way <code>botling</code> checks them.</td>
-</tr>
-<tr>
-<td><code>grid(traits)</code></td>
-<td>The detailed robot as a 15x15 array of <code>Role</code> values, indexed <code>[row][column]</code>.</td>
-</tr>
-<tr>
-<td><code>smallGrid(traits)</code></td>
-<td>The simpler robot drawn below 40px, as a 9x9 array of <code>Role</code> values.</td>
-</tr>
-<tr>
-<td><code>Role</code></td>
-<td>What a cell is part of: <code>Empty</code> (0), <code>Body</code> (1), <code>Screen</code> (2), <code>Glow</code> (3), <code>Accent</code> (4), <code>Shade</code> (5). Each maps to the palette colour of the same name. Without a screen (<code>traits.hasScreen</code> false), paint <code>Glow</code> cells in the screen colour, as <code>botling</code> does.</td>
-</tr>
-<tr>
-<td><code>GRID_SIZE</code>, <code>SMALL_GRID_SIZE</code>, <code>CENTER</code></td>
-<td>15, 9, and the detailed grid&#39;s centre column (7).</td>
-</tr>
-</tbody></table>
-<p>The grids are the robot before it&#39;s drawn: cell shape, padding and animation are left to you.</p>
-<h2 id="how-it-works">How it works</h2>
-<p>The seed is hashed (FNV-1a) into a small seeded generator (mulberry32), which picks a palette, head, eyes, mouth, top, side pieces, a few sizes and, now and then, a head marking, a one-sided quirk or an accessory. Those are drawn as roles (body, shade, screen, glow, accent) onto a 15x15 grid, mirrored down the centre column. Small avatars use a 9x9 grid drawn from the same traits. The renderer then draws each cell in the chosen shape and colours each role from the palette.</p>
-<p>Today that&#39;s 16 palettes, 7 heads, 14 eyes, 11 mouths, 7 tops, 4 side pieces, 4 shapes, 3 head markings, 4 quirks, 4 accessories and a few size and on/off traits: tens of millions of distinct robots, before you count colour. Some parts are drawn for one cell shape: rounded and capsule heads become circles on circle cells, block eyes become rings, domes step by half a cell on triangles and cross eyes become chevrons.</p>
-<p>An accessory takes the place of what it covers: headphones replace the top piece and sides, a bow or cap the top piece. A one-sided ear or antenna does the same, unless an accessory already has that spot.</p>
-<h2 id="versioning">Versioning</h2>
-<p>The picture is the API. Within a major version, a seed with the same options always draws the same robot. Store a seed, shape and palette index, and you get the same robot through every 2.x release. The robots in <code>seedkin/botling</code> are the robots of <code>botling</code> 1.2.0, seed for seed (<a href="https://github.com/mtblck/seedkin/blob/main/docs/adr/0009-seedkin-family.md">ADR 0009</a>).</p>
-<ul>
-<li><strong>Major:</strong> anything that changes an existing seed&#39;s robot, at any size: art, palette colours, the order or length of any parts list, the 40px switch, which parts move when animated, and the output of <code>traits</code>, <code>grid</code> and <code>smallGrid</code>.</li>
-<li><strong>Minor:</strong> new holiday palettes, opt-in options and exports (seeds never pick them), smaller SVG markup that draws the same picture, and motion timing.</li>
-</ul>
-<p>Don&#39;t compare or cache robots by their SVG string across versions; the markup can change while the picture stays put. <a href="https://github.com/mtblck/seedkin/blob/main/docs/adr/0006-what-1-0-freezes.md">ADR 0006</a> has the full list. Snapshot tests guard it.</p>
-<h2 id="snoot">Snoot <span class="badge">Preview</span></h2>
-<p>Seeded animal avatars: cats, foxes, bears, bunnies, mice, dogs, pandas, owls, frogs and pigs. Until Snoot is marked stable, the Snoot a seed draws can change in a minor version, so pin the minor (<code>~2.1.0</code>) if you store seeds and need the same animal back.</p>
-<pre><code class="language-ts">import { snoot, snootDataUri } from &#39;seedkin/snoot&#39;;
-
-const svg = snoot(user.id);
-const src = snootDataUri(user.id, { size: 40 });
-</code></pre>
-<p><code>snoot()</code> takes the same options as <code>botling()</code> except <code>animate</code>: <code>shape</code>, <code>palette</code> (an index into Snoot&#39;s own eight <code>PALETTES</code>, or a palette object), <code>size</code>, <code>detail</code>, <code>showGrid</code>, <code>frame</code>, <code>background</code> and <code>title</code> (default <code>&#39;Animal avatar&#39;</code>). Below 40px it draws a simpler 9x9 Snoot from the same traits.</p>
-<p>The seed is salted, so <code>snoot(id)</code> and <code>botling(id)</code> are unrelated. <code>traits</code>, <code>resolveTraits</code>, <code>grid</code>, <code>smallGrid</code>, <code>SPECIES</code>, <code>EYES</code>, <code>MARKINGS</code>, <code>EXTRAS</code> and <code>SHAPES</code> are exported as for Botling. <a href="/styles/snoot/">Try them in the playground</a>.</p>
-<h2 id="noggin">Noggin <span class="badge">Preview</span></h2>
-<p>Seeded people avatars in seven skin tones, with twelve hairstyles (including afros and locs), glasses, beards, hats and headscarves. Until Noggin is marked stable, the Noggin a seed draws can change in a minor version, so pin the minor (<code>~2.2.0</code>) if you store seeds and need the same person back.</p>
-<pre><code class="language-ts">import { noggin, nogginDataUri } from &#39;seedkin/noggin&#39;;
-
-const svg = noggin(user.id);
-const src = nogginDataUri(user.id, { size: 40, skin: 4 });
-</code></pre>
-<p><code>noggin()</code> takes the same options as <code>snoot()</code>, plus <code>skin</code>, an index into <code>SKIN_TONES</code> (lightest first), so people can pick their own. <code>palette</code> picks one of the six outfits in <code>PALETTES</code>, or takes a whole palette object; <code>title</code> defaults to <code>&#39;Person avatar&#39;</code>. A seed&#39;s hair colour and outfit always stand out from its skin; pick another skin tone and they move to the next colours that do. Below 40px it draws a simpler 9x9 Noggin from the same traits.</p>
-<p><code>traits</code>, <code>resolveTraits</code>, <code>grid</code>, <code>smallGrid</code>, <code>paletteFor</code>, <code>SKIN_TONES</code>, <code>HAIR_COLOURS</code>, <code>HAIRS</code>, <code>EYES</code>, <code>MOUTHS</code>, <code>FACIAL</code>, <code>EYEWEAR</code>, <code>HEADWEAR</code> and <code>SHAPES</code> are exported as for Botling. <a href="/styles/noggin/">Try them in the playground</a>.</p>
-<h2 id="beastie">Beastie <span class="badge">Preview</span></h2>
-<p>Seeded monster avatars: blobs, ghosts, boxes, tall and wide bodies with one to three eyes, fangs, horns and wings. Until Beastie is marked stable, the Beastie a seed draws can change in a minor version, so pin the minor (<code>~2.2.0</code>) if you store seeds and need the same monster back.</p>
-<pre><code class="language-ts">import { beastie, beastieDataUri } from &#39;seedkin/beastie&#39;;
-
-const svg = beastie(user.id);
-const src = beastieDataUri(user.id, { size: 40 });
-</code></pre>
-<p><code>beastie()</code> takes the same options as <code>snoot()</code>: <code>shape</code>, <code>palette</code> (an index into Beastie&#39;s own eight <code>PALETTES</code>, or a palette object), <code>size</code>, <code>detail</code>, <code>showGrid</code>, <code>frame</code>, <code>background</code> and <code>title</code> (default <code>&#39;Monster avatar&#39;</code>). Below 40px it draws a simpler 9x9 Beastie from the same traits.</p>
-<p>The seed is salted, so one id&#39;s Botling, Snoot and Beastie are unrelated. <code>traits</code>, <code>resolveTraits</code>, <code>grid</code>, <code>smallGrid</code>, <code>BODIES</code>, <code>EYES</code>, <code>MOUTHS</code>, <code>TOPS</code>, <code>SIDES</code> and <code>SHAPES</code> are exported as for Botling. <a href="/styles/beastie/">Try them in the playground</a>.</p>
+{{pager}}
     </article>
+    {{toc}}
   </main>
 
   {{footer}}

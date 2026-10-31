@@ -1,13 +1,15 @@
 // npm run site: builds seedkin.dev into dist-site/ (Vercel runs this). Every index.html
 // under site/ is a page, filled in from site/partials/. The package build (dist/) is copied
 // to /lib, so the playground always runs exactly what npm ships; the preview styles from
-// lab/ are bundled to /preview.js, since they aren't in the package yet.
+// lab/ are bundled to /preview.js, since they aren't in the package yet. Docs pages also get
+// their sidebar, contents and previous/next links from scripts/docs.mjs.
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { buildSync } from 'esbuild';
+import { docsNav, docsSlug, pager, toc } from './docs.mjs';
 import { ogImage } from './og.mjs';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -54,12 +56,19 @@ const pages = fs
   .filter((f) => path.basename(f) === 'index.html' || f === '404.html')
   .sort();
 for (const file of pages) {
-  const page = fs
+  let page = fs
     .readFileSync(path.join(site, file), 'utf8')
     .replace(/{{(head|header|footer)}}/g, (_, name) => partials[name])
     .replaceAll('{{logo}}', logo)
     .replaceAll('{{preloads}}', preloads)
     .replace(/{{(version|botling-kb)}}/g, (_, name) => figures[name]);
+  const slug = docsSlug(file);
+  if (slug !== undefined) {
+    page = page
+      .replace('{{docsnav}}', () => docsNav(slug))
+      .replace('{{pager}}', () => pager(slug))
+      .replace('{{toc}}', () => toc(page));
+  }
   if (page.includes('{{')) throw new Error(`site/${file} has a placeholder the build doesn't fill`);
   fs.mkdirSync(path.dirname(path.join(out, file)), { recursive: true });
   fs.writeFileSync(path.join(out, file), page);

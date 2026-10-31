@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Plain HTML · Seedkin docs</title>
+  <meta name="description" content="Seedkin avatars without a build step: import from a CDN or your own server, and the CSP it needs." />
+  <link rel="canonical" href="https://seedkin.dev/docs/html/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://seedkin.dev/docs/html/" />
+  <meta property="og:title" content="Plain HTML · Seedkin docs" />
+  <meta property="og:description" content="Seedkin avatars without a build step: import from a CDN or your own server, and the CSP it needs." />
+  {{head}}
+  <script type="module" src="/docs.js"></script>
+</head>
+<body>
+  <a class="skip" href="#doc">Skip to the docs</a>
+  {{header}}
+
+  <main id="main" class="docs wrap">
+    {{docsnav}}
+    <article id="doc" class="prose" tabindex="-1">
+<h1>Plain HTML</h1>
+<p class="lede">No bundler needed. Seedkin is plain ES modules with no dependencies, so a browser can import it straight from a CDN or from your own server.</p>
+<h2 id="from-a-cdn">From a CDN</h2>
+<pre><code class="language-html">&lt;img data-seed="ada" alt="" width="48" height="48" /&gt;
+&lt;img data-seed="grace" alt="" width="48" height="48" /&gt;
+
+&lt;script type="module"&gt;
+  import { botlingDataUri } from 'https://cdn.jsdelivr.net/npm/seedkin@2/dist/styles/botling/index.js';
+
+  for (const img of document.querySelectorAll('img[data-seed]')) {
+    img.src = botlingDataUri(img.dataset.seed, { size: img.width, title: null });
+  }
+&lt;/script&gt;
+</code></pre>
+<p><code>seedkin@2</code> follows the latest 2.x release, which never changes a stable style's pictures. Pin an exact version (<code>seedkin@2.2.0</code>) if you'd rather upgrade by hand.</p>
+<h2 id="self-hosted">Self-hosted</h2>
+<p>Copy <code>node_modules/seedkin/dist</code> to your site, say to <code>/vendor/seedkin/</code>, and import <code>/vendor/seedkin/styles/botling/index.js</code> instead. The files import each other by relative path, so keep the folder whole.</p>
+<h2 id="content-security-policy">Content Security Policy</h2>
+<p>If your site sends a Content Security Policy, the page needs <code>img-src data:</code> for the avatars, and <code>script-src https://cdn.jsdelivr.net</code> for the CDN import (not needed self-hosted). A module script inside the page counts as an inline script, so under <code>script-src 'self'</code> move it into its own file, as this site does.</p>
+{{pager}}
+    </article>
+    {{toc}}
+  </main>
+
+  {{footer}}
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Versioning · Seedkin docs</title>
+  <meta name="description" content="Seedkin's versioning promise: a seed's picture never changes within a major version, and what Preview styles mean." />
+  <link rel="canonical" href="https://seedkin.dev/docs/versioning/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://seedkin.dev/docs/versioning/" />
+  <meta property="og:title" content="Versioning · Seedkin docs" />
+  <meta property="og:description" content="Seedkin's versioning promise: a seed's picture never changes within a major version, and what Preview styles mean." />
+  {{head}}
+  <script type="module" src="/docs.js"></script>
+</head>
+<body>
+  <a class="skip" href="#doc">Skip to the docs</a>
+  {{header}}
+
+  <main id="main" class="docs wrap">
+    {{docsnav}}
+    <article id="doc" class="prose" tabindex="-1">
+<h1>Versioning</h1>
+<p class="lede">The picture is the API. Within a major version, a seed with the same options always draws the same robot. Store a seed, shape and palette index, and you get the same robot through every 2.x release. The robots in <code>seedkin/botling</code> are the robots of <code>botling</code> 1.2.0, seed for seed (<a href="https://github.com/mtblck/seedkin/blob/main/docs/adr/0009-seedkin-family.md">ADR 0009</a>).</p>
+<h2 id="major-and-minor">Major and minor</h2>
+<ul>
+<li><strong>Major:</strong> anything that changes an existing seed&#39;s robot, at any size: art, palette colours, the order or length of any parts list, the 40px switch, which parts move when animated, and the output of <code>traits</code>, <code>grid</code> and <code>smallGrid</code>.</li>
+<li><strong>Minor:</strong> new holiday palettes, opt-in options and exports (seeds never pick them), smaller SVG markup that draws the same picture, and motion timing.</li>
+</ul>
+<p>Don&#39;t compare or cache robots by their SVG string across versions; the markup can change while the picture stays put. <a href="https://github.com/mtblck/seedkin/blob/main/docs/adr/0006-what-1-0-freezes.md">ADR 0006</a> has the full list. Snapshot tests guard it.</p>
+<h2 id="preview-styles">Preview styles</h2>
+<p>A new style starts in Preview, marked with a badge in these docs and on the site. Until it's marked stable, the avatar a seed draws can change in a minor version as the art settles, so pin the minor (<code>~2.2.0</code>) if you store seeds and need the same picture back. Botling is stable.</p>
+<h2 id="botling-1">From botling 1.x</h2>
+<p>The <code>botling</code> package stays at 1.2.0 on npm and won't change. Move to <code>seedkin</code> by changing the import from <code>'botling'</code> to <code>'seedkin/botling'</code>: the exports are the same and every seed draws the same robot. The <a href="https://github.com/mtblck/seedkin/blob/main/CHANGELOG.md">changelog</a> lists every release of both.</p>
+{{pager}}
+    </article>
+    {{toc}}
+  </main>
+
+  {{footer}}
+</body>
+</html>

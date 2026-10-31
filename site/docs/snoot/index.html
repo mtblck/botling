@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Snoot · Seedkin docs</title>
+  <meta name="description" content="Snoot, seeded animal avatars: how to use them, their options and exports." />
+  <link rel="canonical" href="https://seedkin.dev/docs/snoot/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://seedkin.dev/docs/snoot/" />
+  <meta property="og:title" content="Snoot · Seedkin docs" />
+  <meta property="og:description" content="Snoot, seeded animal avatars: how to use them, their options and exports." />
+  {{head}}
+  <script type="module" src="/docs.js"></script>
+</head>
+<body>
+  <a class="skip" href="#doc">Skip to the docs</a>
+  {{header}}
+
+  <main id="main" class="docs wrap">
+    {{docsnav}}
+    <article id="doc" class="prose" tabindex="-1">
+<h1>Snoot <span class="badge">Preview</span></h1>
+<p class="lede">Seeded animal avatars: cats, foxes, bears, bunnies, mice, dogs, pandas, owls, frogs and pigs, in eight coats. <a href="/styles/snoot/">Try them in the playground</a>.</p>
+<p class="callout">Until Snoot is marked stable, the Snoot a seed draws can change in a minor version, so pin the minor (<code>~2.1.0</code>) if you store seeds and need the same animal back.</p>
+<h2 id="use">Use</h2>
+<pre><code class="language-ts">import { snoot, snootDataUri } from 'seedkin/snoot';
+
+const svg = snoot(user.id);
+const src = snootDataUri(user.id, { size: 40 });
+</code></pre>
+<p>The seed is salted, so <code>snoot(id)</code> and <code>botling(id)</code> are unrelated.</p>
+<h2 id="options">Options</h2>
+<p><code>snoot()</code> takes the same options as <a href="/docs/botling/#options"><code>botling()</code></a> except <code>animate</code>: <code>shape</code>, <code>palette</code> (an index into Snoot's own eight <code>PALETTES</code>, or a palette object), <code>size</code>, <code>detail</code>, <code>showGrid</code>, <code>frame</code>, <code>background</code> and <code>title</code> (default <code>'Animal avatar'</code>). Below 40px it draws a simpler 9x9 Snoot from the same traits.</p>
+<h2 id="exports">Exports</h2>
+<p><code>traits</code>, <code>resolveTraits</code>, <code>grid</code>, <code>smallGrid</code>, <code>SPECIES</code>, <code>EYES</code>, <code>MARKINGS</code>, <code>EXTRAS</code> and <code>SHAPES</code> are exported as for Botling (see <a href="/docs/botling/#advanced">Advanced</a>).</p>
+{{pager}}
+    </article>
+    {{toc}}
+  </main>
+
+  {{footer}}
+</body>
+</html>

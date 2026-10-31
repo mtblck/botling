@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How it works · Seedkin docs</title>
+  <meta name="description" content="How Seedkin turns a seed into an avatar: hashing, traits, the grid and the renderer." />
+  <link rel="canonical" href="https://seedkin.dev/docs/how-it-works/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://seedkin.dev/docs/how-it-works/" />
+  <meta property="og:title" content="How it works · Seedkin docs" />
+  <meta property="og:description" content="How Seedkin turns a seed into an avatar: hashing, traits, the grid and the renderer." />
+  {{head}}
+  <script type="module" src="/docs.js"></script>
+</head>
+<body>
+  <a class="skip" href="#doc">Skip to the docs</a>
+  {{header}}
+
+  <main id="main" class="docs wrap">
+    {{docsnav}}
+    <article id="doc" class="prose" tabindex="-1">
+<h1>How it works</h1>
+<p class="lede">Every style works the same way: hash the seed, roll the traits, draw them onto a grid, and render the grid as SVG. This page follows a robot through it.</p>
+<h2 id="from-seed-to-grid">From seed to grid</h2>
+<p>The seed is hashed (FNV-1a) into a small seeded generator (mulberry32), which picks a palette, head, eyes, mouth, top, side pieces, a few sizes and, now and then, a head marking, a one-sided quirk or an accessory. Those are drawn as roles (body, shade, screen, glow, accent) onto a 15x15 grid, mirrored down the centre column. Small avatars use a 9x9 grid drawn from the same traits. The renderer then draws each cell in the chosen shape and colours each role from the palette.</p>
+<h2 id="parts">Parts</h2>
+<p>Today that&#39;s 16 palettes, 7 heads, 14 eyes, 11 mouths, 7 tops, 4 side pieces, 4 shapes, 3 head markings, 4 quirks, 4 accessories and a few size and on/off traits: tens of millions of distinct robots, before you count colour. Some parts are drawn for one cell shape: rounded and capsule heads become circles on circle cells, block eyes become rings, domes step by half a cell on triangles and cross eyes become chevrons.</p>
+<p>An accessory takes the place of what it covers: headphones replace the top piece and sides, a bow or cap the top piece. A one-sided ear or antenna does the same, unless an accessory already has that spot.</p>
+<h2 id="styles">Other styles</h2>
+<p>Snoot, Noggin and Beastie follow the same steps with their own parts and palettes. Each salts the seed with its name before hashing, so one id draws unrelated characters in each style, and each has its own 9x9 drawing for small sizes.</p>
+{{pager}}
+    </article>
+    {{toc}}
+  </main>
+
+  {{footer}}
+</body>
+</html>
