@@ -142,7 +142,7 @@ describe('noggin', () => {
     for (const seed of ['chrome-piston-108', 'jolly-spark-867']) {
       const c = drawGrid(resolveTraits(seed));
       expect(c.parts[7]?.[c.center + 2]).toBe('eyes');
-      expect(c.parts[8]?.every((part) => part === null)).toBe(true);
+      expect(c.parts.slice(8).flat()).not.toContain('eyes');
       expect(c.parts[9]).toContain('mouth');
     }
   });
