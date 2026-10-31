@@ -77,6 +77,25 @@ export function tagged(c: Canvas, part: Part, draw: () => void): void {
 }
 
 /**
+ * Runs a drawing step but keeps a part's tag on the cells it already had, so
+ * a part drawn over another (a mouth corner on an eye) can't take a piece of
+ * it: those cells keep moving with the part they started in. The picture is
+ * unchanged.
+ *
+ * @param c - Canvas to draw on
+ * @param keep - The part whose cells keep their tag
+ * @param draw - The drawing step
+ */
+export function keepTags(c: Canvas, keep: Part, draw: () => void): void {
+  const kept = c.parts.map((row) => row.map((part) => part === keep));
+  draw();
+  for (const [y, row] of kept.entries()) {
+    const tags = c.parts[y];
+    for (const [x, was] of row.entries()) if (was && tags) tags[x] = keep;
+  }
+}
+
+/**
  * Moves everything drawn up or down by whole rows so it sits in the middle
  * of the canvas, for a robot with no shoulders anchoring it to the bottom.
  * Triangle cells flip with every row, so they only move by even rows.

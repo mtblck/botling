@@ -3,7 +3,7 @@
 exports[`golden corpus > pins the circle markup, still and animated 1`] = `
 {
   "full": "551aa85c2201c52e",
-  "fullAnimated": "229014d4e4a534a9",
+  "fullAnimated": "9855bf755d7b185f",
   "small": "09f50ab98697517e",
   "smallAnimated": "a01c10357ca2635a",
 }
@@ -19,7 +19,7 @@ exports[`golden corpus > pins the circle pictures 1`] = `
 exports[`golden corpus > pins the diamond markup, still and animated 1`] = `
 {
   "full": "9ec89048a5e262c2",
-  "fullAnimated": "052cce183e6ca95c",
+  "fullAnimated": "1dae91a6d64712dd",
   "small": "4902acb1c2edb2ce",
   "smallAnimated": "53b595cd9d34b343",
 }
@@ -35,7 +35,7 @@ exports[`golden corpus > pins the diamond pictures 1`] = `
 exports[`golden corpus > pins the square markup, still and animated 1`] = `
 {
   "full": "f93890bebbca1d84",
-  "fullAnimated": "5ec69eef937d3b86",
+  "fullAnimated": "606c2ace0fe3502b",
   "small": "c5b267be0739f8a8",
   "smallAnimated": "764a6f4fdd4b679f",
 }
@@ -53,7 +53,7 @@ exports[`golden corpus > pins the traits of every seed 1`] = `"eae0816403930e79"
 exports[`golden corpus > pins the triangle markup, still and animated 1`] = `
 {
   "full": "165f95b647189dda",
-  "fullAnimated": "0c1b092708462458",
+  "fullAnimated": "236e0f66f07b9553",
   "small": "c0c1e12ca5292a1b",
   "smallAnimated": "79fc189f0113b2ae",
 }

@@ -1,4 +1,4 @@
-import { type Canvas, centreRows, createCanvas, tagged } from '../../../core/canvas.js';
+import { type Canvas, centreRows, createCanvas, keepTags, tagged } from '../../../core/canvas.js';
 import type { RoleGrid, Traits } from '../types.js';
 import { drawAccessory, drawChestLight, drawPattern, drawQuirk } from './details.js';
 import { drawShoulders, drawSides, drawTop } from './extras.js';
@@ -25,7 +25,8 @@ export function drawGrid(t: Traits): Canvas {
   drawHead(c, t, l);
   drawPattern(c, t, l);
   tagged(c, 'eyes', () => drawEyes(c, t, l));
-  tagged(c, 'mouth', () => drawMouth(c, t, l));
+  // A mouth drawn over an eye leaves those cells with the eye, so talking never moves part of one.
+  keepTags(c, 'eyes', () => tagged(c, 'mouth', () => drawMouth(c, t, l)));
   if (s.hasTop) tagged(c, 'top', () => drawTop(c, t, l));
   if (s.hasSides) tagged(c, 'sides', () => drawSides(c, t, l));
   drawShoulders(c, t);
