@@ -10,6 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { buildSync } from 'esbuild';
+import { highlightPage } from '../site/highlight.js';
 import { changelog } from './changelog.mjs';
 import { DOCS, docsNav, docsSlug, pager, toc } from './docs.mjs';
 import { ogImage, styleOgImage } from './og.mjs';
@@ -100,6 +101,8 @@ for (const file of pages) {
       .replace('{{toc}}', () => toc(page));
   }
   if (page.includes('{{')) throw new Error(`site/${file} has a placeholder the build doesn't fill`);
+  // After the placeholder check: highlighting decodes the {&#123; that keeps samples from looking like one.
+  page = highlightPage(page);
   fs.mkdirSync(path.dirname(path.join(out, file)), { recursive: true });
   fs.writeFileSync(path.join(out, file), page);
   const about = pageInfo(page);
