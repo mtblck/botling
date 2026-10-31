@@ -28,7 +28,7 @@ describe('link preview image', () => {
 
   it('draws the logo robot in the middle, on its Ice tile', () => {
     const ice = lib.PALETTES.find((p) => p.name === 'Ice');
-    expect(at(5, 5)).toBe('#f3f2f8');
+    expect(at(5, 5)).toBe('#f6f3ec');
     expect(at(470, 120)).toBe(ice?.bg);
     const colours = new Set<string>();
     for (let y = 100; y < 400; y += 3) for (let x = 450; x < 750; x += 3) colours.add(at(x, y));
