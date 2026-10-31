@@ -2,7 +2,7 @@
 
 A family of seeded pixel avatars, drawn as SVG on a grid of squares, circles, triangles or diamonds. Plant a seed (a user id, any string) and the same avatar sprouts every time.
 
-The first style is **Botling**, the robots. **Snoot** (animals), **Noggin** (people) and **Beastie** (monsters) are in Preview. Each style has its own entry point, such as `seedkin/botling`, so an app only ships the styles it uses.
+There are four styles: **Botling** (robots), **Snoot** (animals), **Noggin** (people) and **Beastie** (monsters), all Stable: a seed draws the same avatar in every 2.x release. Each style has its own entry point, such as `seedkin/botling`, so an app only ships the styles it uses.
 
 > Coming from the `botling` package? Import from `'seedkin/botling'` instead of `'botling'`: every seed draws the same robot as `botling` 1.2.0.
 
@@ -191,11 +191,11 @@ The picture is the API. Within a major version, a seed with the same options alw
 
 Don't compare or cache robots by their SVG string across versions; the markup can change while the picture stays put. [ADR 0006](docs/adr/0006-what-1-0-freezes.md) has the full list. Snapshot tests guard it.
 
+Snoot, Noggin and Beastie follow the same rules from 2.4.0, when they left Preview ([ADR 0011](docs/adr/0011-every-style-stable.md)): a change to the animal, person or monster a seed draws is a major version.
+
 # Snoot
 
 Seeded animal avatars: cats, foxes, bears, bunnies, mice, dogs, pandas, owls, frogs and pigs. Try them at **[seedkin.dev](https://seedkin.dev/styles/snoot/)**.
-
-> **Preview.** Snoot is in the package, but until it's marked stable, the Snoot a seed draws can change in a minor version. Pin the minor (`~2.1.0`) if you store seeds and need the same animal back.
 
 ```ts
 import { snoot, snootDataUri } from 'seedkin/snoot';
@@ -204,15 +204,15 @@ const svg = snoot(user.id);
 const src = snootDataUri(user.id, { size: 40 });
 ```
 
-`snoot()` takes the same options as `botling()` except `animate`: `shape`, `palette` (an index into Snoot's own eight `PALETTES`, or a palette object), `size`, `detail`, `showGrid`, `look`, `frame`, `background` and `title` (default `'Animal avatar'`). Below 40px it draws a simpler 9x9 Snoot from the same traits, keeping the species' ears, the eyes, muzzle, markings and cheeks.
+`snoot()` takes the same options as `botling()`: `shape`, `palette` (an index into Snoot's own twelve `PALETTES`, or a palette object), `size`, `detail`, `showGrid`, `look`, `frame`, `background`, `animate` and `title` (default `'Animal avatar'`). Below 40px it draws a simpler 9x9 Snoot from the same traits, keeping the species' ears, the eyes, muzzle, markings and cheeks.
 
-The seed is salted, so `snoot(id)` and `botling(id)` are unrelated: one user's robot and animal don't share colours or features. `traits`, `resolveTraits`, `grid`, `smallGrid`, `SPECIES`, `EYES`, `MARKINGS`, `EXTRAS` and `SHAPES` are exported as for Botling.
+With `animate: true` a Snoot hovers, blinks and twitches its ears (sleepy Snoots keep their eyes shut). Below 40px it only blinks and hovers. It works as Botling's [animation](#animation) does: CSS inside the SVG, still for anyone who prefers reduced motion, and still at rest.
+
+The seed is salted, so `snoot(id)` and `botling(id)` are unrelated: one user's robot and animal don't share colours or features. `traits`, `resolveTraits`, `grid`, `smallGrid`, `SPECIES`, `EYES`, `MARKINGS`, `EXTRAS`, `MOUTHS` and `SHAPES` are exported as for Botling.
 
 # Noggin
 
 Seeded people avatars in seven skin tones, with twelve hairstyles (including afros and locs), glasses, beards, hats and headscarves. Try them at **[seedkin.dev](https://seedkin.dev/styles/noggin/)**.
-
-> **Preview.** Noggin is in the package, but until it's marked stable, the Noggin a seed draws can change in a minor version. Pin the minor (`~2.2.0`) if you store seeds and need the same person back.
 
 ```ts
 import { noggin, nogginDataUri } from 'seedkin/noggin';
@@ -223,13 +223,13 @@ const src = nogginDataUri(user.id, { size: 40, skin: 4 });
 
 `noggin()` takes the same options as `snoot()`, plus `skin`, an index into `SKIN_TONES` (lightest first), so people can pick their own. `palette` picks one of the six outfits in `PALETTES`, or takes a whole palette object; `title` defaults to `'Person avatar'`. A seed's hair colour and outfit always stand out from its skin; pick another skin tone and they move to the next colours that do. Below 40px it draws a simpler 9x9 Noggin from the same traits.
 
+With `animate: true` a Noggin hovers, blinks and talks. Closed eyes and shades don't blink and beards don't talk. Below 40px it only blinks and hovers.
+
 `traits`, `resolveTraits`, `grid`, `smallGrid`, `paletteFor`, `SKIN_TONES`, `HAIR_COLOURS`, `HAIRS`, `EYES`, `MOUTHS`, `FACIAL`, `EYEWEAR`, `HEADWEAR` and `SHAPES` are exported as for Botling.
 
 # Beastie
 
 Seeded monster avatars: blobs, ghosts, boxes, tall and wide bodies with one to three eyes, fangs, horns and wings. Try them at **[seedkin.dev](https://seedkin.dev/styles/beastie/)**.
-
-> **Preview.** Beastie is in the package, but until it's marked stable, the Beastie a seed draws can change in a minor version. Pin the minor (`~2.2.0`) if you store seeds and need the same monster back.
 
 ```ts
 import { beastie, beastieDataUri } from 'seedkin/beastie';
@@ -238,7 +238,9 @@ const svg = beastie(user.id);
 const src = beastieDataUri(user.id, { size: 40 });
 ```
 
-`beastie()` takes the same options as `snoot()`: `shape`, `palette` (an index into Beastie's own eight `PALETTES`, or a palette object), `size`, `detail`, `showGrid`, `look`, `frame`, `background` and `title` (default `'Monster avatar'`). Below 40px it draws a simpler 9x9 Beastie from the same traits, keeping the body, eyes, mouth, top and sides.
+`beastie()` takes the same options as `snoot()`, `animate` included: `shape`, `palette` (an index into Beastie's own eight `PALETTES`, or a palette object), `size`, `detail`, `showGrid`, `look`, `frame`, `background` and `title` (default `'Monster avatar'`). Below 40px it draws a simpler 9x9 Beastie from the same traits, keeping the body, eyes, mouth, top and sides.
+
+With `animate: true` a Beastie hovers, blinks and talks, its horns or antennae wobble and its arms or wings twitch. Below 40px it only blinks and hovers.
 
 The seed is salted, so one id's Botling, Snoot and Beastie are unrelated. `traits`, `resolveTraits`, `grid`, `smallGrid`, `BODIES`, `EYES`, `MOUTHS`, `TOPS`, `SIDES` and `SHAPES` are exported as for Botling.
 

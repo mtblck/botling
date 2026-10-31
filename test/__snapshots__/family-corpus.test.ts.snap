@@ -1,0 +1,55 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`beastie golden corpus > pins the markup, still and animated 1`] = `
+{
+  "full": "8f2c936c25b426d5",
+  "fullAnimated": "8a62e08406d387fd",
+  "small": "efa0d7a536a8d986",
+  "smallAnimated": "4fcdc50b00e698b6",
+}
+`;
+
+exports[`beastie golden corpus > pins the traits, grids and colours 1`] = `
+{
+  "colours": "df4f17a4c9f2d0df",
+  "full": "88041a3bef8a75bb",
+  "small": "b687919c8de0c5fe",
+  "traits": "d32171b351b57fb7",
+}
+`;
+
+exports[`noggin golden corpus > pins the markup, still and animated 1`] = `
+{
+  "full": "7550b213f6716426",
+  "fullAnimated": "b827259362ad4234",
+  "small": "c77f0ae7959b07c6",
+  "smallAnimated": "607846e7a065f583",
+}
+`;
+
+exports[`noggin golden corpus > pins the traits, grids and colours 1`] = `
+{
+  "colours": "2d34d89670a4a2bb",
+  "full": "d9d63b02b4aa4daa",
+  "small": "a15ac0a86ed1e0f6",
+  "traits": "892ad95e8a57a93d",
+}
+`;
+
+exports[`snoot golden corpus > pins the markup, still and animated 1`] = `
+{
+  "full": "a9427d79e909d40c",
+  "fullAnimated": "22da81e40d7a09cd",
+  "small": "264a760d02726fe0",
+  "smallAnimated": "199165725ab124f4",
+}
+`;
+
+exports[`snoot golden corpus > pins the traits, grids and colours 1`] = `
+{
+  "colours": "f7c69e0983254e69",
+  "full": "22b44413bac9c0b5",
+  "small": "c3328545434eeef3",
+  "traits": "193a572e19b0193b",
+}
+`;

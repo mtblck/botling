@@ -1,5 +1,5 @@
 import { blob } from '../../../core/art.js';
-import { type Canvas, createCanvas, SMALL_GRID_SIZE } from '../../../core/canvas.js';
+import { type Canvas, createCanvas, SMALL_GRID_SIZE, tagged } from '../../../core/canvas.js';
 import { type BeastieTraits, Role } from '../types.js';
 
 /** Row half-widths of each body on the 9x9 grid, and its top row. */
@@ -53,7 +53,8 @@ export function drawSmallGrid(t: BeastieTraits): Canvas {
     c.paint(c.center - 1, top - 2, Role.Shade);
   }
   const eyeRow = Math.min(top + 2, bottom - 3);
-  eyes(c, t, eyeRow);
+  // Tagged eyes blink when animated.
+  tagged(c, 'eyes', () => eyes(c, t, eyeRow));
   mouth(c, t, eyeRow + 2);
   return c;
 }

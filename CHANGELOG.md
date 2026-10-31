@@ -13,6 +13,18 @@ any change to the robot a seed draws is a major version.
 - The home page has an Animate button again, next to Random, which sets the Botling moving, and a shorter seed box. Each style card shows its Preview badge in its top right corner.
 - Search the site from the header (or press `/`): docs, styles and pages, matched as you type, built into `search.json` at build time.
 
+## [2.4.0] - 2026-10-31
+
+### Added
+
+- `animate` for Snoot, Noggin and Beastie, as for Botling: CSS inside the SVG, still for anyone who prefers reduced motion, and still at rest. Snoots hover, blink and twitch their ears; Noggins hover, blink and talk; Beasties hover, blink and talk, and their horns or antennae wobble and their arms or wings twitch. Below 40px every style only blinks and hovers. Botling's output is unchanged.
+- Snoot's `MOUTHS` and `Mouth` exports.
+
+### Changed
+
+- Snoot, Noggin and Beastie are Stable (ADR 0011): from 2.4.0 the avatar a seed draws only changes in a major version, as for Botling, and a golden corpus guards each style.
+- Snoot has more variety before it freezes, so most seeds draw a different Snoot than in 2.3.0: four more coats (Rose, Sky, Sand and Midnight, twelve in all), a mouth (a smile, a tongue or open), likelier markings, extras and cheeks, and more distinct faces below 40px (taller heads, shining and happy eyes, whiskers). Seeds that draw the same Snoot as another fall from 7.5% to 1.4% at full size and from 20% to 5.7% at 24px.
+
 ## [2.3.0] - 2026-10-31
 
 ### Added
@@ -131,7 +143,8 @@ First release.
 
 The playground site (`site/`, not part of the npm package) lets you try seeds, shapes and palettes and copy the code.
 
-[Unreleased]: https://github.com/mtblck/seedkin/compare/v2.3.0...HEAD
+[Unreleased]: https://github.com/mtblck/seedkin/compare/v2.4.0...HEAD
+[2.4.0]: https://github.com/mtblck/seedkin/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/mtblck/seedkin/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/mtblck/seedkin/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/mtblck/seedkin/compare/v2.0.0...v2.1.0

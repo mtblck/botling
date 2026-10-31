@@ -1,6 +1,6 @@
 import { createRng, int, maybePick, pick } from '../../core/random.js';
 import { PALETTES } from './palettes.js';
-import { EXTRAS, EYES, MARKINGS, SHAPE_ODDS, SPECIES } from './parts.js';
+import { EXTRAS, EYES, MARKINGS, MOUTHS, SHAPE_ODDS, SPECIES } from './parts.js';
 import type { SnootTraits } from './types.js';
 
 /**
@@ -17,11 +17,12 @@ export function traits(seed: string): SnootTraits {
     palette: Math.floor(rng() * PALETTES.length),
     species: pick(rng, SPECIES),
     eyes: pick(rng, EYES),
-    marking: maybePick(rng, 0.4, MARKINGS),
-    extra: maybePick(rng, 0.3, EXTRAS),
+    marking: maybePick(rng, 0.5, MARKINGS),
+    extra: maybePick(rng, 0.5, EXTRAS),
     halfWidth: int(rng, 4, 5),
     isTall: rng() < 0.5,
-    hasCheeks: rng() < 0.4,
+    hasCheeks: rng() < 0.5,
     shape: pick(rng, SHAPE_ODDS),
+    mouth: pick(rng, MOUTHS),
   };
 }

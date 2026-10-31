@@ -1,11 +1,10 @@
-import { centreRows } from '../../core/canvas.js';
 import { type CommonOptions, checkPalette, settle } from '../../core/options.js';
-import { stillSvg } from '../../core/render/svg.js';
+import { avatarSvg } from '../../core/render/animated.js';
 import { drawGrid, drawSmallGrid } from './grid/index.js';
 import { PALETTES, paletteFor, SKIN_TONES } from './palettes.js';
 import { SHAPES } from './parts.js';
 import { hairFor, outfitFor, traits } from './traits.js';
-import type { NogginOptions, NogginTraits, Palette } from './types.js';
+import { type NogginOptions, type NogginTraits, type Palette, Role } from './types.js';
 
 /** Checks an index option, so a bad value fails loudly instead of drawing nothing. */
 function index(name: string, value: unknown, length: number, extra = ''): number {
@@ -43,8 +42,8 @@ export function resolveTraits(seed: string, opts: NogginOptions = {}): NogginTra
 }
 
 /**
- * Renders the Noggin for a seed as an SVG string. Noggin is a Preview style:
- * until it's marked stable, the Noggin a seed draws can change in a minor.
+ * Renders the Noggin for a seed as an SVG string. A seed draws
+ * the same Noggin in every 2.x release.
  *
  * @param seed - Any string, such as a user id
  * @param opts - Rendering options
@@ -58,9 +57,18 @@ export function noggin(seed: string, opts: NogginOptions = {}): string {
       : paletteFor(t.palette, t.skin, t.hairColour);
   const s = settle('noggin', opts as CommonOptions);
   const c = s.isSmall ? drawSmallGrid(t) : drawGrid(t);
-  centreRows(c, t.shape === 'triangle');
   const title = opts.title === undefined ? 'Person avatar' : opts.title;
-  return stillSvg({ cells: c.cells, shape: t.shape, palette, background: opts.background !== false, title }, s);
+  const pic = { shape: t.shape, palette, background: opts.background !== false, title };
+  return avatarSvg(c, pic, s, {
+    style: 'noggin',
+    seed: `noggin:${seed}`,
+    // Shut eyes and shades don't blink; a mouth inside a beard doesn't talk.
+    moves: {
+      ...(t.eyes === 'closed' || t.eyewear === 'shades' ? {} : { eyes: 'blink' }),
+      ...(t.facial === 'beard' ? {} : { mouth: 'talk' }),
+    },
+    lid: Role.Body,
+  });
 }
 
 /**
