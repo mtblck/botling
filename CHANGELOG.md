@@ -16,6 +16,7 @@ any change to the robot a seed draws is a major version.
 ### Site
 
 - A Sprite playground at `/styles/sprite/`, with an Element picker, and a Sprite page in the docs. The home page shows your seed in all five styles, three over two, and the family cards sit three over two, with Sprite marked Preview.
+- The About page has room between its last cards and the footer.
 
 - seedkin.dev has a `sitemap.xml`, a `robots.txt` and an `llms.txt` for AI assistants, all built from the pages themselves; JSON-LD on the home page; and its own link preview image for each style page.
 - The home page has an Animate button again, next to Random, which sets every style moving, and a shorter seed box. Each style card shows its Stable badge in its top right corner.

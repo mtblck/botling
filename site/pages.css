@@ -627,6 +627,9 @@ a.btn {
 .compare {
   padding: 56px 0 8px;
 }
+.about-end {
+  padding-bottom: 72px;
+}
 .promises h2,
 .compare h2,
 .story-card h2 {
