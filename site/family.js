@@ -1,6 +1,8 @@
 // The family pages: the landing page's seed box, which grows one seed in every style, and
 // the style strips on /styles/. Packaged styles come from the package build (/lib); the
 // lab ones from lab/preview.ts, bundled to /preview.js. Seeds stay in the URL hash.
+
+import { beastie } from '/lib/styles/beastie/index.js';
 import { botling, randomSeed } from '/lib/styles/botling/index.js';
 import { snoot } from '/lib/styles/snoot/index.js';
 import { PREVIEWS } from '/preview.js';
@@ -8,6 +10,7 @@ import { PREVIEWS } from '/preview.js';
 const DRAW = {
   botling: (seed, size) => botling(seed, { size, title: null }),
   snoot: (seed, size) => snoot(seed, { size, title: null }),
+  beastie: (seed, size) => beastie(seed, { size, title: null }),
   ...Object.fromEntries(PREVIEWS.map((p) => [p.name.toLowerCase(), p.render])),
 };
 const $ = (id) => document.getElementById(id);

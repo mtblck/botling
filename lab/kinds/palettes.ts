@@ -27,18 +27,6 @@ export const SKIN: readonly { body: string; glow: string }[] = [
 
 export const HAIR: readonly string[] = ['#1f1a17', '#5a3825', '#a0482a', '#e6c15a', '#c4c4cc', '#ff7eb6', '#5a8dee'];
 
-/** Monster skins. Glow is eye whites and teeth, screen the pupils and mouth. */
-export const HIDES: readonly Palette[] = [
-  p('Grape', '#151022', '#221a35', '#8e5cf0', '#6438c4', '#1a0f1f', '#ffffff', '#ffd166'),
-  p('Slime', '#0f1a12', '#1a2b1f', '#7bd74a', '#4f9e2c', '#14200c', '#ffffff', '#ff5fa2'),
-  p('Pumpkin', '#fff3e4', '#f6e2cb', '#ff8a2a', '#d0620d', '#2a1305', '#ffffff', '#5a2ea6'),
-  p('Sky', '#101a2b', '#1a2840', '#4fa7ff', '#2c76d1', '#0b1426', '#ffffff', '#ffe066'),
-  p('Bubblegum', '#fff0f6', '#fde0ec', '#ff7ab8', '#e04892', '#2a0b1a', '#ffffff', '#6ee7d8'),
-  p('Lagoon', '#0e1c1c', '#183030', '#2fc4b2', '#1d8f82', '#071414', '#ffffff', '#ff8a5c'),
-  p('Chilli', '#1d1010', '#2e1a1a', '#e5484d', '#a92b30', '#1a0607', '#fff2d9', '#ffd166'),
-  p('Banana', '#14152a', '#20223f', '#ffd84d', '#d9a91c', '#2a1f05', '#ffffff', '#ff6f61'),
-];
-
 /** Dinosaur hides. Shade is the back and mouth line, screen the belly and teeth, accent spots, plates and frills. */
 export const SCALES: readonly Palette[] = [
   p('Fern', '#14201a', '#1e2f26', '#5cb85c', '#3d8b3d', '#d9f2b4', '#10180f', '#f2c14e'),

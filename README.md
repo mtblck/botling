@@ -2,7 +2,7 @@
 
 A family of seeded pixel avatars, drawn as SVG on a grid of squares, circles, triangles or diamonds. Plant a seed (a user id, any string) and the same avatar sprouts every time.
 
-The first style is **Botling**, the robots. **Snoot**, the animals, is in Preview, and people (Noggins) and monsters (Beasties) are on the way. Each style has its own entry point, such as `seedkin/botling`, so an app only ships the styles it uses.
+The first style is **Botling**, the robots. **Snoot**, the animals, and **Beastie**, the monsters, are in Preview, and people (Noggins) are on the way. Each style has its own entry point, such as `seedkin/botling`, so an app only ships the styles it uses.
 
 > Coming from the `botling` package? Import from `'seedkin/botling'` instead of `'botling'`: every seed draws the same robot as `botling` 1.2.0.
 
@@ -189,6 +189,23 @@ const src = snootDataUri(user.id, { size: 40 });
 `snoot()` takes the same options as `botling()` except `animate`: `shape`, `palette` (an index into Snoot's own eight `PALETTES`, or a palette object), `size`, `detail`, `showGrid`, `frame`, `background` and `title` (default `'Animal avatar'`). Below 40px it draws a simpler 9x9 Snoot from the same traits, keeping the species' ears, the eyes, muzzle, markings and cheeks.
 
 The seed is salted, so `snoot(id)` and `botling(id)` are unrelated: one user's robot and animal don't share colours or features. `traits`, `resolveTraits`, `grid`, `smallGrid`, `SPECIES`, `EYES`, `MARKINGS`, `EXTRAS` and `SHAPES` are exported as for Botling.
+
+# Beastie
+
+Seeded monster avatars: blobs, ghosts, boxes, tall and wide bodies with one to three eyes, fangs, horns and wings. Try them at **[seedkin.dev](https://seedkin.dev/styles/beastie/)**.
+
+> **Preview.** Beastie is in the package, but until it's marked stable, the Beastie a seed draws can change in a minor version. Pin the minor (`~2.2.0`) if you store seeds and need the same monster back.
+
+```ts
+import { beastie, beastieDataUri } from 'seedkin/beastie';
+
+const svg = beastie(user.id);
+const src = beastieDataUri(user.id, { size: 40 });
+```
+
+`beastie()` takes the same options as `snoot()`: `shape`, `palette` (an index into Beastie's own eight `PALETTES`, or a palette object), `size`, `detail`, `showGrid`, `frame`, `background` and `title` (default `'Monster avatar'`). Below 40px it draws a simpler 9x9 Beastie from the same traits, keeping the body, eyes, mouth, top and sides.
+
+The seed is salted, so one id's Botling, Snoot and Beastie are unrelated. `traits`, `resolveTraits`, `grid`, `smallGrid`, `BODIES`, `EYES`, `MOUTHS`, `TOPS`, `SIDES` and `SHAPES` are exported as for Botling.
 
 # Developing
 

@@ -7,6 +7,13 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-10-31
+
+### Added
+
+- `seedkin/beastie`, the Beasties: seeded monster avatars (blobs, ghosts, boxes, tall and wide bodies with one to three eyes, eyes on stalks, fangs, horns, antennae, arms and wings) in eight hides, with `beastie()`, `beastieDataUri()` and the same options as `snoot()`. Below 40px it draws a simpler 9x9 Beastie from the same traits. Beastie is a Preview style: the Beastie a seed draws can change in a minor version until it's marked stable (ADR 0009). Botling and Snoot are unchanged.
+- seedkin.dev has a Beastie playground at `/styles/beastie/`, and the landing and Styles pages draw Beasties from the package.
+
 ## [2.1.0] - 2026-10-31
 
 ### Added
