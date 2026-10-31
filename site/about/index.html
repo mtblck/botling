@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Why Seedkin · Seedkin</title>
+  <meta name="description" content="Why Seedkin exists and how it works: a seed's picture never changes within a major version, every style stays readable at 24px, and nothing leaves your server. How it compares with DiceBear, Boring Avatars, Jdenticon and minidenticons." />
+  <link rel="canonical" href="https://seedkin.dev/about/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://seedkin.dev/about/" />
+  <meta property="og:title" content="Why Seedkin" />
+  <meta property="og:description" content="Avatars that grow from a seed and never change their face: same picture forever, readable at 24px, nothing leaves your server." />
+  {{head}}
+  <script type="module" src="/family.js"></script>
+  <link rel="modulepreload" href="/preview.js" />
+  {{preloads}}
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the content</a>
+  {{header}}
+
+  <main id="main">
+    <section class="about-hero wrap" aria-labelledby="about-h">
+      <div>
+        <p class="kicker">Why Seedkin</p>
+        <h1 id="about-h">Avatars that grow from a seed and never change their face.</h1>
+        <p class="lede">Seedkin is a small library with a few strong opinions: a seed's picture is a promise, a 24px avatar still needs a face, and nobody's id should leave your server to get one.</p>
+        <p class="ctas">
+          <a class="btn primary" href="/styles/botling/">Try the playground</a>
+          <a class="btn" href="/docs/">Read the docs</a>
+        </p>
+      </div>
+      <div class="about-art" aria-hidden="true">
+        <span data-avatar="botling" data-seed="ada" data-size="96"></span>
+        <span data-avatar="snoot" data-seed="whiskers" data-size="96"></span>
+        <span data-avatar="botling" data-seed="grace" data-size="96"></span>
+        <span data-avatar="noggin" data-seed="ada" data-size="96"></span>
+        <span data-avatar="botling" data-seed="margaret" data-size="96"></span>
+        <span data-avatar="beastie" data-seed="grumble" data-size="96"></span>
+      </div>
+    </section>
+
+    <section class="promises wrap" aria-labelledby="promises-h">
+      <h2 id="promises-h">Four promises</h2>
+      <ol class="features two">
+        <li class="card">
+          <h3>The picture is the API</h3>
+          <p>Within a major version a seed always draws the same avatar, cell for cell. Snapshot tests guard every palette, part and draw order, so an upgrade never changes someone's face. Anything that would is a new major version.</p>
+          <p><a href="https://github.com/mtblck/seedkin/blob/main/docs/adr/0001-the-picture-is-the-api.md">ADR 0001: the picture is the API</a></p>
+        </li>
+        <li class="card">
+          <h3>Still a face at 24px</h3>
+          <p>Most generated avatars turn to mush in a comment thread. Below 40px, Botling switches to a simpler 9x9 drawing of the same robot, from the same traits, so it keeps its eyes and mouth.</p>
+          <p class="sizes-row" aria-hidden="true"><span data-avatar="botling" data-seed="jolly-sprocket-65" data-size="48"></span><span data-avatar="botling" data-seed="jolly-sprocket-65" data-size="32"></span><span data-avatar="botling" data-seed="jolly-sprocket-65" data-size="24"></span></p>
+        </li>
+        <li class="card">
+          <h3>Private by design</h3>
+          <p>There's no API to call, no request and no storage. The avatar is computed where you call the function, so your users' ids never leave your servers. This site keeps the seed you type in the URL hash, which browsers never send.</p>
+        </li>
+        <li class="card">
+          <h3>Nothing to install but itself</h3>
+          <p>Zero runtime dependencies, ESM with TypeScript types, and one entry point per style, so Botling alone is {{botling-kb}} kB gzipped. It returns an SVG string and works in the browser, on the server and at the edge, under a strict CSP.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="compare wrap" aria-labelledby="compare-h">
+      <h2 id="compare-h">How it compares</h2>
+      <p class="sub">Every library here is good at something, and Seedkin is narrow on purpose: pixel characters, readable small, no network. If you want dozens of styles, an HTTP API or libraries in other languages, DiceBear is the one to pick.</p>
+      <div class="table-box">
+        <table>
+          <caption class="sr-only">Seedkin compared with four other avatar libraries</caption>
+          <thead>
+            <tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">Seedkin</th><th scope="col">DiceBear</th><th scope="col">Boring Avatars</th><th scope="col">Jdenticon</th><th scope="col">minidenticons</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Pictures</th><td>Pixel characters: robots, animals, people and monsters</td><td>Dozens of styles, illustrated and abstract</td><td>Abstract shapes</td><td>Geometric identicons</td><td>Pixel identicons</td></tr>
+            <tr><th scope="row">Faces</th><td>Yes</td><td>In many styles</td><td>No</td><td>No</td><td>No</td></tr>
+            <tr><th scope="row">Runtime dependencies</th><td>None</td><td>None in the core; each style is a package</td><td>None, needs React</td><td>One</td><td>None</td></tr>
+            <tr><th scope="row">Works without a framework</th><td>Yes</td><td>Yes</td><td>No, React only</td><td>Yes</td><td>Yes</td></tr>
+            <tr><th scope="row">Hosted HTTP API</th><td>No, on purpose</td><td>Yes</td><td colspan="3" class="na">Not compared</td></tr>
+            <tr><th scope="row">Art licence</th><td>MIT, art included</td><td>Per style: CC0, CC BY 4.0 or MIT</td><td>MIT</td><td>MIT</td><td>MIT</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Checked on 31 October 2026 against each project's npm package and website. <a href="https://github.com/mtblck/seedkin/issues">Tell us if something has changed</a>.</p>
+    </section>
+
+    <section class="story-card wrap" aria-labelledby="story-h">
+      <span data-avatar="botling" data-seed="jolly-sprocket-65" data-size="160" aria-hidden="true"></span>
+      <div>
+        <h2 id="story-h">Where they come from</h2>
+        <p>Under every app there's a field of dots called the Grid, fifteen across and fifteen down, waiting. Drop a seed into it, a name, an id, any string at all, and something sprouts. The Grid never forgets a seed, so the same one always grows the same seedkin, cell for cell.</p>
+        <p>Nobody planted the Grid. It was just there, the way a lawn is there, and things kept coming up.</p>
+      </div>
+    </section>
+
+    <section class="wrap" aria-labelledby="oss-h">
+      <ul class="features two">
+        <li class="card">
+          <h2 id="oss-h">Open source</h2>
+          <p>Seedkin is built in the open by <a href="https://mattblack.space">Matt Black</a>. Bugs, ideas and new styles are welcome, and every decision worth keeping is written down as a short record in the repo.</p>
+          <p class="ctas"><a class="btn" href="https://github.com/mtblck/seedkin/blob/main/CONTRIBUTING.md">Contribute on GitHub</a></p>
+        </li>
+        <li class="card">
+          <h2>MIT, art included</h2>
+          <p>The code and the drawings share one licence, so you can use Seedkin anywhere, commercial or not. A credit line is never required, though it's always nice.</p>
+          <p class="ctas"><a class="btn" href="https://github.com/mtblck/seedkin/blob/main/LICENSE">Read the licence</a></p>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  {{footer}}
+</body>
+</html>

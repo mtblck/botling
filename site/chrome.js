@@ -1,5 +1,6 @@
-// What every page shares: the theme toggle and the page-view count.
+// What every page shares: the theme toggle, the phone menu, code blocks and the page-view count.
 import { arrival, track } from '/track.js';
+import '/code.js';
 
 document.querySelector('.theme').addEventListener('click', () => {
   const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
@@ -11,11 +12,31 @@ document.querySelector('.theme').addEventListener('click', () => {
   }
 });
 
-// The current page in the nav, for screen readers and the underline.
-for (const a of document.querySelectorAll('.top nav a')) {
-  if (a.getAttribute('href') !== '/' && location.pathname.startsWith(a.getAttribute('href'))) {
-    a.setAttribute('aria-current', 'page');
+// The current page in the nav, for screen readers and the underline: the longest link the
+// path starts with, except that every style page (/styles/<name>/) is the Playground.
+const path = /^\/styles\/[^/]+\/$/.test(location.pathname) ? '/styles/botling/' : location.pathname;
+const here = [...document.querySelectorAll('.top nav a[href^="/"]')]
+  .filter((a) => path.startsWith(a.getAttribute('href')))
+  .sort((a, b) => b.getAttribute('href').length - a.getAttribute('href').length)[0];
+here?.setAttribute('aria-current', 'page');
+
+// On a phone the nav folds behind a Menu button. Escape closes it and returns focus.
+const menu = document.querySelector('.menu-btn');
+const nav = document.getElementById('site-nav');
+const setMenu = (open) => {
+  menu.setAttribute('aria-expanded', String(open));
+  nav.classList.toggle('is-open', open);
+};
+menu.addEventListener('click', () => setMenu(menu.getAttribute('aria-expanded') !== 'true'));
+// Escape, or a click outside the header, closes it.
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') {
+    setMenu(false);
+    menu.focus();
   }
-}
+});
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.top')) setMenu(false);
+});
 
 track('pageview', arrival(document.referrer, location.hostname));

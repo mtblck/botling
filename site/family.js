@@ -6,16 +6,22 @@ import { snoot } from '/lib/styles/snoot/index.js';
 import { PREVIEWS } from '/preview.js';
 
 const DRAW = {
-  botling: (seed, size) => botling(seed, { size, title: null }),
-  snoot: (seed, size) => snoot(seed, { size, title: null }),
+  botling: (seed, size, frame) => botling(seed, { size, frame, title: null }),
+  snoot: (seed, size, frame) => snoot(seed, { size, frame, title: null }),
   ...Object.fromEntries(PREVIEWS.map((p) => [p.name.toLowerCase(), p.render])),
 };
 const $ = (id) => document.getElementById(id);
 
-/** Draws every [data-avatar] that has no seed of its own with this one. */
-function grow(seed) {
-  for (const el of document.querySelectorAll('[data-avatar]')) {
-    el.innerHTML = DRAW[el.dataset.avatar](el.dataset.seed ?? seed, el.dataset.seed ? 96 : 128);
+/**
+ * Draws [data-avatar] elements: those with a data-seed of their own (drawn once, on load),
+ * or by default those without, with this seed. An element can also set its size and frame
+ * with data-size and data-frame.
+ */
+function grow(seed, selector = '[data-avatar]:not([data-seed])') {
+  for (const el of document.querySelectorAll(selector)) {
+    const { avatar, frame } = el.dataset;
+    const size = Number(el.dataset.size) || (el.dataset.seed ? 96 : 128);
+    el.innerHTML = DRAW[avatar](el.dataset.seed ?? seed, size, frame);
     // Decorative: the style's name is next to it.
     el.firstElementChild?.setAttribute('aria-hidden', 'true');
   }
@@ -37,6 +43,7 @@ function saveHash(seed) {
   }, 300);
 }
 
+grow('', '[data-avatar][data-seed]');
 const input = $('seed');
 if (input) {
   const readHash = () => {
@@ -55,8 +62,6 @@ if (input) {
   });
   window.addEventListener('hashchange', readHash);
   readHash();
-} else {
-  grow('');
 }
 
 for (const strip of document.querySelectorAll('[data-strip]')) {
