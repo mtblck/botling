@@ -16,7 +16,8 @@
     { "source": "/styles/snoot", "destination": "/styles/snoot/", "permanent": true },
     { "source": "/styles/beastie", "destination": "/styles/beastie/", "permanent": true },
     { "source": "/styles/noggin", "destination": "/styles/noggin/", "permanent": true },
-    { "source": "/docs", "destination": "/docs/", "permanent": true }
+    { "source": "/docs", "destination": "/docs/", "permanent": true },
+    { "source": "/about", "destination": "/about/", "permanent": true }
   ],
   "rewrites": [{ "source": "/_mb/events", "destination": "https://mattblack.space/boards/api/events" }],
   "headers": [

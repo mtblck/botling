@@ -13,7 +13,15 @@ any change to the robot a seed draws is a major version.
 
 - `seedkin/beastie`, the Beasties: seeded monster avatars (blobs, ghosts, boxes, tall and wide bodies with one to three eyes, eyes on stalks, fangs, horns, antennae, arms and wings) in eight hides, with `beastie()`, `beastieDataUri()` and the same options as `snoot()`. Below 40px it draws a simpler 9x9 Beastie from the same traits. Beastie is a Preview style: the Beastie a seed draws can change in a minor version until it's marked stable (ADR 0009). Botling and Snoot are unchanged.
 - `seedkin/noggin`, the Noggins: seeded people avatars in seven skin tones, with twelve hairstyles (including afros and locs), glasses, beards, hats and headscarves, in six outfits. `noggin()` and `nogginDataUri()` take the same options as `snoot()` plus `skin`, so people can pick their own skin tone; hair and outfit always stand out from the skin. Below 40px it draws a simpler 9x9 Noggin. Noggin is a Preview style.
-- seedkin.dev has Beastie and Noggin playgrounds at `/styles/beastie/` and `/styles/noggin/`, and the landing and Styles pages draw both from the package. No lab styles are left on the site.
+
+### Site
+
+- seedkin.dev has a fuller header (Playground, Styles, Docs, About) that folds into a menu on phones, a footer with Explore, Docs, Project and Versions columns, and a 404 page.
+- The landing page gains calls to action, an at-a-glance strip with figures measured at build time, mock-ups of comments, a leaderboard and a team list drawn with real avatars, and a Why Seedkin grid.
+- New `/about/` page: the four promises, how Seedkin compares with similar libraries, and the Grid's backstory.
+- Every code sample has a Copy button, and install commands have npm, pnpm, yarn and bun tabs.
+- The playground is one shared page layout (`site/playground.js`) for every style: the options sit beside the avatar, which stays in view while they change (pinned in a compact bar on phones), with the code and downloads under it, tabs between styles, a Reset button, and a gallery that redraws with the options on screen. Snoot gains PNG, JPG and GIF downloads.
+- Beastie and Noggin get playgrounds at `/styles/beastie/` and `/styles/noggin/` (Noggin with a skin tone picker), and the landing and Styles pages draw both from the package. No lab styles are left on the site.
 
 ## [2.1.0] - 2026-10-31
 

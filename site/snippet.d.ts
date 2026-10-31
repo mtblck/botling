@@ -7,10 +7,11 @@ export interface PlaygroundState {
   /** A frame other than 'square' goes into the options. */
   frame?: string;
   palette: string;
-  skin?: string;
   grid: string;
   /** 'on' animates the robot; anything else leaves it still. */
   motion?: string;
+  /** A style's own option, such as Noggin's skin: 'auto' leaves it out. */
+  [option: string]: string | undefined;
 }
 export function options(
   state: Omit<PlaygroundState, 'seed'>,

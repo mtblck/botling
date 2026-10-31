@@ -22,8 +22,14 @@
   <main id="main">
     <section class="hero wrap" aria-labelledby="hero-h">
       <div class="intro">
+        <p class="kicker">Seeded pixel avatars, as SVG</p>
         <h1 id="hero-h">One seed. A whole&nbsp;family.</h1>
         <p class="lede">Seedkin turns any string into a pixel avatar, the same one every time, on any machine, with nothing stored. Plant a user id and a robot sprouts, or an animal, a person or a monster. Type anything to meet your kin.</p>
+        <p class="ctas">
+          <a class="btn primary" href="/styles/botling/">Try the playground</a>
+          <a class="btn" href="/docs/">Get started</a>
+          <code class="install">npm i seedkin</code>
+        </p>
         <form class="seed" id="seed-form">
           <label for="seed">Seed</label>
           <div class="seed-row">
@@ -41,10 +47,13 @@
       </ul>
     </section>
 
-    <section class="story wrap" aria-labelledby="story-h">
-      <h2 id="story-h">Where they come from</h2>
-      <p>Under every app there's a field of dots called the Grid, fifteen across and fifteen down, waiting. Drop a seed into it, a name, an id, any string at all, and something sprouts. The Grid never forgets a seed, so the same one always grows the same seedkin, cell for cell.</p>
-      <p>Nobody planted the Grid. It was just there, the way a lawn is there, and things kept coming up.</p>
+    <section class="wrap" aria-label="At a glance">
+      <ul class="glance">
+        <li><strong>0</strong> runtime dependencies, and no requests</li>
+        <li><strong>{{botling-kb}} kB</strong> for Botling, minified and gzipped</li>
+        <li><strong>10M+</strong> robots, computed rather than stored</li>
+        <li><strong>24px</strong> and still a face, with a simpler drawing</li>
+      </ul>
     </section>
 
     <section class="families wrap" aria-labelledby="families-h">
@@ -73,33 +82,82 @@
       </ul>
     </section>
 
-    <section class="use wrap" aria-labelledby="start-h">
-      <h2 id="start-h">Quick start</h2>
-      <div class="cols">
-        <div>
-          <h3>Install</h3>
-          <pre class="code"><code>npm install seedkin</code></pre>
-          <h3>Draw one</h3>
-          <pre class="code"><code>import { botling } from 'seedkin/botling';
+    <section class="built wrap" aria-labelledby="built-h">
+      <p class="kicker">Built for</p>
+      <h2 id="built-h">Every place a person needs a face</h2>
+      <p class="sub">Each name below is its avatar's seed. Seed with the same name anywhere and you get the same face.</p>
+      <ul class="uses">
+        <li class="card">
+          <div class="mock mock-thread" aria-hidden="true">
+            <div class="msg"><span data-avatar="botling" data-seed="ada_l" data-size="32"></span><p><b>ada_l</b>Shipped the fix, thanks all.</p></div>
+            <div class="msg reply"><span data-avatar="botling" data-seed="grace.h" data-size="24"></span><p><b>grace.h</b>Nice one. Merging.</p></div>
+          </div>
+          <h3>Comments and profiles</h3>
+          <p>A face for everyone who hasn't uploaded one, so a new account never looks empty. Still readable at 24px.</p>
+        </li>
+        <li class="card">
+          <div class="mock mock-board" aria-hidden="true">
+            <div class="row"><i>1</i><span data-avatar="botling" data-seed="margaret" data-size="28"></span><b>margaret</b><code>9,410</code></div>
+            <div class="row"><i>2</i><span data-avatar="botling" data-seed="linus" data-size="28"></span><b>linus</b><code>8,977</code></div>
+            <div class="row"><i>3</i><span data-avatar="botling" data-seed="alan" data-size="28"></span><b>alan</b><code>8,502</code></div>
+          </div>
+          <h3>Games and leaderboards</h3>
+          <p>Players, bots and NPCs, each with a face that's theirs on every device, with nothing to sync.</p>
+        </li>
+        <li class="card">
+          <div class="mock mock-team" aria-hidden="true">
+            <p>Design team</p>
+            <div class="stack"><span data-avatar="botling" data-seed="nifty-gadget-30" data-size="40" data-frame="circle"></span><span data-avatar="botling" data-seed="tiny-widget-274" data-size="40" data-frame="circle"></span><span data-avatar="snoot" data-seed="whiskers" data-size="40" data-frame="circle"></span><span data-avatar="botling" data-seed="plucky-servo-427" data-size="40" data-frame="circle"></span><i>+4</i></div>
+          </div>
+          <h3>Teams, projects and placeholders</h3>
+          <p>Seed with a repo or team name and it's done. The circle frame crops cleanly for avatar stacks.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="why wrap" aria-labelledby="why-h">
+      <p class="kicker">Why Seedkin</p>
+      <h2 id="why-h">Small, private and the same forever</h2>
+      <ul class="features">
+        <li class="card"><h3>Same seed, same avatar</h3><p>Within a major version a seed never draws a different picture. The picture is the API.</p></li>
+        <li class="card"><h3>Nothing leaves the page</h3><p>No API to call, no requests, no storage. Your users' ids stay on your servers.</p></li>
+        <li class="card"><h3>Readable at 24px</h3><p>Below 40px each style draws a simpler version of the same face, so it still reads in a comment thread.</p></li>
+        <li class="card"><h3>Zero dependencies</h3><p>An SVG string out. It runs in the browser, on the server and at the edge, under a strict CSP.</p></li>
+        <li class="card"><h3>Moves when you ask</h3><p>Opt-in animation lives inside the SVG, and holds still for anyone who prefers less motion.</p></li>
+        <li class="card"><h3>MIT, art included</h3><p>The code and the drawings share one licence, so commercial use is covered too.</p></li>
+      </ul>
+      <p><a href="/about/">Why Seedkin works this way</a></p>
+    </section>
+
+    <section class="start wrap" aria-labelledby="start-h">
+      <div>
+        <p class="kicker">Quick start</p>
+        <h2 id="start-h">Two lines</h2>
+        <p class="sub">Import a style, pass a seed, get an SVG string. Each style is its own entry point, so an app only ships the ones it uses.</p>
+        <p><a href="/docs/">Read the docs</a></p>
+      </div>
+      <div>
+        <div class="tabs" data-label="Package manager" data-sync="pm">
+          <pre class="code" data-tab="npm"><code>npm install seedkin</code></pre>
+          <pre class="code" data-tab="pnpm"><code>pnpm add seedkin</code></pre>
+          <pre class="code" data-tab="yarn"><code>yarn add seedkin</code></pre>
+          <pre class="code" data-tab="bun"><code>bun add seedkin</code></pre>
+        </div>
+        <pre class="code"><code>import { botling } from 'seedkin/botling';
 
 const svg = botling(user.id);</code></pre>
-          <p><a href="/docs/">Read the docs</a></p>
-        </div>
-        <div>
-          <h3>What people use them for</h3>
-          <ul class="facts">
-            <li><strong>Profile pictures</strong> for everyone who hasn't uploaded one, so a new account never looks empty.</li>
-            <li><strong>Comment threads and chat</strong>, where a face tells people apart at a glance, even at 24px.</li>
-            <li><strong>Players and bots</strong> in games, leaderboards and dashboards.</li>
-            <li><strong>Placeholders</strong> for projects, teams and repos: seed with the name and it's done.</li>
-          </ul>
-        </div>
       </div>
     </section>
 
     <section class="open wrap" aria-labelledby="open-h">
-      <h2 id="open-h">Free and open source</h2>
-      <p>Seedkin is MIT licensed, art included, so you can use it anywhere, commercial or not. It has no dependencies, makes no requests and returns an SVG string, so it runs in the browser, on the server and at the edge, under a strict CSP. <a href="https://github.com/mtblck/seedkin">The source is on GitHub</a>.</p>
+      <div>
+        <h2 id="open-h">Free and open source</h2>
+        <p>MIT licensed, art included, so you can use it anywhere, commercial or not. Bugs, ideas and new styles are welcome.</p>
+      </div>
+      <p class="ctas">
+        <a class="btn primary" href="https://github.com/mtblck/seedkin">Star on GitHub</a>
+        <a class="btn" href="https://github.com/mtblck/seedkin/blob/main/CONTRIBUTING.md">Contribute</a>
+      </p>
     </section>
   </main>
 

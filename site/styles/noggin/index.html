@@ -12,6 +12,7 @@
   <meta property="og:description" content="People avatars from any string: same seed, same Noggin. Seven skin tones, twelve hairstyles, glasses, beards and hats." />
   {{head}}
   <script type="module" src="/noggin.js"></script>
+  <link rel="modulepreload" href="/playground.js" />
   <link rel="modulepreload" href="/snippet.js" />
   {{preloads}}
 </head>
@@ -20,60 +21,57 @@
   {{header}}
 
   <main id="main">
-    <section class="hero wrap" aria-labelledby="hero-h">
-      <div class="intro">
+    <section class="play-head wrap" aria-labelledby="hero-h">
+      <div>
         <p class="eyebrow"><a href="/styles/">Styles</a> / Noggin <span class="badge">Preview</span></p>
         <h1 id="hero-h">Meet the Noggins.</h1>
-        <p class="lede">The Grid's people came up last and in every shade: curls and locs, buzz cuts and buns, glasses, beards and headscarves, and no two noggins quite alike. Give one some text and it draws the same person every time, on any machine, with nothing stored. Type anything to meet yours, or pick your own skin tone below.</p>
-        <form class="seed" id="seed-form">
-          <label for="seed">Seed</label>
-          <div class="seed-row">
-            <input id="seed" name="seed" type="text" autocomplete="off" spellcheck="false" maxlength="200" placeholder="Try your name…" />
-            <!-- Icons: Lucide (ISC licence), lucide.dev -->
-            <button class="btn" type="button" id="random"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg>Random</button>
-          </div>
-        </form>
+        <p class="lede">The Grid's people came up last and in every shade: curls and locs, buzz cuts and buns, glasses, beards and headscarves, and no two noggins quite alike. Give one some text and it draws the same person every time, on any machine, with nothing stored. Type anything to meet yours, or pick your own skin tone in the options.</p>
       </div>
-      <div class="stage">
-        <div class="big" id="big" role="img" aria-label="Your Noggin"></div>
-        <ul class="sizes" id="sizes" aria-label="The same Noggin at 96, 48, 32 and 24 pixels"></ul>
-        <p class="note">Below 40px it switches to a simpler version of the same Noggin.</p>
-      </div>
+      <nav class="style-tabs" aria-label="Styles"><a href="/styles/botling/" data-to="botling">Botling</a><a href="/styles/snoot/" data-to="snoot">Snoot</a><a href="/styles/noggin/" data-to="noggin" aria-current="page">Noggin</a><a href="/styles/beastie/" data-to="beastie">Beastie</a></nav>
     </section>
 
-    <section class="controls wrap" aria-label="Options">
-      <fieldset>
-        <legend>Cells</legend>
-        <div class="choices" id="shapes"></div>
-      </fieldset>
-      <fieldset>
-        <legend>Frame</legend>
-        <div class="choices" id="frames"></div>
-      </fieldset>
-      <fieldset>
-        <legend>Skin tone</legend>
-        <div class="choices swatches" id="skins"></div>
-      </fieldset>
-      <fieldset>
-        <legend>Outfit</legend>
-        <div class="choices swatches" id="palettes"></div>
-      </fieldset>
-      <fieldset>
-        <legend>Background grid</legend>
-        <div class="choices" id="grids"></div>
-      </fieldset>
-      <div class="actions">
-        <button class="btn" type="button" id="copy-code">Copy code</button>
-        <button class="btn" type="button" id="copy-svg">Copy SVG</button>
-        <button class="btn" type="button" id="download">Download SVG</button>
-        <p class="status" id="status" role="status" aria-live="polite"></p>
+    <section class="play wrap" aria-label="Playground">
+      <div class="preview">
+        <div class="stage card">
+          <form class="seed" id="seed-form">
+            <label for="seed">Seed</label>
+            <div class="seed-row">
+              <input id="seed" name="seed" type="text" autocomplete="off" spellcheck="false" maxlength="200" placeholder="Try your name…" />
+              <!-- Icon: Lucide (ISC licence), lucide.dev -->
+              <button class="btn" type="button" id="random"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg>Random</button>
+            </div>
+          </form>
+          <div class="big" id="big" role="img" aria-label="Your Noggin"></div>
+          <ul class="sizes" id="sizes" aria-label="The same Noggin at 96, 48, 32 and 24 pixels"></ul>
+          <p class="note">Below 40px it switches to a simpler version of the same Noggin.</p>
+        </div>
+        <div class="output card">
+          <pre class="code" data-nocopy><code id="code"></code></pre>
+          <div class="actions">
+            <button class="btn" type="button" id="copy-code">Copy code</button>
+            <button class="btn" type="button" id="copy-svg">Copy SVG</button>
+            <fieldset class="downloads" id="downloads">
+              <legend>Download</legend>
+              <button class="btn" type="button" data-format="svg">SVG</button>
+              <button class="btn" type="button" data-format="png">PNG</button>
+              <button class="btn" type="button" data-format="jpeg">JPG</button>
+              <button class="btn" type="button" data-format="gif">GIF</button>
+            </fieldset>
+          </div>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+        </div>
       </div>
-      <pre class="code"><code id="code"></code></pre>
+      <section class="options card" id="options" aria-labelledby="options-h">
+        <div class="options-head">
+          <h2 id="options-h">Options</h2>
+          <button class="btn" type="button" id="reset">Reset</button>
+        </div>
+      </section>
     </section>
 
     <section class="crowd wrap" aria-labelledby="crowd-h">
       <div class="head">
-        <h2 id="crowd-h">Meet a few more</h2>
+        <h2 id="crowd-h">Same options, more seeds</h2>
         <button class="btn" type="button" id="shuffle">Shuffle</button>
       </div>
       <ul class="gallery" id="gallery"></ul>
