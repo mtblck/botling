@@ -991,3 +991,13 @@ ol.features > li::before {
 .page .prose h2 a {
   text-decoration: none;
 }
+
+/* The family cards on the home page carry their status in the top right corner. */
+.cards .card {
+  position: relative;
+}
+.cards .card h3 .badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
