@@ -15,7 +15,8 @@ const pickOne = (list) => list[Math.floor(Math.random() * list.length)];
  * @param {object} style - The style's name (its function's name), noun ('robot'), draw and
  *   dataUri functions, randomSeed, holidays (HOLIDAY_PALETTES or {}), describe(seed, options)
  *   for screen readers, swatch(palette) giving its four colours, and groups: option groups
- *   as { name, legend, choices: [[value, label, palette?]] }, the first choice the default.
+ *   as { name, legend, choices: [[value, label, swatch?]] }, the first choice the default; a
+ *   swatch is a palette or an array of colours.
  *   Two groups may share a name (everyday and holiday palettes): picking in one clears the other.
  */
 export function playground(style) {
@@ -66,11 +67,9 @@ export function playground(style) {
   }
 
   // The option groups, as radio buttons styled as segments or swatches.
+  // A choice's swatch: a palette (through style.swatch) or a list of colours, such as a skin tone.
   const swatch = (p) =>
-    `<i class="sw" aria-hidden="true">${style
-      .swatch(p)
-      .map((c) => `<b data-c="${c}"></b>`)
-      .join('')}</i>`;
+    `<i class="sw" aria-hidden="true">${(Array.isArray(p) ? p : style.swatch(p)).map((c) => `<b data-c="${c}"></b>`).join('')}</i>`;
   $('options').insertAdjacentHTML(
     'beforeend',
     groups

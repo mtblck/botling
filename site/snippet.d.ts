@@ -10,6 +10,8 @@ export interface PlaygroundState {
   grid: string;
   /** 'on' animates the robot; anything else leaves it still. */
   motion?: string;
+  /** A style's own option, such as Noggin's skin: 'auto' leaves it out. */
+  [option: string]: string | undefined;
 }
 export function options(
   state: Omit<PlaygroundState, 'seed'>,

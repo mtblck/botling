@@ -588,10 +588,6 @@ legend {
   position: relative;
   margin: 0 0 16px;
 }
-.codebox pre {
-  margin: 0;
-  padding-right: 84px;
-}
 .copy {
   position: absolute;
   top: 8px;

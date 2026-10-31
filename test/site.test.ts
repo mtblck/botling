@@ -24,6 +24,11 @@ describe('playground snippet', () => {
     },
   );
 
+  it("passes a style's own options through", () => {
+    expect(snippet({ seed: 'abc', ...auto, skin: '3' }, 'noggin')).toBe("noggin('abc', { skin: 3 })");
+    expect(options({ ...auto, skin: 'auto' })).toEqual({});
+  });
+
   it("names the style's function", () => {
     expect(snippet({ seed: 'abc', ...auto, palette: '2' }, 'snoot')).toBe("snoot('abc', { palette: 2 })");
   });

@@ -440,9 +440,6 @@ a.btn {
   gap: 40px;
   align-items: start;
 }
-.start .code {
-  margin-bottom: 16px;
-}
 .open {
   display: flex;
   flex-wrap: wrap;
@@ -795,4 +792,10 @@ ol.features > li::before {
   .output {
     order: 2;
   }
+}
+
+/* Last, so a sample with a Copy button keeps room for it whatever page styles its <pre>. */
+.codebox > pre {
+  margin: 0;
+  padding-right: 84px;
 }
