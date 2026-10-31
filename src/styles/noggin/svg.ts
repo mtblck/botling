@@ -4,7 +4,7 @@ import { drawGrid, drawSmallGrid } from './grid/index.js';
 import { PALETTES, paletteFor, SKIN_TONES } from './palettes.js';
 import { SHAPES } from './parts.js';
 import { hairFor, outfitFor, traits } from './traits.js';
-import { type NogginOptions, type NogginTraits, type Palette, Role } from './types.js';
+import type { NogginOptions, NogginTraits, Palette } from './types.js';
 
 /** Checks an index option, so a bad value fails loudly instead of drawing nothing. */
 function index(name: string, value: unknown, length: number, extra = ''): number {
@@ -67,7 +67,6 @@ export function noggin(seed: string, opts: NogginOptions = {}): string {
       ...(t.eyes === 'closed' || t.eyewear === 'shades' ? {} : { eyes: 'blink' }),
       ...(t.facial === 'beard' ? {} : { mouth: 'talk' }),
     },
-    lid: Role.Body,
   });
 }
 

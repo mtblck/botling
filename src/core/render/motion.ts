@@ -1,6 +1,6 @@
 import type { Part } from '../canvas.js';
 import { createRng, int, type Rng } from '../random.js';
-import { Role } from '../types.js';
+import { Role, type RoleGrid } from '../types.js';
 
 /**
  * Ways an avatar moves. Eyes blink, a top piece wobbles, side pieces twitch,
@@ -116,8 +116,10 @@ export interface MotionPlan {
   isSmall: boolean;
   /** The motion for each tagged part; untagged and unlisted parts hold still. */
   moves: Partial<Record<Exclude<Part, null>, 'blink' | 'talk' | 'wobble' | 'twitch'>>;
-  /** The colour shown behind blinking and talking cells as they squash. */
-  lid: Role;
+  /** What each cell showed before a moving part covered it, uncovered as blinks and talks squash. */
+  under: RoleGrid;
+  /** A colour to show there instead, wherever something was covered. */
+  lid?: Role;
 }
 
 /**
@@ -155,7 +157,12 @@ export function animation(plan: MotionPlan): Animation {
   const squashes = new RegExp(`^${plan.style}-(blink|talk)`);
   return {
     classOf,
-    copies: (role, part, x) => (squashes.test(classOf(role, part, x) ?? '') ? [['', plan.lid]] : []),
+    copies: (role, part, x, y) => {
+      const below = plan.under[y]?.[x] ?? Role.Empty;
+      // Over empty space, or over another moving part, a squash uncovers nothing.
+      if (below === Role.Empty || !squashes.test(classOf(role, part, x) ?? '')) return [];
+      return [['', plan.lid ?? below]];
+    },
     attrs: () => '',
     wrap: on('hover') ? cls('hover') : null,
     css: (used) => {

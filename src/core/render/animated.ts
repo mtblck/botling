@@ -93,17 +93,22 @@ export function animatedSvg(pic: Picture, parts: readonly (readonly Part[])[], a
  * @param c - The drawn canvas, whose parts say what moves
  * @param pic - Everything but the cells: shape, palette, background and title
  * @param s - Settled options
- * @param plan - The style, salted seed, moving parts and lid colour
+ * @param plan - The style, salted seed and moving parts
  * @returns A standalone SVG document
  */
 export function avatarSvg(
   c: Canvas,
   pic: Omit<Picture, 'cells'>,
   s: Settled,
-  plan: Omit<MotionPlan, 'size' | 'isSmall'>,
+  plan: Omit<MotionPlan, 'size' | 'isSmall' | 'under'>,
 ): string {
   centreRows(c, pic.shape === 'triangle');
   const full = { ...pic, cells: c.cells };
   if (!s.animate) return stillSvg(full, s);
-  return animatedSvg(full, c.parts, animation({ ...plan, size: c.cells.length, isSmall: s.isSmall }), s);
+  return animatedSvg(
+    full,
+    c.parts,
+    animation({ ...plan, size: c.cells.length, isSmall: s.isSmall, under: c.under }),
+    s,
+  );
 }

@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { Role } from '../src/core/types.js';
+import { drawGrid } from '../src/styles/beastie/grid/full.js';
 import {
   BODIES,
   beastie,
@@ -104,5 +106,22 @@ describe('beastie', () => {
     [{ frame: 'star' }, 'unknown frame'],
   ])('rejects %j', (opts, message) => {
     expect(() => beastie('x', opts as never)).toThrow(new RegExp(`^beastie: ${message}`));
+  });
+
+  it('blinks eyes on stalks without uncovering anything behind them', () => {
+    // bouncy-socket-123 has eyes on stalks over its antennae.
+    const c = drawGrid(resolveTraits('bouncy-socket-123'));
+    const eyes = c.parts.flatMap((row, y) => row.flatMap((p, x) => (p === 'eyes' && y < 4 ? [{ x, y }] : [])));
+    expect(eyes.length).toBeGreaterThan(0);
+    // Above the head there is nothing behind an eye, so a blink shows the background.
+    for (const { x, y } of eyes) expect(c.under[y]?.[x]).toBe(Role.Empty);
+    // The stalks hold still.
+    for (const [y, x] of [
+      [2, c.center - 2],
+      [3, c.center + 2],
+    ] as const) {
+      expect(c.cells[y]?.[x]).toBe(Role.Body);
+      expect(c.parts[y]?.[x]).toBeNull();
+    }
   });
 });

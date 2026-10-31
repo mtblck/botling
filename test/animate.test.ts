@@ -108,7 +108,10 @@ describe('animate', () => {
       c.parts.flatMap((row, y) =>
         row.flatMap((p, x) => (p === 'eyes' ? [{ x, role: c.cells[y]?.[x] ?? Role.Empty }] : [])),
       );
-    const wink = traits(seedWith('wink'));
+    // A wink whose mouth doesn't run into its open eye, so only that eye is tagged.
+    const winks = Array.from({ length: 200 }, (_, i) => traits(`eyes-${i}`)).filter((w) => w.eyes === 'wink');
+    const wink = winks.find((w) => drawGrid(w).parts.flat().includes('mouth'));
+    if (!wink) throw new Error('no wink with a separate mouth');
     for (const cell of tagged(drawGrid(wink))) expect(cell.x).toBeLessThan(CENTER);
     for (const cell of tagged(drawSmallGrid(wink))) expect(cell.x).toBeLessThan(4);
     const angry = traits(seedWith('angry'));
@@ -135,9 +138,11 @@ describe('animate', () => {
   });
 
   it('keeps an eye whole when the mouth is drawn over it, so talking never moves part of an eye', () => {
-    // Seed s1 is a cyclops whose grin is drawn over the eye's bottom row.
+    // Seed s1 is a cyclops whose grin is drawn over the eye's bottom row and runs on
+    // from it, so the eye keeps those cells and the rest of the grin blinks with it.
     const c = drawGrid(resolveTraits('s1'));
     expect(c.parts[8]?.slice(6, 9)).toEqual(['eyes', 'eyes', 'eyes']);
-    expect(c.parts[9]?.[CENTER]).toBe('mouth');
+    expect(c.parts[9]?.[CENTER]).toBe('eyes');
+    expect(c.parts.flat()).not.toContain('mouth');
   });
 });

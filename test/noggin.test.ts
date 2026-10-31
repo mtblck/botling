@@ -136,10 +136,13 @@ describe('noggin', () => {
     expect(() => noggin('x', opts as never)).toThrow(new RegExp(`^noggin: ${message}`));
   });
 
-  it('keeps an eye whole when a mouth corner lands on it, so talking never moves part of an eye', () => {
-    // chrome-piston-108 has tall eyes and a smirk whose corner sits on the right eye.
-    const c = drawGrid(resolveTraits('chrome-piston-108', { palette: 1 }));
-    expect(c.parts[7]?.[c.center + 2]).toBe('eyes');
-    expect(c.parts[8]?.[c.center + 1]).toBe('mouth');
+  it('draws the mouth a row clear of the eyes, so they never join', () => {
+    // chrome-piston-108 has tall eyes and a smirk; jolly-spark-867 a wink and a smile.
+    for (const seed of ['chrome-piston-108', 'jolly-spark-867']) {
+      const c = drawGrid(resolveTraits(seed));
+      expect(c.parts[7]?.[c.center + 2]).toBe('eyes');
+      expect(c.parts[8]?.every((part) => part === null)).toBe(true);
+      expect(c.parts[9]).toContain('mouth');
+    }
   });
 });

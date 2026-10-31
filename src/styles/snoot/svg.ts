@@ -50,7 +50,8 @@ export function snoot(seed: string, opts: SnootOptions = {}): string {
     seed: `snoot:${seed}`,
     // Ears twitch; eyes already shut don't blink, and an owl's blink shows its disc.
     moves: t.eyes === 'sleepy' ? { top: 'twitch', sides: 'twitch' } : { eyes: 'blink', top: 'twitch', sides: 'twitch' },
-    lid: t.species === 'owl' ? Role.Screen : Role.Body,
+    // An owl's eyes sit in discs, so a blink shows the disc.
+    ...(t.species === 'owl' ? { lid: Role.Screen } : {}),
   });
 }
 
