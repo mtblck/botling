@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { drawGrid, drawSmallGrid } from '../src/styles/botling/grid/index.js';
-import { botling, CENTER, type Eyes, PALETTES, Role, SHAPES, traits } from '../src/styles/botling/index.js';
+import {
+  botling,
+  CENTER,
+  type Eyes,
+  PALETTES,
+  Role,
+  resolveTraits,
+  SHAPES,
+  traits,
+} from '../src/styles/botling/index.js';
 import { stillFrame } from './still-frame.js';
 
 const classes = (svg: string): string[] => [...svg.matchAll(/<g class="([^"]+)"/g)].map(([, c]) => c as string);
@@ -123,5 +132,12 @@ describe('animate', () => {
         botling(`b-${i}`, { animate: true, size: 24 }).length - botling(`b-${i}`, { size: 24 }).length,
       ).toBeLessThan(900);
     }
+  });
+
+  it('keeps an eye whole when the mouth is drawn over it, so talking never moves part of an eye', () => {
+    // Seed s1 is a cyclops whose grin is drawn over the eye's bottom row.
+    const c = drawGrid(resolveTraits('s1'));
+    expect(c.parts[8]?.slice(6, 9)).toEqual(['eyes', 'eyes', 'eyes']);
+    expect(c.parts[9]?.[CENTER]).toBe('mouth');
   });
 });

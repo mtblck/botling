@@ -19,7 +19,8 @@ any change to the robot a seed draws is a major version.
 
 ### Fixed
 
-- An animated Noggin no longer moves part of an eye when it talks. When a smile or smirk's corner lands on a tall, winking or closed eye (about a quarter of Noggins), that cell now blinks with the eye instead of talking with the mouth. Still Noggins are unchanged, and so is every other style.
+- An animated Noggin no longer moves part of an eye when it talks. When a smile or smirk's corner lands on a tall, winking or closed eye (about a quarter of Noggins), that cell now blinks with the eye instead of talking with the mouth. Still Noggins are unchanged.
+- The same fix for Botling, where a mouth drawn over an eye (about a quarter of robots, such as a cyclops with a grin) made talking move part of the eye. Which parts move is normally frozen within a major version (ADR 0006); this is a bug fix, made in a patch while nobody depends on the motion yet. Every still robot is unchanged.
 
 ## [2.4.0] - 2026-10-31
 
