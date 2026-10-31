@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy · Seedkin</title>
+  <meta name="description" content="What seedkin.dev counts (daily totals of visits, copies and downloads, with nothing about you), what it never sees (the seeds you type), and what the Seedkin library sends (nothing)." />
+  <link rel="canonical" href="https://seedkin.dev/privacy/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://seedkin.dev/privacy/" />
+  <meta property="og:title" content="Privacy · Seedkin" />
+  <meta property="og:description" content="What seedkin.dev counts (daily totals of visits, copies and downloads, with nothing about you), what it never sees (the seeds you type), and what the Seedkin library sends (nothing)." />
+  {{head}}
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the content</a>
+  {{header}}
+
+  <main id="main" class="page wrap">
+    <article class="prose">
+      <h1>Privacy</h1>
+      <p class="lede">Seedkin the library sends nothing anywhere. This site counts visits, copies and downloads without cookies or anything about you, and never sees the seeds you type.</p>
+
+      <h2 id="library">The library</h2>
+      <p>The <code>seedkin</code> package makes no requests, sets no cookies, reads no storage and keeps no state. Each function takes a seed and returns an SVG string, computed where you call it, so your users' ids never leave your app to get an avatar. It has no dependencies that could do otherwise.</p>
+      <p>What you do with the avatar is up to you. If you serve avatars from a URL, the seed is in that URL, in your logs and in the <code>Referer</code> header; <a href="/docs/#choosing-a-seed">seed with an opaque id</a> so it gives nothing away.</p>
+
+      <h2 id="seeds">The seeds you type here</h2>
+      <p>The playground draws in your browser. The seed and options you pick live in the part of the URL after <code>#</code>, which browsers never send to a server, so a shared link carries them but our server never sees them. Before any page view is counted, the part after <code>#</code> is cut off.</p>
+
+      <h2 id="counting">What this site counts</h2>
+      <ul>
+        <li><strong>Visits, copies and downloads, as daily totals.</strong> When a page opens, or someone copies code or downloads an avatar, the page sends the event's name and, for a visit from another site, that site's hostname (such as <code>github.com</code>). Never the page's address, the seed, or anything about you. These go to <a href="https://mattblack.space">mattblack.space</a>, which keeps one count per event per day and nothing else.</li>
+        <li><strong>Page views in Vercel Web Analytics.</strong> The site is hosted on Vercel, and its analytics count page views by page, country, browser and referring site, without the part after <code>#</code>. They use no cookies: Vercel tells visits apart with a hash of the request that it discards after a day, not with anything stored on your device.</li>
+      </ul>
+      <p>Nothing here sets a cookie. Two choices stay in your browser's own storage, never sent anywhere: the light or dark theme, and which package manager or framework tab you last picked in a code sample.</p>
+
+      <h2 id="not-collected">What we don't collect</h2>
+      <p>No accounts, no forms, no cookies, no fingerprinting, no advertising and no third-party scripts beyond Vercel's analytics. The fonts are served from this site, not a font service.</p>
+
+      <h2 id="contact">Questions</h2>
+      <p>Open an issue on <a href="https://github.com/mtblck/seedkin/issues">GitHub</a>. The site's code is public in the same repository, so you can check every line above.</p>
+    </article>
+  </main>
+
+  {{footer}}
+</body>
+</html>

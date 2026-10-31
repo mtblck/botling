@@ -22,7 +22,12 @@
       "destination": "/docs/:page/",
       "permanent": true
     },
-    { "source": "/about", "destination": "/about/", "permanent": true }
+    { "source": "/about", "destination": "/about/", "permanent": true },
+    { "source": "/changelog", "destination": "/changelog/", "permanent": true },
+    { "source": "/privacy", "destination": "/privacy/", "permanent": true },
+    { "source": "/licences", "destination": "/licences/", "permanent": true },
+    { "source": "/licenses", "destination": "/licences/", "permanent": true },
+    { "source": "/licenses/", "destination": "/licences/", "permanent": true }
   ],
   "rewrites": [{ "source": "/_mb/events", "destination": "https://mattblack.space/boards/api/events" }],
   "headers": [

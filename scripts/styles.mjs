@@ -168,6 +168,12 @@ function optionRows(s) {
       "Draw the empty grid cells; <code>'auto'</code> draws them from 40px up.",
     ],
     [
+      'look',
+      "<code>'gapped' | 'flat' | 'inked' | 'soft' | 'soft-inked' | 'sticker'</code>",
+      "<code>'gapped'</code>",
+      'How the cells are drawn: apart, or merged into flat shapes. See <a href="/docs/botling/#looks">Looks</a>.',
+    ],
+    [
       'frame',
       "<code>'square' | 'rounded' | 'squircle' | 'circle'</code>",
       "<code>'square'</code>",
