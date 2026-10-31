@@ -12,6 +12,8 @@ try {
   /* storage blocked */
 }
 const live = /(^|\.)seedkin\.dev$/.test(location.hostname);
+// A ?palette= link is for looking at a light palette, so it opens in the light theme.
+if (!live && fromQuery) root.dataset.theme = 'light';
 const pick = live ? 'lavender' : [fromQuery, saved].find((p) => PALETTES.includes(p)) || 'lavender';
 root.dataset.palette = pick;
 
@@ -22,9 +24,12 @@ if (!live) {
   const select = document.createElement('select');
   for (const p of PALETTES) select.add(new Option(p[0].toUpperCase() + p.slice(1), p, false, p === pick));
   select.addEventListener('change', () => {
+    // The palettes are light-only, so picking one shows the light theme.
     root.dataset.palette = select.value;
+    root.dataset.theme = 'light';
     try {
       localStorage.setItem(KEY, select.value);
+      localStorage.setItem('seedkin-theme', 'light');
     } catch {
       /* storage blocked: the choice lasts for this page only */
     }
