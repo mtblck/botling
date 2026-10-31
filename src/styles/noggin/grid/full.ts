@@ -1,5 +1,5 @@
 import { blob } from '../../../core/art.js';
-import { type Canvas, createCanvas, keepTags, tagged } from '../../../core/canvas.js';
+import { type Canvas, createCanvas, tagged } from '../../../core/canvas.js';
 import { type NogginTraits, Role } from '../types.js';
 import { drawHair, TOP } from './hair.js';
 
@@ -38,10 +38,7 @@ export function drawGrid(t: NogginTraits): Canvas {
     c.mirror(EYE_X, EYE_ROW - 1, Role.Shade);
     c.mirror(EYE_X + 1, EYE_ROW - 1, Role.Shade);
   }
-  // A smile or smirk corner can land on an eye; that cell stays with the eye.
-  keepTags(c, 'eyes', () =>
-    tagged(c, 'mouth', () => mouth(c, t, mouthRow, t.facial === 'beard' ? Role.Body : Role.Glow)),
-  );
+  tagged(c, 'mouth', () => mouth(c, t, mouthRow, t.facial === 'beard' ? Role.Body : Role.Glow));
   if (t.hasCheeks && t.facial !== 'beard') c.mirror(EYE_X + 1, EYE_ROW + 1, Role.Accent);
   eyewear(c, t);
   headwear(c, t, hw);
