@@ -105,7 +105,9 @@ for (const file of pages) {
   const about = pageInfo(page);
   info.set(file.split(path.sep).join('/'), about);
   if (about.url && !about.noindex && about.title) {
-    const main = page.slice(page.indexOf('<main'), page.indexOf('</main>'));
+    const [from, to] = [page.indexOf('<main'), page.indexOf('</main>')];
+    if (from === -1 || to < from) throw new Error(`site/${file} needs one <main> for the search index`);
+    const main = page.slice(from, to);
     search.push(
       ...searchEntries({
         path: new URL(about.url).pathname,
