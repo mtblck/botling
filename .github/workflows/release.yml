@@ -1,6 +1,6 @@
 name: Release
 
-# Publishes to npm when Matt pushes a version tag (v0.1.0, v1.2.3), then makes
+# Publishes to npm when Matt pushes a version tag (v2.0.0, v2.1.3), then makes
 # the GitHub release from that version's CHANGELOG section. npm trusted
 # publishing: npm accepts this workflow's OIDC token instead of a stored token,
 # and adds a provenance statement linking the package to this commit.
@@ -45,9 +45,10 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: |
           version=$(node -p "require('./package.json').version")
+          name=$(node -p "require('./package.json').name")
           if [ "$TAG" != "v$version" ]; then echo "::error::Tag $TAG doesn't match package.json version $version."; exit 1; fi
-          if npm view "botling@$version" version >/dev/null 2>&1; then
-            echo "::notice::botling@$version is already on npm; skipping the publish."
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "::notice::$name@$version is already on npm; skipping the publish."
             echo "published=true" >> "$GITHUB_OUTPUT"
           fi
       # prepublishOnly runs lint, typecheck, tests and the build first, so a red

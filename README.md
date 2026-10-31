@@ -166,7 +166,7 @@ An accessory takes the place of what it covers: headphones replace the top piece
 
 ## Versioning
 
-The picture is the API. Within a major version, a seed with the same options always draws the same robot. Store a seed, shape and palette index, and you get the same robot through every 1.x release. The robots in `seedkin/botling` are the robots of `botling` 1.2.0, seed for seed ([ADR 0009](docs/adr/0009-seedkin-family.md)).
+The picture is the API. Within a major version, a seed with the same options always draws the same robot. Store a seed, shape and palette index, and you get the same robot through every 2.x release. The robots in `seedkin/botling` are the robots of `botling` 1.2.0, seed for seed ([ADR 0009](docs/adr/0009-seedkin-family.md)).
 
 - **Major:** anything that changes an existing seed's robot, at any size: art, palette colours, the order or length of any parts list, the 40px switch, which parts move when animated, and the output of `traits`, `grid` and `smallGrid`.
 - **Minor:** new holiday palettes, opt-in options and exports (seeds never pick them), smaller SVG markup that draws the same picture, and motion timing.
