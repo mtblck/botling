@@ -13,9 +13,10 @@ document.querySelector('.theme').addEventListener('click', () => {
 });
 
 // The current page in the nav, for screen readers and the underline: the longest link the
-// path starts with, so /styles/botling/ marks Playground rather than Styles.
+// path starts with, except that every style page (/styles/<name>/) is the Playground.
+const path = /^\/styles\/[^/]+\/$/.test(location.pathname) ? '/styles/botling/' : location.pathname;
 const here = [...document.querySelectorAll('.top nav a[href^="/"]')]
-  .filter((a) => location.pathname.startsWith(a.getAttribute('href')))
+  .filter((a) => path.startsWith(a.getAttribute('href')))
   .sort((a, b) => b.getAttribute('href').length - a.getAttribute('href').length)[0];
 here?.setAttribute('aria-current', 'page');
 
@@ -27,11 +28,15 @@ const setMenu = (open) => {
   nav.classList.toggle('is-open', open);
 };
 menu.addEventListener('click', () => setMenu(menu.getAttribute('aria-expanded') !== 'true'));
-nav.addEventListener('keydown', (e) => {
+// Escape, or a click outside the header, closes it.
+document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') {
     setMenu(false);
     menu.focus();
   }
+});
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.top')) setMenu(false);
 });
 
 track('pageview', arrival(document.referrer, location.hostname));

@@ -21,7 +21,7 @@ export function options(state, extra = {}, holidays = {}) {
   if (state.motion === 'on') o.animate = true;
   // A style's own options, such as Noggin's skin: numbers stay numbers.
   for (const [k, v] of Object.entries(state)) {
-    if (!SHARED.has(k) && v !== 'auto') o[k] = /^\d+$/.test(v) ? Number(v) : v;
+    if (!SHARED.has(k) && v !== undefined && v !== 'auto') o[k] = /^\d+$/.test(v) ? Number(v) : v;
   }
   return o;
 }

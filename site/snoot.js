@@ -1,8 +1,6 @@
 // The Snoot playground, drawn from the package build at /lib; site/playground.js does the rest.
 import { FRAMES, PALETTES, randomSeed, resolveTraits, SHAPES, snoot, snootDataUri } from '/lib/styles/snoot/index.js';
-import { playground } from '/playground.js';
-
-const title = (s) => s[0].toUpperCase() + s.slice(1);
+import { playground, sharedGroups } from '/playground.js';
 
 /** Names the big Snoot for screen readers, so a change of seed or option is heard. */
 function describe(seed, options) {
@@ -13,6 +11,7 @@ function describe(seed, options) {
   return `Snoot for "${seed}": a ${t.species}, ${parts.join(', ')}`;
 }
 
+const shared = sharedGroups({ SHAPES, FRAMES });
 playground({
   name: 'snoot',
   noun: 'snoot',
@@ -22,21 +21,13 @@ playground({
   describe,
   swatch: (p) => [p.bg, p.body, p.screen, p.accent],
   groups: [
-    { name: 'shape', legend: 'Cells', choices: [['auto', 'Seed picks'], ...SHAPES.map((s) => [s, title(s)])] },
-    { name: 'frame', legend: 'Frame', choices: FRAMES.map((f) => [f, title(f)]) },
+    shared.cells,
+    shared.frame,
     {
       name: 'palette',
       legend: 'Coat',
       choices: [['auto', 'Seed picks'], ...PALETTES.map((p, i) => [String(i), p.name, p])],
     },
-    {
-      name: 'grid',
-      legend: 'Background grid',
-      choices: [
-        ['auto', 'Auto'],
-        ['on', 'On'],
-        ['off', 'Off'],
-      ],
-    },
+    shared.grid,
   ],
 });

@@ -10,9 +10,8 @@ import {
   resolveTraits,
   SHAPES,
 } from '/lib/styles/botling/index.js';
-import { playground } from '/playground.js';
+import { playground, sharedGroups } from '/playground.js';
 
-const title = (s) => s[0].toUpperCase() + s.slice(1);
 const ACCESSORY_NAMES = { headphones: 'headphones', visor: 'a visor band', bow: 'a bow', cap: 'a cap' };
 
 /** Names the big robot for screen readers, so a change of seed or option is heard. */
@@ -29,6 +28,7 @@ function describe(seed, options) {
   return `Robot for "${seed}": ${parts.join(', ')}`;
 }
 
+const shared = sharedGroups({ SHAPES, FRAMES });
 playground({
   name: 'botling',
   noun: 'robot',
@@ -39,8 +39,8 @@ playground({
   describe,
   swatch: (p) => [p.bg, p.body, p.glow, p.accent],
   groups: [
-    { name: 'shape', legend: 'Cells', choices: [['auto', 'Seed picks'], ...SHAPES.map((s) => [s, title(s)])] },
-    { name: 'frame', legend: 'Frame', choices: FRAMES.map((f) => [f, title(f)]) },
+    shared.cells,
+    shared.frame,
     {
       name: 'palette',
       legend: 'Palette',
@@ -51,15 +51,7 @@ playground({
       legend: 'Holiday palette',
       choices: Object.entries(HOLIDAY_PALETTES).map(([key, p]) => [key, p.name, p]),
     },
-    {
-      name: 'grid',
-      legend: 'Background grid',
-      choices: [
-        ['auto', 'Auto'],
-        ['on', 'On'],
-        ['off', 'Off'],
-      ],
-    },
+    shared.grid,
     {
       name: 'motion',
       legend: 'Motion',

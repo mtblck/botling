@@ -25,7 +25,9 @@ function addCopy(pre) {
   btn.type = 'button';
   btn.className = 'copy';
   btn.textContent = 'Copy';
+  let timer;
   btn.addEventListener('click', async () => {
+    clearTimeout(timer);
     try {
       await navigator.clipboard.writeText(pre.textContent.trimEnd());
       btn.textContent = 'Copied';
@@ -34,9 +36,9 @@ function addCopy(pre) {
     } catch {
       btn.textContent = 'Select and copy';
     }
-    setTimeout(() => {
+    timer = setTimeout(() => {
       btn.textContent = 'Copy';
-      status.textContent = '';
+      if (status.textContent === 'Code copied') status.textContent = '';
     }, 1600);
   });
   box.append(btn);

@@ -9,6 +9,30 @@ const $ = (id) => document.getElementById(id);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const pickOne = (list) => list[Math.floor(Math.random() * list.length)];
 
+const title = (s) => s[0].toUpperCase() + s.slice(1);
+
+/**
+ * The option groups every style has: cells, frame and background grid.
+ *
+ * @param {{ SHAPES: readonly string[], FRAMES: readonly string[] }} style - The style's exports
+ * @returns {{ cells: object, frame: object, grid: object }} Groups for playground()
+ */
+export function sharedGroups({ SHAPES, FRAMES }) {
+  return {
+    cells: { name: 'shape', legend: 'Cells', choices: [['auto', 'Seed picks'], ...SHAPES.map((s) => [s, title(s)])] },
+    frame: { name: 'frame', legend: 'Frame', choices: FRAMES.map((f) => [f, title(f)]) },
+    grid: {
+      name: 'grid',
+      legend: 'Background grid',
+      choices: [
+        ['auto', 'Auto'],
+        ['on', 'On'],
+        ['off', 'Off'],
+      ],
+    },
+  };
+}
+
 /**
  * Starts the playground.
  *
@@ -16,7 +40,8 @@ const pickOne = (list) => list[Math.floor(Math.random() * list.length)];
  *   dataUri functions, randomSeed, holidays (HOLIDAY_PALETTES or {}), describe(seed, options)
  *   for screen readers, swatch(palette) giving its four colours, and groups: option groups
  *   as { name, legend, choices: [[value, label, swatch?]] }, the first choice the default; a
- *   swatch is a palette or an array of colours.
+ *   swatch is a palette or an array of colours. A style's own groups start with 'auto', which
+ *   snippet.js leaves out of the code.
  *   Two groups may share a name (everyday and holiday palettes): picking in one clears the other.
  */
 export function playground(style) {
@@ -58,7 +83,6 @@ export function playground(style) {
     $('big').setAttribute('aria-label', style.describe(state.seed, options()));
     $('sizes').innerHTML = [96, 48, 32, 24].map((size) => `<li>${avatar(size)}<span>${size}px</span></li>`).join('');
     $('code').textContent = snippet();
-    gallery();
     for (const input of document.querySelectorAll('.choices input')) input.checked = state[input.name] === input.value;
     for (const link of document.querySelectorAll('[data-to]')) {
       link.href = `/styles/${link.dataset.to}/#${new URLSearchParams({ seed: state.seed })}`;
@@ -90,10 +114,12 @@ export function playground(style) {
   $('options').addEventListener('change', (e) => {
     state[e.target.name] = e.target.value;
     draw();
+    gallery();
   });
   $('reset').addEventListener('click', () => {
     Object.assign(state, DEFAULTS);
     draw();
+    gallery();
     say('Options reset to what the seed picks');
   });
 
@@ -114,6 +140,7 @@ export function playground(style) {
   }
 
   // More seeds, drawn with the options on screen, so a change shows on many avatars at once.
+  // Redrawn when an option changes, not on every keystroke in the seed box.
   let seeds = [];
   const shuffle = () => (seeds = Array.from({ length: 24 }, () => randomSeed()));
   function gallery() {
@@ -135,9 +162,11 @@ export function playground(style) {
     state.seed = $('seed').value = randomSeed();
     for (const key of ['shape', 'palette']) {
       const values = groups.filter((g) => g.name === key).flatMap((g) => g.choices.map(([v]) => v));
-      state[key] = pickOne(values.filter((v) => v !== 'auto'));
+      const picks = values.filter((v) => v !== 'auto');
+      if (picks.length) state[key] = pickOne(picks);
     }
     draw();
+    gallery();
   });
   $('shuffle').addEventListener('click', () => {
     shuffle();
@@ -212,6 +241,7 @@ export function playground(style) {
     }
     $('seed').value = state.seed;
     draw();
+    gallery();
   }
   // replaceState doesn't fire hashchange, so this only runs for real navigations.
   window.addEventListener('hashchange', readHash);

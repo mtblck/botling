@@ -13,11 +13,12 @@ const DRAW = {
 const $ = (id) => document.getElementById(id);
 
 /**
- * Draws every [data-avatar] that has no seed of its own with this one. An element can set
- * its own seed, size and frame with data-seed, data-size and data-frame.
+ * Draws [data-avatar] elements: those with a data-seed of their own (drawn once, on load),
+ * or by default those without, with this seed. An element can also set its size and frame
+ * with data-size and data-frame.
  */
-function grow(seed) {
-  for (const el of document.querySelectorAll('[data-avatar]')) {
+function grow(seed, selector = '[data-avatar]:not([data-seed])') {
+  for (const el of document.querySelectorAll(selector)) {
     const { avatar, frame } = el.dataset;
     const size = Number(el.dataset.size) || (el.dataset.seed ? 96 : 128);
     el.innerHTML = DRAW[avatar](el.dataset.seed ?? seed, size, frame);
@@ -42,6 +43,7 @@ function saveHash(seed) {
   }, 300);
 }
 
+grow('', '[data-avatar][data-seed]');
 const input = $('seed');
 if (input) {
   const readHash = () => {
@@ -60,8 +62,6 @@ if (input) {
   });
   window.addEventListener('hashchange', readHash);
   readHash();
-} else {
-  grow('');
 }
 
 for (const strip of document.querySelectorAll('[data-strip]')) {
