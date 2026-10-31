@@ -1,0 +1,111 @@
+<title>Seedkin Sprites</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&display=swap">
+<style>
+/* Layout: one reading column on the Seedkin "Paper" ground, avatars in wrapping rows, the take last. */
+:root {
+  --paper: #f6f3ec; --card: #fffdf8; --sunk: #ece7db; --ink: #1d1a16; --ink-2: #55504a;
+  --rule: #ddd6c8; --accent: #3a26c9; --good: #0f6e5d; --ok: #8a5a00; --weak: #a3155c;
+  --display: "Pixelify Sans", ui-monospace, monospace;
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #14121c; --card: #1b1926; --sunk: #1c1a28; --ink: #ece9f6; --ink-2: #aaa6bd;
+  --rule: #302c42; --accent: #a99cff; --good: #7ee8d0; --ok: #f0cd78; --weak: #ff9ccb; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --paper: #14121c; --card: #1b1926; --sunk: #1c1a28; --ink: #ece9f6; --ink-2: #aaa6bd;
+  --rule: #302c42; --accent: #a99cff; --good: #7ee8d0; --ok: #f0cd78; --weak: #ff9ccb; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 15px/1.6 var(--sans); }
+main { max-width: 1000px; margin: 0 auto; padding-block: 40px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(36px, 7vw, 56px); }
+h2 { font-size: 26px; }
+h3 { font-size: 22px; }
+p { margin: 0; max-width: 65ch; }
+.eyebrow { font: 600 12px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.intro { display: grid; gap: 14px; }
+.intro p { color: var(--ink-2); font-size: 17px; }
+.bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+button { font: 600 14px var(--sans); color: var(--ink); background: var(--card); border: 1px solid var(--rule);
+  border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section { display: grid; gap: 20px; }
+section > p { color: var(--ink-2); }
+svg { display: block; flex: none; }
+.els { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); }
+.el { background: var(--card); border: 1px solid var(--rule); border-radius: 16px; padding: 20px; display: grid; gap: 16px; align-content: start; }
+.el header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.el p { color: var(--ink-2); font-size: 14px; }
+.forms { display: flex; gap: 20px; flex-wrap: wrap; }
+.form { margin: 0; display: grid; gap: 8px; justify-items: start; }
+.strip { display: flex; gap: 8px; align-items: end; }
+figcaption, .label { font: 600 12px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+.chip { font: 600 12px var(--sans); padding: 3px 10px; border-radius: 999px; border: 1px solid currentColor; }
+.chip.good { color: var(--good); } .chip.ok { color: var(--ok); } .chip.weak { color: var(--weak); }
+.avs { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
+.facerow { display: grid; gap: 10px; padding-block: 12px; border-top: 1px solid var(--rule); }
+.famgrid, .looks { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 10px 16px; align-items: center; }
+.famgrid + .famgrid { margin-top: 20px; }
+.famgrid.s24 .avs { gap: 6px; }
+.take { background: var(--sunk); border-radius: 16px; padding: 24px; display: grid; gap: 14px; }
+.take ul { margin: 0; padding-left: 20px; display: grid; gap: 10px; max-width: 70ch; }
+.take strong { color: var(--ink); }
+@media (max-width: 520px) { .famgrid, .looks { grid-template-columns: 1fr; gap: 6px; } }
+</style>
+<main>
+  <div class="intro">
+    <span class="eyebrow">Seedkin lab · concept, not in the package</span>
+    <h1>Sprites</h1>
+    <p>Little elemental spirits that flicker. A seed picks an element (fire, water, earth, wind or space), one of two forms, and a palette. Each sprite swaps between four frames and dims now and then, like a firefly, but never goes fully out.</p>
+    <div class="bar"><button type="button" id="motion" aria-pressed="false">Pause motion</button></div>
+  </div>
+
+  <section>
+    <h2>Five elements</h2>
+    <p>Each element at 120px on the 15x15 grid, then 48px, and 32 and 24px on the simpler 9x9 grid.</p>
+    <div class="els">{{elements}}</div>
+  </section>
+
+  <section>
+    <h2>Faces or no faces</h2>
+    <p>The same ten sprites without and with eyes. Faceless, they read as weather icons. Two dots of eye turn them into characters that belong next to the robots and animals.</p>
+    <div>{{faces}}</div>
+  </section>
+
+  <section>
+    <h2>Next to the family</h2>
+    <p>The same eight seeds in every style, at 40px and at 24px.</p>
+    <div>{{family}}</div>
+  </section>
+
+  <section>
+    <h2>In the existing looks</h2>
+    <p>The render looks work unchanged, since a sprite is just cells. Soft suits the blobby ones.</p>
+    <div class="looks">{{looks}}</div>
+  </section>
+
+  <section class="take">
+    <h2>Does it work?</h2>
+    <ul>
+      <li><strong>Yes, with eyes.</strong> Abstract shapes alone drift toward animated identicons or weather icons, and lose what makes Seedkin a family of characters. With eyes they become will-o'-wisps and soot sprites, which sit happily next to the robots.</li>
+      <li><strong>Fire and space are strong, water is good, earth is fine, wind is hard.</strong> Each element needs a silhouette people already know. Wind has none, so it relies on speed lines and motion.</li>
+      <li><strong>Flicker belongs in the motes, not the body.</strong> Embers, bubbles, pebbles and stars blinking around a sprite give the firefly feel. A body that vanishes looks like a loading bug in a list of avatars. The still frame has to stand alone too, since most avatars are drawn still.</li>
+      <li><strong>Too few combinations today.</strong> 5 elements × 2 forms × 3 palettes is 30 sprites, so many seeds share a look. It needs more traits before it could ship: eye styles, a mouth, mote patterns, sizes and more palettes.</li>
+      <li><strong>Elements are a nice hook.</strong> Letting people pick an element (<code>element: 'fire'</code>) is something no other style has, and it suits teams, games and status.</li>
+    </ul>
+  </section>
+</main>
+<script>
+const btn = document.getElementById('motion');
+const set = (paused) => {
+  document.querySelectorAll('svg').forEach((s) => (paused ? s.pauseAnimations() : s.unpauseAnimations()));
+  btn.setAttribute('aria-pressed', String(paused));
+  btn.textContent = paused ? 'Play motion' : 'Pause motion';
+};
+btn.addEventListener('click', () => set(btn.getAttribute('aria-pressed') !== 'true'));
+if (matchMedia('(prefers-reduced-motion: reduce)').matches) set(true);
+</script>
