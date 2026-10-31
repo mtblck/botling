@@ -64,8 +64,8 @@ function eyes(c: Canvas, t: NogginTraits): void {
       return;
     case 'wink':
       c.paint(c.center - x, EYE_ROW, Role.Glow);
-      c.paint(c.center + x, EYE_ROW + 1, Role.Glow);
-      c.paint(c.center + x + 1, EYE_ROW + 1, Role.Glow);
+      c.paint(c.center + x, EYE_ROW, Role.Glow);
+      c.paint(c.center + x + 1, EYE_ROW, Role.Glow);
       return;
     case 'closed':
       e(x, EYE_ROW + 1);
@@ -91,13 +91,12 @@ function mouth(c: Canvas, t: NogginTraits, y: number, role: Role): void {
       c.mirror(0, y, role);
       c.paint(c.center, y + 1, Role.Accent);
       return;
-    case 'smirk':
-      // Two cells across and the right corner raised; a dropped corner read as a frown.
-      c.paint(c.center - 1, y, role);
-      c.paint(c.center, y, role);
-      // Under a happy eye the raised corner would join it, so it stays level there.
-      c.paint(c.center + 1, c.parts[y - 2]?.[c.center + 1] === 'eyes' ? y : y - 1, role);
+    case 'smirk': {
+      // Low on the left, the right corner raised; a cell narrower on a narrow head, as the smile.
+      for (let dx = 3 - t.halfWidth; dx <= 0; dx++) c.paint(c.center + dx, y + 1, role);
+      c.paint(c.center + 1, y, role);
       return;
+    }
   }
 }
 

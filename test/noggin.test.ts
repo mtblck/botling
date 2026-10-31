@@ -141,10 +141,16 @@ describe('noggin', () => {
     // chrome-piston-108 has tall eyes and a smirk; jolly-spark-867 a wink and a smile.
     for (const seed of ['chrome-piston-108', 'jolly-spark-867']) {
       const c = drawGrid(resolveTraits(seed));
-      expect(c.parts[7]?.[c.center + 2]).toBe('eyes');
+      expect(c.parts.slice(6, 8).flat()).toContain('eyes');
       expect(c.parts.slice(8).flat()).not.toContain('eyes');
       expect(c.parts[9]).toContain('mouth');
     }
+  });
+
+  it('draws a wink on the eye row, its closed eye out to the side', () => {
+    const c = drawGrid(resolveTraits('jolly-spark-867'));
+    for (const dx of [-2, 2, 3]) expect(c.parts[6]?.[c.center + dx]).toBe('eyes');
+    expect(c.parts[7]).not.toContain('eyes');
   });
 
   it('keeps the chin joined to the neck under every mouth', () => {
