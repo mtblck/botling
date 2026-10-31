@@ -13,6 +13,7 @@ import { buildSync } from 'esbuild';
 import { changelog } from './changelog.mjs';
 import { DOCS, docsNav, docsSlug, pager, toc } from './docs.mjs';
 import { ogImage, styleOgImage } from './og.mjs';
+import { searchEntries } from './search.mjs';
 import { jsonLd, llms, pageInfo, robots, sitemap } from './seo.mjs';
 import { playground, STYLES, styleGuide, styleOf, styleTabs } from './styles.mjs';
 
@@ -64,6 +65,7 @@ const pages = fs
   .filter((f) => path.basename(f) === 'index.html' || f === '404.html')
   .sort();
 const info = new Map(); // each page's canonical URL, title and description
+const search = []; // /search.json, for the site search
 for (const file of pages) {
   let page = fs
     .readFileSync(path.join(site, file), 'utf8')
@@ -100,8 +102,21 @@ for (const file of pages) {
   if (page.includes('{{')) throw new Error(`site/${file} has a placeholder the build doesn't fill`);
   fs.mkdirSync(path.dirname(path.join(out, file)), { recursive: true });
   fs.writeFileSync(path.join(out, file), page);
-  info.set(file.split(path.sep).join('/'), pageInfo(page));
+  const about = pageInfo(page);
+  info.set(file.split(path.sep).join('/'), about);
+  if (about.url && !about.noindex && about.title) {
+    const main = page.slice(page.indexOf('<main'), page.indexOf('</main>'));
+    search.push(
+      ...searchEntries({
+        path: new URL(about.url).pathname,
+        title: about.title.replace(/ · Seedkin( docs)?$/, ''),
+        description: about.description ?? '',
+        html: main,
+      }),
+    );
+  }
 }
+fs.writeFileSync(path.join(out, 'search.json'), JSON.stringify(search));
 for (const { name } of STYLES) fs.writeFileSync(path.join(out, `og-${name}.png`), styleOgImage(styleLibs[name]));
 
 // For search engines and AI assistants: every page that asks to be indexed, and the docs.

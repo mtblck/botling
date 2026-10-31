@@ -645,3 +645,115 @@ legend {
     transition: none;
   }
 }
+
+/* ---- search ---- */
+.search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 8px 0 10px;
+  font: 500 0.92rem / 1 var(--sans);
+  color: var(--ink-2);
+  background: var(--card);
+  border: 1px solid var(--control-edge);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.search-btn:hover {
+  color: var(--ink);
+}
+.search-btn .icon {
+  width: 16px;
+  height: 16px;
+}
+.search-btn kbd,
+.search-close {
+  font: 500 0.75rem / 1 var(--mono);
+  padding: 3px 6px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  color: var(--ink-2);
+  background: var(--paper);
+}
+dialog.search {
+  width: min(600px, 100% - 32px);
+  margin: 10vh auto auto;
+  padding: 0;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.3);
+}
+dialog.search::backdrop {
+  background: rgb(10 8 20 / 0.45);
+}
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--rule);
+}
+.search-form input {
+  flex: 1;
+  min-width: 0;
+  font: 1.05rem / 1.4 var(--sans);
+  padding: 6px 4px;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+}
+.search-form input:focus {
+  outline: none;
+}
+.search-form:focus-within {
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+.search-close {
+  cursor: pointer;
+}
+.search-results {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.search-results:empty {
+  display: none;
+}
+dialog.search .search-results a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--ink);
+  text-decoration: none;
+}
+dialog.search .search-results a:hover,
+dialog.search .search-results a:focus {
+  background: var(--accent-soft);
+  outline: none;
+}
+dialog.search .search-results a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.search-page {
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+@media (max-width: 640px) {
+  .search-btn {
+    width: 38px;
+    justify-content: center;
+    padding: 0;
+  }
+  .search-btn .search-label,
+  .search-btn kbd {
+    display: none;
+  }
+}
