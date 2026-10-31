@@ -1,19 +1,15 @@
-import { cellStyle, type Outline, outline, padding } from '../../core/render/cell.js';
-import { FRAMES, framed, frameFit } from '../../core/render/frame.js';
+import { checkPalette, settle } from '../../core/options.js';
+import { cellStyle, type Outline, padding } from '../../core/render/cell.js';
+import { framed, frameFit } from '../../core/render/frame.js';
+import { inkFor, innerLines, silhouette } from '../../core/render/ink.js';
+import { lookCell, softExtras, stickerGroup } from '../../core/render/look.js';
 import { paintAttrs, pathData } from '../../core/render/path.js';
 import { animation } from './animate.js';
 import { drawGrid, drawSmallGrid, GRID_SIZE, SMALL_GRID_SIZE } from './grid/index.js';
 import { PALETTES } from './palettes.js';
 import { SHAPES } from './parts.js';
 import { traits } from './traits.js';
-import { type BotlingOptions, type Detail, type Palette, Role, type Traits } from './types.js';
-
-/**
- * Below this size the 15x15 robot reads as noise, so `detail: 'auto'` draws
- * the small robot and `showGrid: 'auto'` hides the empty grid.
- */
-const AUTO_FULL_MIN_SIZE = 40;
-const DETAILS: readonly Detail[] = ['auto', 'full', 'small'];
+import { type BotlingOptions, type Palette, Role, type Traits } from './types.js';
 
 const escapeXml = (s: string): string => s.replace(/[&<>"']/g, (ch) => `&#${ch.charCodeAt(0)};`);
 
@@ -41,32 +37,9 @@ export function resolveTraits(seed: string, opts: BotlingOptions = {}): Traits {
   return t;
 }
 
-const HEX = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
-const PALETTE_KEYS = ['bg', 'grid', 'body', 'shade', 'screen', 'glow', 'accent'] as const;
-
-/**
- * The palette to paint with: a palette object from the options, else the
- * built-in palette the traits name. Object colours go straight into SVG
- * attributes, so anything but a hex colour is rejected.
- */
-function resolvePalette(t: Traits, opts: BotlingOptions): Palette {
-  const custom: unknown = opts.palette;
-  if (typeof custom !== 'object') return PALETTES[t.palette] as Palette;
-  if (custom === null || Array.isArray(custom)) {
-    throw new RangeError('botling: palette must be an index into PALETTES or a palette object');
-  }
-  // Read each colour once into a copy, so a getter can't pass the check and then change.
-  const source = custom as Record<string, unknown>;
-  const checked: Palette = { name: String(source.name ?? 'Custom') } as Palette;
-  for (const key of PALETTE_KEYS) {
-    const colour = source[key];
-    if (typeof colour !== 'string' || !HEX.test(colour)) {
-      throw new RangeError(`botling: palette.${key} must be a hex colour such as #1d1210`);
-    }
-    checked[key] = colour;
-  }
-  return checked;
-}
+/** The palette to paint with: a checked palette object from the options, else the one the traits name. */
+const resolvePalette = (t: Traits, opts: BotlingOptions): Palette =>
+  typeof opts.palette === 'object' ? checkPalette('botling', opts.palette) : (PALETTES[t.palette] as Palette);
 
 /**
  * Maps each role to its colour. Without a screen, eyes and mouth are cut out
@@ -94,20 +67,10 @@ export function botling(seed: string, opts: BotlingOptions = {}): string {
   const t = resolveTraits(seed, opts);
   const p = resolvePalette(t, opts);
   const colours = roleColours(p, t);
-  const size = opts.size ?? 96;
-  if (typeof size !== 'number' || !Number.isFinite(size) || size <= 0) {
-    throw new RangeError('botling: size must be a positive, finite number');
-  }
-  const detail = opts.detail ?? 'auto';
-  if (!DETAILS.includes(detail)) throw new RangeError(`botling: unknown detail "${String(detail)}"`);
-  const isSmall = detail === 'small' || (detail === 'auto' && size < AUTO_FULL_MIN_SIZE);
-  const showGrid =
-    !isSmall && (opts.showGrid === 'auto' || opts.showGrid === undefined ? size >= AUTO_FULL_MIN_SIZE : opts.showGrid);
   if (opts.animate !== undefined && typeof opts.animate !== 'boolean') {
     throw new RangeError('botling: animate must be true or false');
   }
-  const frame = opts.frame ?? 'square';
-  if (!FRAMES.includes(frame)) throw new RangeError(`botling: unknown frame "${String(frame)}"`);
+  const { size, isSmall, showGrid, frame, look } = settle('botling', opts);
 
   // One path per colour keeps the picture (cells don't overlap, bar the
   // hairline bleed on solid cells) and saves an element per cell. Animated,
@@ -120,10 +83,13 @@ export function botling(seed: string, opts: BotlingOptions = {}): string {
   const reach = showGrid ? fit.reach : 0;
   const anim = opts.animate ? animation(seed, t, isSmall) : null;
   const GRID = anim ? 'grid' : '';
+  const g = c.cells.map((row) => row.map((r) => (r === Role.Empty ? null : colours[r])));
   const groups = new Map<string, Map<string, Outline[]>>([
     [GRID, new Map()],
     ['', new Map()],
   ]);
+  // The robot's own cells by group, without the animation's copies, for the look's outline.
+  const drawn = new Map<string, Outline[]>();
   const add = (key: string, fill: string, cell: Outline): void => {
     const byColour = groups.get(key) ?? new Map<string, Outline[]>();
     groups.set(key, byColour);
@@ -137,29 +103,43 @@ export function botling(seed: string, opts: BotlingOptions = {}): string {
       if (role === Role.Empty && !(showGrid && fit.holds(x, y))) continue;
       const fill = role === Role.Empty ? p.grid : colours[role];
       const part = c.parts[y]?.[x] ?? null;
-      const cell = outline(t.shape, x, y, isSmall);
-      add(role === Role.Empty ? GRID : (anim?.classOf(role, part, x) ?? ''), fill, cell);
-      for (const [key, as] of anim && role !== Role.Empty ? anim.copies(role, part, x, y) : []) {
-        add(key, colours[as as Exclude<Role, 0>], cell);
+      const cell = lookCell(look, t.shape, g, x, y, isSmall);
+      const key = role === Role.Empty ? GRID : (anim?.classOf(role, part, x) ?? '');
+      add(key, fill, cell);
+      if (role !== Role.Empty) {
+        const own = drawn.get(key) ?? [];
+        own.push(cell);
+        drawn.set(key, own);
+      }
+      for (const [copy, as] of anim && role !== Role.Empty ? anim.copies(role, part, x, y) : []) {
+        add(copy, colours[as as Exclude<Role, 0>], cell);
       }
     }
   }
-  const style = cellStyle(t.shape, isSmall);
-  const paths = (key: string): string => {
+  const style = cellStyle(t.shape, isSmall || look !== 'gapped');
+  const paths = (byColour: Map<string, Outline[]> | undefined): string => {
     let out = '';
-    for (const [colour, outlines] of groups.get(key) ?? [])
+    for (const [colour, outlines] of byColour ?? [])
       out += `<path ${paintAttrs(colour, style.paint)} d="${pathData(outlines)}"/>`;
     return out;
   };
   const moving = [...groups.keys()].filter((k) => k !== '' && k !== GRID);
-  let robot = paths('');
-  for (const k of moving) robot += `<g class="${k}"${anim?.attrs(k) ?? ''}>${paths(k)}</g>`;
+  const wrap = (k: string, inner: string): string =>
+    k && inner ? `<g class="${k}"${anim?.attrs(k) ?? ''}>${inner}</g>` : inner;
+  const ink = inkFor(p.shade);
+  const extras = softExtras(look, t.shape, g);
+  let outlines = '';
+  for (const [k, list] of drawn) outlines += wrap(k, silhouette(look, t.shape === 'circle', pathData(list), ink));
+  let robot = outlines + paths(extras.under) + paths(groups.get('')) + paths(extras.over);
+  robot += innerLines(look, t.shape, g, ink);
+  for (const k of moving) robot += wrap(k, paths(groups.get(k)));
   if (anim?.wrap && robot) {
     robot = `<g class="${anim.wrap}">${robot}</g>`;
     moving.push(anim.wrap);
   }
-  let cells = (GRID ? paths(GRID) : '') + robot;
+  let cells = (GRID ? paths(groups.get(GRID)) : '') + robot;
   if (style.attrs && cells) cells = `<g ${style.attrs}>${cells}</g>`;
+  if (look === 'sticker' && cells) cells = stickerGroup(n, cells);
 
   const span = n + 2 * pad;
   const title = opts.title === undefined ? 'Robot avatar' : opts.title;

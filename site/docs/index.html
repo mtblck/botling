@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Docs · Seedkin</title>
-  <meta name="description" content="How to install Seedkin and draw Botling avatars: options, frames, animation, holiday palettes, pickers and versioning." />
+  <meta name="description" content="How to install Seedkin and draw Botling avatars: options, looks, frames, animation, holiday palettes, pickers and versioning." />
   <link rel="canonical" href="https://seedkin.dev/docs/" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://seedkin.dev/docs/" />
@@ -25,6 +25,7 @@
           <ul>
             <li><a href="#random-robots">Random robots</a></li>
             <li><a href="#options">Options</a></li>
+            <li><a href="#looks">Looks</a></li>
             <li><a href="#frames">Frames</a></li>
             <li><a href="#animation">Animation</a></li>
             <li><a href="#holiday-palettes">Holiday palettes</a></li>
@@ -109,6 +110,12 @@ const svg = botling(seed);
 <td>Draw the empty grid cells. <code>&#39;auto&#39;</code> draws them from 40px up; below that they read as noise. The small robot never draws them.</td>
 </tr>
 <tr>
+<td><code>look</code></td>
+<td><code>&#39;gapped&#39; | &#39;flat&#39; | &#39;inked&#39; | &#39;soft&#39; | &#39;soft-inked&#39; | &#39;sticker&#39;</code></td>
+<td><code>&#39;gapped&#39;</code></td>
+<td>How the cells are drawn: apart, or merged into flat shapes. See <a href="#looks">Looks</a>.</td>
+</tr>
+<tr>
 <td><code>frame</code></td>
 <td><code>&#39;square&#39; | &#39;rounded&#39; | &#39;squircle&#39; | &#39;circle&#39;</code></td>
 <td><code>&#39;square&#39;</code></td>
@@ -146,6 +153,19 @@ const svg = botling(seed);
 </ul>
 <p>The grid behind the robot keeps only whole cells inside the frame, so its edge steps round the curve, and in a squircle it fills the room the smaller robot leaves. <code>FRAMES</code> lists the four, for a picker. A seed never picks a frame, so store the one a user chooses with their seed.</p>
 <p>Every frame but <code>&#39;square&#39;</code> clips with a <code>&lt;clipPath&gt;</code>. Its id names the frame and its size (<code>botling-circle-500-16000</code>), so robots inlined on one page share identical clip paths instead of clashing. In an <code>&lt;img&gt;</code> or a <code>data:</code> URI each robot is its own document, so ids never meet.</p>
+<h3 id="looks">Looks</h3>
+<pre><code class="language-ts">botling(user.id, { look: &#39;soft&#39; });
+</code></pre>
+<p><code>look</code> sets how the cells are drawn. The same seed draws the same picture in every look; only the drawing changes.</p>
+<ul>
+<li><strong><code>&#39;gapped&#39;</code></strong> (the default) draws each cell apart, over a faint grid, like pixels on a display.</li>
+<li><strong><code>&#39;flat&#39;</code></strong> closes the gap, so cells merge into solid shapes. Circles become touching beads, and diamonds and triangles tile into facets.</li>
+<li><strong><code>&#39;inked&#39;</code></strong> is flat with a dark outline round the avatar and thin lines between colours, like a cel-shaded cartoon.</li>
+<li><strong><code>&#39;soft&#39;</code></strong> rounds the outer corners of each patch of colour and curves its inner ones, so the avatar reads as vector shapes.</li>
+<li><strong><code>&#39;soft-inked&#39;</code></strong> is soft with the dark outline.</li>
+<li><strong><code>&#39;sticker&#39;</code></strong> is soft with a white die-cut border and a drop shadow. The avatar draws at 86% to make room for them.</li>
+</ul>
+<p>Only <code>&#39;gapped&#39;</code> has a grid, so <code>showGrid</code> does nothing in the other looks. Rounded corners and the lines between colours need square cells: with circles, triangles or diamonds, <code>&#39;soft&#39;</code> draws like <code>&#39;flat&#39;</code>, and <code>&#39;inked&#39;</code> and <code>&#39;sticker&#39;</code> keep their outline and border. Small avatars, below 40px, already draw their cells touching, so there <code>&#39;flat&#39;</code> changes nothing and the other looks add their outline, corners or border. The ink is the palette&#39;s <code>shade</code> colour darkened. <code>LOOKS</code> lists the six, for a picker. A seed never picks a look, so store the one a user chooses with their seed. Every style takes <code>look</code>; animated robots keep their outline on their moving parts.</p>
 <h3 id="animation">Animation</h3>
 <pre><code class="language-ts">botling(user.id, { animate: true });
 </code></pre>
@@ -234,7 +254,7 @@ traits(user.id); // { head: &#39;tv&#39;, eyes: &#39;visor&#39;, mouth: &#39;gri
 const svg = snoot(user.id);
 const src = snootDataUri(user.id, { size: 40 });
 </code></pre>
-<p><code>snoot()</code> takes the same options as <code>botling()</code> except <code>animate</code>: <code>shape</code>, <code>palette</code> (an index into Snoot&#39;s own eight <code>PALETTES</code>, or a palette object), <code>size</code>, <code>detail</code>, <code>showGrid</code>, <code>frame</code>, <code>background</code> and <code>title</code> (default <code>&#39;Animal avatar&#39;</code>). Below 40px it draws a simpler 9x9 Snoot from the same traits.</p>
+<p><code>snoot()</code> takes the same options as <code>botling()</code> except <code>animate</code>: <code>shape</code>, <code>palette</code> (an index into Snoot&#39;s own eight <code>PALETTES</code>, or a palette object), <code>size</code>, <code>detail</code>, <code>showGrid</code>, <code>look</code>, <code>frame</code>, <code>background</code> and <code>title</code> (default <code>&#39;Animal avatar&#39;</code>). Below 40px it draws a simpler 9x9 Snoot from the same traits.</p>
 <p>The seed is salted, so <code>snoot(id)</code> and <code>botling(id)</code> are unrelated. <code>traits</code>, <code>resolveTraits</code>, <code>grid</code>, <code>smallGrid</code>, <code>SPECIES</code>, <code>EYES</code>, <code>MARKINGS</code>, <code>EXTRAS</code> and <code>SHAPES</code> are exported as for Botling. <a href="/styles/snoot/">Try them in the playground</a>.</p>
 <h2 id="noggin">Noggin <span class="badge">Preview</span></h2>
 <p>Seeded people avatars in seven skin tones, with twelve hairstyles (including afros and locs), glasses, beards, hats and headscarves. Until Noggin is marked stable, the Noggin a seed draws can change in a minor version, so pin the minor (<code>~2.2.0</code>) if you store seeds and need the same person back.</p>
@@ -252,7 +272,7 @@ const src = nogginDataUri(user.id, { size: 40, skin: 4 });
 const svg = beastie(user.id);
 const src = beastieDataUri(user.id, { size: 40 });
 </code></pre>
-<p><code>beastie()</code> takes the same options as <code>snoot()</code>: <code>shape</code>, <code>palette</code> (an index into Beastie&#39;s own eight <code>PALETTES</code>, or a palette object), <code>size</code>, <code>detail</code>, <code>showGrid</code>, <code>frame</code>, <code>background</code> and <code>title</code> (default <code>&#39;Monster avatar&#39;</code>). Below 40px it draws a simpler 9x9 Beastie from the same traits.</p>
+<p><code>beastie()</code> takes the same options as <code>snoot()</code>: <code>shape</code>, <code>palette</code> (an index into Beastie&#39;s own eight <code>PALETTES</code>, or a palette object), <code>size</code>, <code>detail</code>, <code>showGrid</code>, <code>look</code>, <code>frame</code>, <code>background</code> and <code>title</code> (default <code>&#39;Monster avatar&#39;</code>). Below 40px it draws a simpler 9x9 Beastie from the same traits.</p>
 <p>The seed is salted, so one id&#39;s Botling, Snoot and Beastie are unrelated. <code>traits</code>, <code>resolveTraits</code>, <code>grid</code>, <code>smallGrid</code>, <code>BODIES</code>, <code>EYES</code>, <code>MOUTHS</code>, <code>TOPS</code>, <code>SIDES</code> and <code>SHAPES</code> are exported as for Botling. <a href="/styles/beastie/">Try them in the playground</a>.</p>
     </article>
   </main>

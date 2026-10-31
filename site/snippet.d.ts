@@ -4,6 +4,8 @@ import type { BotlingOptions, Palette } from '../src/index.js';
 export interface PlaygroundState {
   seed: string;
   shape: string;
+  /** A look other than 'gapped' goes into the options. */
+  look?: string;
   /** A frame other than 'square' goes into the options. */
   frame?: string;
   palette: string;

@@ -1,6 +1,6 @@
-import type { Detail, Frame, Palette, Shape } from '../../core/types.js';
+import type { Detail, Frame, Look, Palette, Shape } from '../../core/types.js';
 
-export type { Detail, Frame, Palette, RoleGrid, Shape } from '../../core/types.js';
+export type { Detail, Frame, Look, Palette, RoleGrid, Shape } from '../../core/types.js';
 export { Role } from '../../core/types.js';
 
 /** Every choice that makes up one robot. */
@@ -97,6 +97,15 @@ export interface BotlingOptions {
    * outside the frame are transparent, and the grid keeps only whole cells.
    */
   frame?: Frame;
+  /**
+   * How cells are drawn. `'gapped'` (the default) draws separate cells over
+   * the grid. The others close the gap so cells merge into flat shapes and
+   * never draw the grid: `'flat'`; `'inked'`, with a dark outline and lines
+   * between colours; `'soft'`, with rounded corners; `'soft-inked'`; and
+   * `'sticker'`, with a white border and a shadow. Rounded corners and the
+   * lines between colours need square cells.
+   */
+  look?: Look;
   /** Width and height in pixels. Defaults to 96. */
   size?: number;
   /** Accessible name. Defaults to "Robot avatar". Pass `null` to mark the image decorative. */

@@ -5,6 +5,7 @@ import {
   botlingDataUri,
   FRAMES,
   HOLIDAY_PALETTES,
+  LOOKS,
   PALETTES,
   randomSeed,
   resolveTraits,
@@ -19,6 +20,7 @@ function describe(seed, options) {
   const t = resolveTraits(seed, options);
   const palette = typeof options.palette === 'object' ? options.palette : PALETTES[t.palette];
   const framing = options.frame ? [`in a ${options.frame} frame`] : [];
+  if (options.look) framing.push(`${options.look.replace('-', ' ')} look`);
   const parts = [`${t.shape} cells`, ...framing, `${palette.name} palette`, `${t.head} head`, `${t.eyes} eyes`];
   if (t.mouth !== 'none') parts.push(`${t.mouth === 'o' ? 'O-shaped' : t.mouth} mouth`);
   // Matches slots() in the package: these accessories and an off-side antenna take the top piece's place.
@@ -28,7 +30,7 @@ function describe(seed, options) {
   return `Robot for "${seed}": ${parts.join(', ')}`;
 }
 
-const shared = sharedGroups({ SHAPES, FRAMES });
+const shared = sharedGroups({ SHAPES, FRAMES, LOOKS });
 playground({
   name: 'botling',
   noun: 'robot',
@@ -40,6 +42,7 @@ playground({
   swatch: (p) => [p.bg, p.body, p.glow, p.accent],
   groups: [
     shared.cells,
+    shared.look,
     shared.frame,
     {
       name: 'palette',

@@ -20,8 +20,12 @@ const SQUARE_INSET = 0.06;
 const SQUARE_RADIUS = 0.12;
 const CIRCLE_RADIUS = 0.44;
 
-/** A point in thousandths of a grid unit, so path data can be built from exact integers. */
-export type Point = readonly [number, number];
+/**
+ * A point in thousandths of a grid unit, so path data can be built from exact
+ * integers. A third number is a radius: the edge to the point is a clockwise
+ * quarter arc, not a line.
+ */
+export type Point = readonly [number, number] | readonly [number, number, number];
 /** One cell: the corners of a polygon, or a single point for a round dot. */
 export type Outline = readonly Point[];
 

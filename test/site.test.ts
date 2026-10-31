@@ -60,6 +60,22 @@ describe('playground holiday palettes', () => {
     }
   });
 
+  it('passes a look other than gapped, and copies code that draws it', () => {
+    expect(options({ ...auto, look: 'gapped' })).toEqual({});
+    const state: PlaygroundState = {
+      seed: 'mtblck',
+      ...auto,
+      look: 'soft-inked',
+      palette: 'halloween',
+      frame: 'circle',
+    };
+    const code = snippet(state);
+    expect(code).toBe(
+      "botling('mtblck', { frame: 'circle', palette: HOLIDAY_PALETTES.halloween, look: 'soft-inked' })",
+    );
+    expect(run(code)).toBe(botling('mtblck', options(state, {}, HOLIDAY_PALETTES)));
+  });
+
   it('leaves an unknown holiday out rather than passing undefined', () => {
     expect(options({ shape: 'auto', palette: 'arbor-day', grid: 'auto' }, {}, HOLIDAY_PALETTES)).toEqual({});
   });

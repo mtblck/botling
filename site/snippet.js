@@ -5,7 +5,7 @@
 /**
  * Options for botling() from the playground state, leaving out anything on auto.
  *
- * @param {{ shape: string, frame?: string, palette: string, grid: string, motion?: string }} state - The playground's choices
+ * @param {{ shape: string, look?: string, frame?: string, palette: string, grid: string, motion?: string }} state - The playground's choices
  * @param {object} [extra] - Options to add, such as size
  * @param {Record<string, object>} [holidays] - HOLIDAY_PALETTES, to look holiday keys up in
  * @returns {object} botling() options
@@ -18,6 +18,7 @@ export function options(state, extra = {}, holidays = {}) {
     if (holidays[state.palette]) o.palette = holidays[state.palette];
   } else if (state.palette !== 'auto') o.palette = Number(state.palette);
   if (state.grid !== 'auto') o.showGrid = state.grid === 'on';
+  if (state.look && state.look !== 'gapped') o.look = state.look;
   if (state.motion === 'on') o.animate = true;
   // A style's own options, such as Noggin's skin: numbers stay numbers.
   for (const [k, v] of Object.entries(state)) {
@@ -27,12 +28,12 @@ export function options(state, extra = {}, holidays = {}) {
 }
 
 /** State every style shares, mapped to options above; anything else passes straight through. */
-const SHARED = new Set(['seed', 'shape', 'frame', 'palette', 'grid', 'motion']);
+const SHARED = new Set(['seed', 'shape', 'look', 'frame', 'palette', 'grid', 'motion']);
 
 /**
  * The call a developer would write for the avatar on screen.
  *
- * @param {{ seed: string, shape: string, frame?: string, palette: string, grid: string, motion?: string }} state - The playground's choices
+ * @param {{ seed: string, shape: string, look?: string, frame?: string, palette: string, grid: string, motion?: string }} state - The playground's choices
  * @param {string} [name] - The style's function, such as snoot
  * @returns {string} A botling(...) call, or the style's, in single-quoted JavaScript
  */

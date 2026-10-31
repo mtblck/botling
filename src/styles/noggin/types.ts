@@ -1,7 +1,7 @@
 import type { CommonOptions } from '../../core/options.js';
 import type { Palette, Shape } from '../../core/types.js';
 
-export type { Detail, Frame, Palette, RoleGrid, Shape } from '../../core/types.js';
+export type { Detail, Frame, Look, Palette, RoleGrid, Shape } from '../../core/types.js';
 export { Role } from '../../core/types.js';
 
 export type Hair =

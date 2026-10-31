@@ -20,7 +20,7 @@ const MINUS = 45;
 /**
  * Path data for a set of cells, with every move and edge relative so each
  * number stays small. Polygons are closed with `z`, which returns to their
- * first point; a one-point outline is a zero-length `h0`, which a round cap
+ * first point; a point with a radius is reached by a clockwise arc; a one-point outline is a zero-length `h0`, which a round cap
  * draws as a dot. The first `m` of a path counts as absolute, from 0,0.
  *
  * @param outlines - Cells in thousandths, in drawing order
@@ -60,7 +60,21 @@ export function pathData(outlines: readonly Outline[]): string {
     let px = cx;
     let py = cy;
     for (let i = 1; i < o.length; i++) {
-      const [x, y] = o[i] as Point;
+      const [x, y, r] = o[i] as Point;
+      if (r !== undefined) {
+        // Flags are written in full: some parsers misread them run together.
+        if (last !== 'a') cmd('a');
+        put(r);
+        put(r);
+        d += ' 0 0 1';
+        afterNumber = true;
+        put(x - px);
+        put(y - py);
+        last = 'a';
+        px = x;
+        py = y;
+        continue;
+      }
       const next = y === py ? 'h' : x === px ? 'v' : 'l';
       if (next !== last) cmd(next);
       if (next !== 'v') put(x - px);

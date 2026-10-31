@@ -4,6 +4,12 @@ export type Shape = 'square' | 'circle' | 'triangle' | 'diamond';
 /** The outline of the background an avatar sits in. */
 export type Frame = 'square' | 'rounded' | 'squircle' | 'circle';
 
+/**
+ * How cells are drawn: `gapped` cells over a faint grid, or one of the
+ * gapless looks, where touching cells merge into flat shapes.
+ */
+export type Look = 'gapped' | 'flat' | 'inked' | 'soft' | 'soft-inked' | 'sticker';
+
 /** How much detail an avatar is drawn with: the 15x15 grid, the simpler 9x9 one, or the size's pick. */
 export type Detail = 'auto' | 'full' | 'small';
 

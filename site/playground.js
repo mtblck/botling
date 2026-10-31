@@ -9,17 +9,18 @@ const $ = (id) => document.getElementById(id);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const pickOne = (list) => list[Math.floor(Math.random() * list.length)];
 
-const title = (s) => s[0].toUpperCase() + s.slice(1);
+const title = (s) => s[0].toUpperCase() + s.slice(1).replaceAll('-', ' ');
 
 /**
- * The option groups every style has: cells, frame and background grid.
+ * The option groups every style has: cells, look, frame and background grid.
  *
- * @param {{ SHAPES: readonly string[], FRAMES: readonly string[] }} style - The style's exports
- * @returns {{ cells: object, frame: object, grid: object }} Groups for playground()
+ * @param {{ SHAPES: readonly string[], FRAMES: readonly string[], LOOKS: readonly string[] }} style - The style's exports
+ * @returns {{ cells: object, look: object, frame: object, grid: object }} Groups for playground()
  */
-export function sharedGroups({ SHAPES, FRAMES }) {
+export function sharedGroups({ SHAPES, FRAMES, LOOKS }) {
   return {
     cells: { name: 'shape', legend: 'Cells', choices: [['auto', 'Seed picks'], ...SHAPES.map((s) => [s, title(s)])] },
+    look: { name: 'look', legend: 'Look', choices: LOOKS.map((l) => [l, title(l)]) },
     frame: { name: 'frame', legend: 'Frame', choices: FRAMES.map((f) => [f, title(f)]) },
     grid: {
       name: 'grid',
@@ -157,7 +158,7 @@ export function playground(style) {
     draw();
   });
   $('seed-form').addEventListener('submit', (e) => e.preventDefault());
-  // A new seed, cells and palette (everyday or holiday). Frame, grid and motion stay as they are.
+  // A new seed, cells and palette (everyday or holiday). Look, frame, grid and motion stay as they are.
   $('random').addEventListener('click', () => {
     state.seed = $('seed').value = randomSeed();
     for (const key of ['shape', 'palette']) {

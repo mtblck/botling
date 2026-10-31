@@ -1,5 +1,6 @@
 import { FRAMES } from './render/frame.js';
-import type { Detail, Frame, Palette } from './types.js';
+import { LOOKS } from './render/look.js';
+import type { Detail, Frame, Look, Palette } from './types.js';
 
 /** Options every style's renderer takes, besides its own `shape` and `palette`. */
 export interface CommonOptions {
@@ -7,7 +8,14 @@ export interface CommonOptions {
   size?: number;
   /** `'auto'` draws the simpler 9x9 avatar below 40px. Default `'auto'`. */
   detail?: Detail;
-  /** Draw the empty grid cells. `'auto'` draws them from 40px up. */
+  /**
+   * How cells are drawn. `'gapped'` (the default) draws separate cells; the
+   * others close the gap so cells merge into flat shapes: `'flat'`,
+   * `'inked'` with a dark outline, `'soft'` with rounded corners,
+   * `'soft-inked'` and `'sticker'`.
+   */
+  look?: Look;
+  /** Draw the empty grid cells. `'auto'` draws them from 40px up. Only the gapped look has a grid. */
   showGrid?: boolean | 'auto';
   /** The outline of the background. Default `'square'`. */
   frame?: Frame;
@@ -23,6 +31,7 @@ export interface Settled {
   isSmall: boolean;
   showGrid: boolean;
   frame: Frame;
+  look: Look;
 }
 
 /** Below this size the 15x15 avatar reads as noise, so `'auto'` draws the small one without its grid. */
@@ -35,7 +44,7 @@ const DETAILS: readonly Detail[] = ['auto', 'full', 'small'];
  *
  * @param style - The style's name, for error messages
  * @param opts - Caller options
- * @returns Size, detail, grid and frame to draw with
+ * @returns Size, detail, grid, frame and look to draw with
  */
 export function settle(style: string, opts: CommonOptions): Settled {
   const size = opts.size ?? 96;
@@ -46,10 +55,12 @@ export function settle(style: string, opts: CommonOptions): Settled {
   if (!DETAILS.includes(detail)) throw new RangeError(`${style}: unknown detail "${String(detail)}"`);
   const isSmall = detail === 'small' || (detail === 'auto' && size < AUTO_FULL_MIN_SIZE);
   const auto = opts.showGrid === 'auto' || opts.showGrid === undefined;
-  const showGrid = !isSmall && (auto ? size >= AUTO_FULL_MIN_SIZE : opts.showGrid === true);
+  const look = opts.look ?? 'gapped';
+  if (!LOOKS.includes(look)) throw new RangeError(`${style}: unknown look "${String(look)}"`);
+  const showGrid = !isSmall && look === 'gapped' && (auto ? size >= AUTO_FULL_MIN_SIZE : opts.showGrid === true);
   const frame = opts.frame ?? 'square';
   if (!FRAMES.includes(frame)) throw new RangeError(`${style}: unknown frame "${String(frame)}"`);
-  return { size, isSmall, showGrid, frame };
+  return { size, isSmall, showGrid, frame, look };
 }
 
 const HEX = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
