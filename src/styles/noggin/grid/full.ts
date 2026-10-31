@@ -19,14 +19,16 @@ export function drawGrid(t: NogginTraits): Canvas {
   blob(c, 12, [hw + 1, hw + 3, hw + 3], Role.Screen);
   c.paint(c.center, 12, Role.Body);
   blob(c, 11, [1], Role.Body);
-  blob(c, TOP, [hw - 1, hw, hw, hw, hw, hw, hw - 1, hw - 2], Role.Body);
+  // The chin is five cells on every head, so a mouth on it leaves skin either side.
+  const chin = Math.max(hw - 2, 2);
+  blob(c, TOP, [hw - 1, hw, hw, hw, hw, hw, hw - 1, chin], Role.Body);
   c.mirror(hw + 1, EYE_ROW, Role.Body);
   c.mirror(hw + 1, EYE_ROW + 1, Role.Body);
   if (t.headwear !== 'headscarf') drawHair(c, t.hair, hw);
   // A row clear of the eyes, so no eye joins the mouth.
   const mouthRow = 9;
   if (t.facial === 'beard') {
-    blob(c, 8, [hw, hw - 1, hw - 2], Role.Shade);
+    blob(c, 8, [hw, hw - 1, chin], Role.Shade);
     c.mirror(hw, 7, Role.Shade);
   }
   if (t.facial === 'mustache') blob(c, 8, [1], Role.Shade);
@@ -76,13 +78,11 @@ function eyes(c: Canvas, t: NogginTraits): void {
 
 function mouth(c: Canvas, t: NogginTraits, y: number, role: Role): void {
   switch (t.mouth) {
-    case 'smile': {
-      // On a narrow head the chin row is three cells; a narrower smile leaves its sides.
-      const corner = t.halfWidth - 2;
-      for (let dx = 0; dx < corner; dx++) c.mirror(dx, y + 1, role);
-      c.mirror(corner, y, role);
+    case 'smile':
+      c.mirror(0, y + 1, role);
+      c.mirror(1, y + 1, role);
+      c.mirror(2, y, role);
       return;
-    }
     case 'line':
       c.mirror(0, y, role);
       c.mirror(1, y, role);
@@ -91,12 +91,12 @@ function mouth(c: Canvas, t: NogginTraits, y: number, role: Role): void {
       c.mirror(0, y, role);
       c.paint(c.center, y + 1, Role.Accent);
       return;
-    case 'smirk': {
-      // Low on the left, the right corner raised; a cell narrower on a narrow head, as the smile.
-      for (let dx = 3 - t.halfWidth; dx <= 0; dx++) c.paint(c.center + dx, y + 1, role);
+    case 'smirk':
+      // Low on the left, the right corner raised; a dropped corner read as a frown.
+      c.paint(c.center - 1, y + 1, role);
+      c.paint(c.center, y + 1, role);
       c.paint(c.center + 1, y, role);
       return;
-    }
   }
 }
 
