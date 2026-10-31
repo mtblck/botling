@@ -978,3 +978,16 @@ ol.features > li::before {
   gap: 8px 20px;
   margin-top: 12px;
 }
+
+/* ---- single prose pages: changelog, privacy, licences ---- */
+.page {
+  padding: 40px 0 64px;
+}
+.page .prose h2 time {
+  margin-left: 10px;
+  font: 400 1rem / 1 var(--sans);
+  color: var(--ink-2);
+}
+.page .prose h2 a {
+  text-decoration: none;
+}

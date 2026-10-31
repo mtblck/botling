@@ -10,6 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { buildSync } from 'esbuild';
+import { changelog } from './changelog.mjs';
 import { docsNav, docsSlug, pager, toc } from './docs.mjs';
 import { ogImage } from './og.mjs';
 import { playground, STYLES, styleGuide, styleOf, styleTabs } from './styles.mjs';
@@ -68,6 +69,12 @@ for (const file of pages) {
     .replaceAll('{{logo}}', logo)
     .replaceAll('{{preloads}}', preloads)
     .replace(/{{(version|botling-kb)}}/g, (_, name) => figures[name]);
+  if (file.split(path.sep).join('/') === 'changelog/index.html') {
+    page = page.replace(
+      '{{changelog}}',
+      () => changelog(fs.readFileSync(path.join(ROOT, 'CHANGELOG.md'), 'utf8')).html,
+    );
+  }
   const style = styleOf(file);
   if (style) {
     page = page
