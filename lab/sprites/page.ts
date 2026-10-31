@@ -13,9 +13,10 @@ import { ELEMENTS, type Element, sprite, spriteTraits } from './sprite.js';
 const out = process.argv[2] ?? 'sprites.html';
 const tpl = readFileSync(new URL('./page.html', import.meta.url), 'utf8');
 
-/** The first seed that draws this element in this form and palette. */
+/** The first seed that draws this element in this form and the `pal`th palette that suits it. */
 const find = (el: Element, form: string, pal: number): string => {
-  const want = ELEMENTS[el].palettes[pal]?.name;
+  const suits = ELEMENTS[el].palettes.filter((p) => !p.only || p.only === form);
+  const want = suits[pal % suits.length]?.palette.name;
   for (let i = 0; ; i++) {
     const t = spriteTraits(`kin-${i}`, el);
     if (t.form === form && t.palette.name === want) return `kin-${i}`;
@@ -44,9 +45,9 @@ const NOTES: Record<Element, { verdict: string; tone: string; note: string }> = 
     note: 'A rock is a lump until the sprout tells you it is earth, and at 24px the sprout is two pixels. The gem only works in gem colours.',
   },
   wind: {
-    verdict: 'Weakest',
-    tone: 'weak',
-    note: 'Air has no outline. The puff reads as a cloud only thanks to its speed lines, and the funnel can look like a tooth at 24px. Wind leans on motion more than any other element.',
+    verdict: 'Better, still the hardest',
+    tone: 'ok',
+    note: "Air has no outline. The puff's speed lines now end in curls, and the funnel spins with sliding bands instead of a hard outline. Wind still leans on motion more than any other element.",
   },
 };
 
@@ -59,8 +60,10 @@ const elements = order
     const big = forms
       .map((form, k) => {
         const seed = find(el, form, k);
-        const strip = [48, 32, 24].map((size) => sprite(seed, { size, element: el, animate: true })).join('');
-        return `<figure class="form">${sprite(seed, { size: 120, element: el, animate: true })}<div class="strip">${strip}</div><figcaption>${form}</figcaption></figure>`;
+        const strip = [48, 32, 24]
+          .map((size) => sprite(seed, { size, element: el, frame: 'rounded', animate: true }))
+          .join('');
+        return `<figure class="form">${sprite(seed, { size: 120, element: el, frame: 'rounded', animate: true })}<div class="strip">${strip}</div><figcaption>${form}</figcaption></figure>`;
       })
       .join('');
     return `<article class="el"><header><h3>${el[0]?.toUpperCase()}${el.slice(1)}</h3><span class="chip ${n.tone}">${n.verdict}</span></header><div class="forms">${big}</div><p>${n.note}</p></article>`;
@@ -74,10 +77,10 @@ const faces = [false, true]
   .map(
     (eyes) =>
       `<div class="facerow"><span class="label">${eyes ? 'With eyes' : 'Faceless'}</span><div class="avs">${faceSeeds
-        .map(([el, s]) => sprite(s, { size: 48, element: el, eyes, animate: true }))
+        .map(([el, s]) => sprite(s, { size: 48, element: el, face: eyes, frame: 'rounded', animate: true }))
         .join(
           '',
-        )}</div><div class="avs">${faceSeeds.map(([el, s]) => sprite(s, { size: 24, element: el, eyes, animate: true })).join('')}</div></div>`,
+        )}</div><div class="avs">${faceSeeds.map(([el, s]) => sprite(s, { size: 24, element: el, face: eyes, frame: 'rounded', animate: true })).join('')}</div></div>`,
   )
   .join('');
 
@@ -87,7 +90,7 @@ const fam: [string, (s: string, size: number) => string][] = [
   ['Snoot', (s, size) => snoot(s, { size, frame: 'rounded' })],
   ['Noggin', (s, size) => noggin(s, { size, frame: 'rounded' })],
   ['Beastie', (s, size) => beastie(s, { size, frame: 'rounded' })],
-  ['Sprites', (s, size) => sprite(s, { size, animate: true })],
+  ['Sprites', (s, size) => sprite(s, { size, frame: 'rounded', animate: true })],
 ];
 const family = [40, 24]
   .map(
@@ -101,13 +104,17 @@ const family = [40, 24]
   )
   .join('');
 
+const handful = Array.from({ length: 24 }, (_, i) =>
+  sprite(`seed-${i}`, { size: 64, frame: 'rounded', animate: true }),
+).join('');
+
 const looks: Look[] = ['gapped', 'flat', 'soft', 'sticker'];
 const lookSeeds = order.map((el, i) => [el, find(el, ELEMENTS[el].forms[0], i % 3)] as const);
 const looksHtml = looks
   .map(
     (look) =>
       `<span class="label">${look[0]?.toUpperCase()}${look.slice(1)}</span><div class="avs">${lookSeeds
-        .map(([el, s]) => sprite(s, { size: 72, element: el, look, animate: true }))
+        .map(([el, s]) => sprite(s, { size: 72, element: el, look, frame: 'rounded', animate: true }))
         .join('')}</div>`,
   )
   .join('');
@@ -118,6 +125,7 @@ writeFileSync(
     .replace('{{elements}}', elements)
     .replace('{{faces}}', faces)
     .replace('{{family}}', family)
-    .replace('{{looks}}', looksHtml),
+    .replace('{{looks}}', looksHtml)
+    .replace('{{handful}}', handful),
 );
 console.log(`wrote ${out}`);

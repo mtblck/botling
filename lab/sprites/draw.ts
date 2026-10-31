@@ -1,6 +1,28 @@
 import { type Canvas, createCanvas } from '../../src/core/canvas.js';
 import { Role } from '../../src/core/types.js';
 
+/** Where a form puts its face: the centre column, the eyes' distance from it, and the eye row. */
+export interface Anchor {
+  x: number;
+  dx: number;
+  y: number;
+}
+
+/** One frame of a form: its cells and where the face goes. */
+export interface Drawn {
+  c: Canvas;
+  at: Anchor;
+}
+
+/** Draws frame `f` (0-3) of a form, without its face. */
+export type Draw = (f: number) => Drawn;
+
+/** A form drawn on both grids. */
+export interface Form {
+  full: Draw;
+  small: Draw;
+}
+
 /** Fills cells `xl`..`xr` on row `y`, with the two end cells in `edge`. */
 export function span(
   c: Canvas,
@@ -31,15 +53,34 @@ export function rows(
   });
 }
 
+type Cells = (readonly [number, number])[];
+
 /** Paints a list of `[x, y]` cells in one role. */
-export function dots(c: Canvas, cells: readonly (readonly [number, number])[], role: Role): void {
+export function dots(c: Canvas, cells: Cells, role: Role): void {
   for (const [x, y] of cells) c.paint(x, y, role);
 }
 
-/** Paints a pair of eyes `dx` either side of centre, `h` cells tall. */
-export function eyes(c: Canvas, dx: number, y: number, h = 1): void {
-  for (let i = 0; i < h; i++) c.mirror(dx, y + i, Role.Glow);
+/**
+ * Parses frames of cells written as `"x,y x,y | x,y"`: one group per frame,
+ * so mote paths stay one line each.
+ */
+export function frames(s: string): Cells[] {
+  return s.split('|').map((g) =>
+    g
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((xy) => xy.split(',').map(Number) as [number, number]),
+  );
 }
 
+const SWAY = [0, 1, 0, -1] as const;
+/** Sideways sway for frame `f`: 0, 1, 0, -1. */
+export const sway = (f: number): number => SWAY[f % 4] as number;
+/** The item for frame `f`, cycling through the list. */
+export const pick = <T>(list: readonly T[], f: number): T => list[f % list.length] as T;
+/** A canvas of the given size, with an anchor helper. */
+export const canvas = (size: number): Canvas => createCanvas(size);
+
 export type { Canvas };
-export { createCanvas, Role };
+export { Role };

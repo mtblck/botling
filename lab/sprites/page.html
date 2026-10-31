@@ -60,9 +60,15 @@ figcaption, .label { font: 600 12px var(--sans); letter-spacing: .06em; text-tra
   <div class="intro">
     <span class="eyebrow">Seedkin lab · concept, not in the package</span>
     <h1>Sprites</h1>
-    <p>Little elemental spirits. A seed picks an element (fire, water, earth, wind or space), one of two forms, and a palette. Animated, a flame sways, a drop wobbles and the motes around each sprite drift and twinkle.</p>
+    <p>Little elemental spirits. A seed picks an element (fire, water, earth, wind or space), one of two forms, a palette and a face. Animated, a flame sways, a drop wobbles and the motes around each sprite drift and twinkle.</p>
     <div class="bar"><button type="button" id="motion" aria-pressed="false">Pause motion</button></div>
   </div>
+
+  <section>
+    <h2>A handful of seeds</h2>
+    <p>Twenty-four seeds, each picking its own element, form, palette and face.</p>
+    <div class="avs">{{handful}}</div>
+  </section>
 
   <section>
     <h2>Five elements</h2>
@@ -72,7 +78,7 @@ figcaption, .label { font: 600 12px var(--sans); letter-spacing: .06em; text-tra
 
   <section>
     <h2>Faces or no faces</h2>
-    <p>The same ten sprites without and with eyes. Faceless, they read as weather icons. Two dots of eye turn them into characters that belong next to the robots and animals.</p>
+    <p>The same ten sprites without and with their faces. Faceless, they read as weather icons. A seed picks one of five eye styles (dots, round, happy, sleepy or a wink), one of four mouths, and sometimes cheeks. At 24px every face shrinks to two eyes and maybe a mouth.</p>
     <div>{{faces}}</div>
   </section>
 
@@ -89,12 +95,12 @@ figcaption, .label { font: 600 12px var(--sans); letter-spacing: .06em; text-tra
   </section>
 
   <section class="take">
-    <h2>Does it work?</h2>
+    <h2>Where it stands</h2>
     <ul>
       <li><strong>Yes, with eyes.</strong> Abstract shapes alone drift toward animated identicons or weather icons, and lose what makes Seedkin a family of characters. With eyes they become will-o'-wisps and soot sprites, which sit happily next to the robots.</li>
-      <li><strong>Fire and space are strong, water is good, earth is fine, wind is hard.</strong> Each element needs a silhouette people already know. Wind has none, so it relies on speed lines and motion.</li>
+      <li><strong>Fire and space are strong, water is good, earth is fine, wind is better.</strong> Each element needs a silhouette people already know. Wind has none, so its speed lines now end in curls, and the funnel lost its outline and spins.</li>
       <li><strong>Steady, not flickering.</strong> The sprite stays fully visible. The only motion is the shape itself swaying or wobbling and the embers, bubbles, pebbles and stars around it, so a list of avatars never looks like it failed to load.</li>
-      <li><strong>Too few combinations today.</strong> 5 elements × 2 forms × 3 palettes is 30 sprites, so many seeds share a look. It needs more traits before it could ship: eye styles, a mouth, mote patterns, sizes and more palettes.</li>
+      <li><strong>About 2,000 combinations.</strong> 5 elements, 2 forms, 5 palettes per element (earth's are split between stone and gem), 5 eye styles, 4 mouths and cheeks. Far fewer than the robots, but enough that neighbours rarely match. More forms per element would help the most.</li>
       <li><strong>Elements are a nice hook.</strong> Letting people pick an element (<code>element: 'fire'</code>) is something no other style has, and it suits teams, games and status.</li>
     </ul>
   </section>
@@ -102,7 +108,10 @@ figcaption, .label { font: 600 12px var(--sans); letter-spacing: .06em; text-tra
 <script>
 const btn = document.getElementById('motion');
 const set = (paused) => {
-  document.querySelectorAll('svg').forEach((s) => (paused ? s.pauseAnimations() : s.unpauseAnimations()));
+  for (const s of document.querySelectorAll('svg')) {
+    if (paused) s.pauseAnimations();
+    else s.unpauseAnimations();
+  }
   btn.setAttribute('aria-pressed', String(paused));
   btn.textContent = paused ? 'Play motion' : 'Pause motion';
 };

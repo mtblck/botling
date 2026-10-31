@@ -1,0 +1,91 @@
+import type { Palette } from '../../src/core/types.js';
+import type { FormName } from './forms/index.js';
+
+export type Element = 'fire' | 'water' | 'earth' | 'wind' | 'space';
+
+const p = (name: string, ...c: [string, string, string, string, string, string, string]): Palette => {
+  const [bg, grid, body, shade, screen, glow, accent] = c;
+  return { name, bg, grid, body, shade, screen, glow, accent };
+};
+
+/** A palette, and the forms it suits when not all of them. */
+interface Pick {
+  palette: Palette;
+  only?: FormName;
+}
+
+/**
+ * Each element: its two forms and its palettes. Screen is the bright core or
+ * highlight, glow the face, accent the motes and cheeks.
+ */
+export const ELEMENTS: Readonly<Record<Element, { forms: [FormName, FormName]; palettes: Pick[] }>> = {
+  fire: {
+    forms: ['flame', 'wisp'],
+    palettes: [
+      { palette: p('Ember', '#1d1210', '#2c1c18', '#ff7a2f', '#d9461f', '#ffd25e', '#2a0f05', '#ffb347') },
+      { palette: p('Gas', '#0e1424', '#18213a', '#4f8cff', '#2f5fd6', '#bfe3ff', '#0b1430', '#8fd0ff') },
+      { palette: p('Spark', '#1a0f1f', '#281830', '#ff4fa3', '#c92d7a', '#ffd0e8', '#2a0618', '#ffb3dc') },
+      { palette: p('Candle', '#fbf3e6', '#f1e4cf', '#ffb02e', '#e07b12', '#fff1b8', '#3a1d00', '#ff6b3d') },
+      { palette: p('Jade', '#0f1c18', '#182b25', '#3ddc97', '#22a571', '#d4ffe9', '#05140e', '#a8ffd6') },
+    ],
+  },
+  water: {
+    forms: ['drop', 'bubble'],
+    palettes: [
+      { palette: p('Lagoon', '#0f1b26', '#182a3a', '#3fa9f5', '#2177c4', '#d7f0ff', '#0b1a2c', '#8fd3ff') },
+      { palette: p('Sea glass', '#eaf6f3', '#d8ece7', '#3fc1b0', '#239184', '#e6fffb', '#0d2a26', '#239184') },
+      { palette: p('Ink', '#f2f0fa', '#e2def2', '#5b6cf0', '#3b48c4', '#dfe3ff', '#11143a', '#9aa5ff') },
+      { palette: p('Deep', '#0b1030', '#151c45', '#2f6bff', '#1f47c2', '#c9dcff', '#050a24', '#5ce1ff') },
+      { palette: p('Rain', '#e9eef5', '#d9e1ec', '#7fa7d9', '#5a83b8', '#eef5ff', '#16243a', '#5a83b8') },
+    ],
+  },
+  earth: {
+    forms: ['boulder', 'crystal'],
+    palettes: [
+      {
+        palette: p('Clay', '#f4ede4', '#e7dccd', '#b07b4f', '#855630', '#f3dcbc', '#2a170a', '#4f9e33'),
+        only: 'boulder',
+      },
+      {
+        palette: p('Stone', '#1a1c1a', '#272a27', '#8d958c', '#646b63', '#e4e9e2', '#121412', '#7ed957'),
+        only: 'boulder',
+      },
+      {
+        palette: p('Moss', '#eef1e4', '#dfe4cf', '#6f9a4a', '#4f7433', '#cfe3b0', '#18240c', '#c98a3a'),
+        only: 'boulder',
+      },
+      {
+        palette: p('Amethyst', '#17121f', '#241c30', '#a77bf0', '#7550c4', '#efe3ff', '#1a0f2e', '#ffd166'),
+        only: 'crystal',
+      },
+      {
+        palette: p('Ruby', '#1d1014', '#2b1a20', '#e0455f', '#a82a40', '#ffd3dc', '#22070d', '#ffcf6b'),
+        only: 'crystal',
+      },
+      {
+        palette: p('Quartz', '#eef2f6', '#dde4ec', '#bcd3ea', '#8faccb', '#ffffff', '#1b2a3a', '#f29bb8'),
+        only: 'crystal',
+      },
+    ],
+  },
+  wind: {
+    forms: ['puff', 'tornado'],
+    palettes: [
+      { palette: p('Breeze', '#dcecf7', '#cbe0ef', '#ffffff', '#a9c6dd', '#ffffff', '#2b3f55', '#6fa9d6') },
+      { palette: p('Storm', '#1b2030', '#262d42', '#c9d3e6', '#8f9bb5', '#eef2fa', '#151a28', '#ffe066') },
+      { palette: p('Gust', '#102320', '#1a332f', '#b8f2df', '#79c9ae', '#e9fff7', '#0b1f1a', '#5fe0b5') },
+      { palette: p('Dusk', '#2a1f3d', '#382b50', '#f3d9ff', '#c9a3e6', '#fff4ff', '#241631', '#ffb3c7') },
+      { palette: p('Sand', '#f3ead8', '#e8dcc2', '#fffaf0', '#d8c39b', '#ffffff', '#4a3a1f', '#d8a24a') },
+    ],
+  },
+  space: {
+    forms: ['planet', 'star'],
+    palettes: [
+      { palette: p('Nebula', '#0d0b1f', '#1a1733', '#7b5cff', '#5236d1', '#fff3b0', '#0d0b1f', '#ff8fd1') },
+      { palette: p('Void', '#05070f', '#121626', '#4f63a8', '#33437a', '#ffffff', '#e9ecff', '#ffd166') },
+      { palette: p('Saturn', '#14101e', '#221b31', '#f2b56b', '#c9853b', '#fff1c9', '#2a1806', '#c3a6ff') },
+      { palette: p('Comet', '#071a1f', '#0f2a31', '#5fd4e8', '#2fa3b8', '#e8fdff', '#03161b', '#fff3a3') },
+      { palette: p('Mars', '#1a0e0c', '#2a1714', '#e0663f', '#a8442a', '#ffd6c4', '#1a0805', '#ffcf8a') },
+    ],
+  },
+};
