@@ -74,13 +74,19 @@ function cell(shape, left, top, u) {
 }
 
 /** A robot tile: its background square, rounded, with the robot's cells on it. */
-function robot(lib, paint, { seed, shape, palette, size }, left, top) {
-  const p = lib.PALETTES.find((q) => q.name === palette);
-  const t = lib.resolveTraits(seed, { shape, palette: lib.PALETTES.indexOf(p) });
+/**
+ * One avatar, from a style's own exports: its traits, its grid, and the palette the style
+ * would paint it with (Noggin builds its palette from skin and hair; the rest index PALETTES).
+ */
+function avatar(lib, paint, { seed, shape, palette, size }, left, top) {
+  const named = palette === undefined ? undefined : lib.PALETTES.findIndex((q) => q.name === palette);
+  const t = lib.resolveTraits(seed, { shape, ...(named !== undefined && { palette: named }) });
+  const p = lib.paletteFor ? lib.paletteFor(t.palette, t.skin, t.hairColour) : lib.PALETTES[t.palette];
   const colours = {
     [lib.Role.Body]: p.body,
     [lib.Role.Screen]: p.screen,
-    [lib.Role.Glow]: t.hasScreen ? p.glow : p.screen,
+    // A robot without a screen paints its glow cells in the screen colour, as botling() does.
+    [lib.Role.Glow]: t.hasScreen === false ? p.screen : p.glow,
     [lib.Role.Accent]: p.accent,
     [lib.Role.Shade]: p.shade,
   };
@@ -150,22 +156,45 @@ function png(px) {
   ]);
 }
 
+/** Five avatars in a row above the wordmark, the middle one biggest. */
+function card(lib, avatars) {
+  const { px, paint } = canvas(PAGE);
+  const gap = 24;
+  const total = avatars.reduce((w, r) => w + r.size, 0) + gap * (avatars.length - 1);
+  const middle = 250;
+  let left = (WIDTH - total) / 2;
+  for (const r of avatars) {
+    avatar(lib, paint, r, left, middle - r.size / 2);
+    left += r.size + gap;
+  }
+  wordmark(paint, WIDTH / 2, 440, 14);
+  return png(px);
+}
+
 /**
- * Draws the link preview card: five robots in a row above the wordmark.
+ * Draws the site's link preview card: five robots in a row above the wordmark.
  *
  * @param {object} lib - seedkin/botling (its build, or the sources in a test)
  * @returns {Buffer} A 1200x630 PNG
  */
 export function ogImage(lib) {
-  const { px, paint } = canvas(PAGE);
-  const gap = 24;
-  const total = ROBOTS.reduce((w, r) => w + r.size, 0) + gap * (ROBOTS.length - 1);
-  const middle = 250;
-  let left = (WIDTH - total) / 2;
-  for (const r of ROBOTS) {
-    robot(lib, paint, r, left, middle - r.size / 2);
-    left += r.size + gap;
-  }
-  wordmark(paint, WIDTH / 2, 440, 14);
-  return png(px);
+  return card(lib, ROBOTS);
+}
+
+/** Seeds for a style's card; each style salts its seeds, so these draw a mix in any style. */
+const STYLE_SEEDS = ['ada', 'grace', 'margaret', 'katherine', 'hedy'];
+
+/**
+ * Draws a style page's link preview card: five of the style's avatars, in the palettes their
+ * seeds pick, above the wordmark.
+ *
+ * @param {object} lib - The style's module, such as seedkin/snoot
+ * @returns {Buffer} A 1200x630 PNG
+ */
+export function styleOgImage(lib) {
+  const shapes = ['circle', 'diamond', 'square', 'square', 'circle'];
+  return card(
+    lib,
+    STYLE_SEEDS.map((seed, i) => ({ seed, shape: shapes[i], size: i === 2 ? 300 : 180 })),
+  );
 }

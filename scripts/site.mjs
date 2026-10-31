@@ -11,8 +11,9 @@ import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { buildSync } from 'esbuild';
 import { changelog } from './changelog.mjs';
-import { docsNav, docsSlug, pager, toc } from './docs.mjs';
-import { ogImage } from './og.mjs';
+import { DOCS, docsNav, docsSlug, pager, toc } from './docs.mjs';
+import { ogImage, styleOgImage } from './og.mjs';
+import { jsonLd, llms, pageInfo, robots, sitemap } from './seo.mjs';
 import { playground, STYLES, styleGuide, styleOf, styleTabs } from './styles.mjs';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -62,6 +63,7 @@ const pages = fs
   .readdirSync(site, { recursive: true })
   .filter((f) => path.basename(f) === 'index.html' || f === '404.html')
   .sort();
+const info = new Map(); // each page's canonical URL, title and description
 for (const file of pages) {
   let page = fs
     .readFileSync(path.join(site, file), 'utf8')
@@ -75,9 +77,15 @@ for (const file of pages) {
       () => changelog(fs.readFileSync(path.join(ROOT, 'CHANGELOG.md'), 'utf8')).html,
     );
   }
+  if (file === 'index.html') {
+    page = page.replace('{{jsonld}}', () => jsonLd({ version, description: pageInfo(page).description ?? '' }));
+  }
   const style = styleOf(file);
   if (style) {
+    const title = STYLES.find((s) => s.name === style)?.title;
     page = page
+      .replace('https://seedkin.dev/og.png', `https://seedkin.dev/og-${style}.png`)
+      .replace(/(og:image:alt" content=")[^"]*/, `$1Five ${title} avatars in different colours above the word seedkin`)
       .replace('{{style-tabs}}', () => styleTabs(style))
       .replace('{{playground}}', () => playground(partials.playground, style))
       .replace('{{style-guide}}', () => styleGuide(style, styleLibs[style], styleKb[style]));
@@ -92,7 +100,35 @@ for (const file of pages) {
   if (page.includes('{{')) throw new Error(`site/${file} has a placeholder the build doesn't fill`);
   fs.mkdirSync(path.dirname(path.join(out, file)), { recursive: true });
   fs.writeFileSync(path.join(out, file), page);
+  info.set(file.split(path.sep).join('/'), pageInfo(page));
 }
+for (const { name } of STYLES) fs.writeFileSync(path.join(out, `og-${name}.png`), styleOgImage(styleLibs[name]));
+
+// For search engines and AI assistants: every page that asks to be indexed, and the docs.
+const indexed = [...info.values()].filter((p) => p.url && !p.noindex);
+fs.writeFileSync(path.join(out, 'sitemap.xml'), sitemap(indexed.map((p) => p.url)));
+fs.writeFileSync(path.join(out, 'robots.txt'), robots());
+const listed = (files, titles = []) =>
+  files.map((f, i) => {
+    const p = info.get(f);
+    if (!p?.url || !p.title || !p.description)
+      throw new Error(`site/${f} needs a canonical URL, title and description`);
+    return { url: p.url, title: titles[i] ?? p.title.replace(/ · Seedkin( docs)?$/, ''), description: p.description };
+  });
+const sections = [
+  ...DOCS.map(({ group, pages: docs }) => ({
+    name: group,
+    pages: listed(
+      docs.map(([slug]) => (slug ? `docs/${slug}/index.html` : 'docs/index.html')),
+      docs.map(([, title]) => title),
+    ),
+  })),
+  {
+    name: 'Optional',
+    pages: listed([...STYLES.map((s) => `styles/${s.name}/index.html`), 'about/index.html', 'changelog/index.html']),
+  },
+];
+fs.writeFileSync(path.join(out, 'llms.txt'), llms({ version, sections }));
 fs.writeFileSync(path.join(out, 'icon.svg'), icon);
 fs.writeFileSync(path.join(out, 'og.png'), ogImage(lib));
 for (const f of fs.readdirSync(site).filter((f) => /\.(js|css)$/.test(f))) {

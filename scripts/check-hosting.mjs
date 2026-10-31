@@ -43,8 +43,9 @@ const htmlFiles = fs
   .map((f) => `site/${f.split(path.sep).join('/')}`);
 for (const file of htmlFiles) {
   const html = read(file);
+  // JSON-LD is data the browser never runs, so the CSP doesn't apply to it.
   for (const tag of html.match(/<script\b[^>]*>/g) ?? [])
-    if (!/\bsrc=/.test(tag)) fail(`inline script in ${file}: ${tag}`);
+    if (!/\bsrc=/.test(tag) && !/\btype="application\/ld\+json"/.test(tag)) fail(`inline script in ${file}: ${tag}`);
   if (/\son[a-z]+\s*=/i.test(html)) fail(`inline event handler in ${file}`);
   if (/\sstyle\s*=/i.test(html)) fail(`style attribute in ${file} (style-src is 'self')`);
 }
