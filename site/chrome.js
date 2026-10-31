@@ -1,6 +1,7 @@
-// What every page shares: the theme toggle, the phone menu, code blocks and the page-view count.
+// What every page shares: the theme toggle, the phone menu, code blocks, search and the page-view count.
 import { arrival, track } from '/track.js';
 import '/code.js';
+import '/search.js';
 
 document.querySelector('.theme').addEventListener('click', () => {
   const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
