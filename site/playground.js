@@ -32,6 +32,14 @@ export function sharedGroups({ SHAPES, FRAMES, LOOKS }) {
         ['off', 'Off'],
       ],
     },
+    motion: {
+      name: 'motion',
+      legend: 'Motion',
+      choices: [
+        ['off', 'Still'],
+        ['on', 'Animated'],
+      ],
+    },
   };
 }
 

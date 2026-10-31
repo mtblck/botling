@@ -75,7 +75,7 @@ const svg = botling(user.id);                         // inline SVG string
 const src = botlingDataUri(user.id, { size: 40 });    // for <img src>
 \`\`\`
 
-The other styles follow the same pattern: \`snoot\`/\`snootDataUri\` from \`seedkin/snoot\`, \`noggin\`/\`nogginDataUri\` from \`seedkin/noggin\`, \`beastie\`/\`beastieDataUri\` from \`seedkin/beastie\`. Common options: \`size\`, \`shape\`, \`palette\`, \`look\`, \`frame\`, \`detail\`, \`showGrid\`, \`background\`, \`title\`. Below 40px each style draws a simpler 9x9 version so small avatars keep a face. Seed with an opaque, stable id rather than an email address. Snoot, Noggin and Beastie are Preview styles: a seed's picture can change in a minor version until they are marked stable.
+The other styles follow the same pattern: \`snoot\`/\`snootDataUri\` from \`seedkin/snoot\`, \`noggin\`/\`nogginDataUri\` from \`seedkin/noggin\`, \`beastie\`/\`beastieDataUri\` from \`seedkin/beastie\`. Common options: \`size\`, \`shape\`, \`palette\`, \`look\`, \`frame\`, \`detail\`, \`showGrid\`, \`background\`, \`title\`, \`animate\`. Below 40px each style draws a simpler 9x9 version so small avatars keep a face. Seed with an opaque, stable id rather than an email address. Every style is stable: a seed draws the same picture in every release of a major version.
 
 ${groups}
 `;

@@ -55,13 +55,6 @@ playground({
       choices: Object.entries(HOLIDAY_PALETTES).map(([key, p]) => [key, p.name, p]),
     },
     shared.grid,
-    {
-      name: 'motion',
-      legend: 'Motion',
-      choices: [
-        ['off', 'Still'],
-        ['on', 'Animated'],
-      ],
-    },
+    shared.motion,
   ],
 });
