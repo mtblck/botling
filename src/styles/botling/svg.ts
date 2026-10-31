@@ -1,7 +1,7 @@
 import { checkPalette, settle } from '../../core/options.js';
 import { cellStyle, type Outline, padding } from '../../core/render/cell.js';
 import { framed, frameFit } from '../../core/render/frame.js';
-import { inkFor, innerLines, silhouette } from '../../core/render/ink.js';
+import { inkFor, innerLines, silhouetteLayers } from '../../core/render/ink.js';
 import { lookCell, softExtras, stickerGroup } from '../../core/render/look.js';
 import { paintAttrs, pathData } from '../../core/render/path.js';
 import { animation } from './animate.js';
@@ -129,7 +129,11 @@ export function botling(seed: string, opts: BotlingOptions = {}): string {
   const ink = inkFor(p.shade);
   const extras = softExtras(look, t.shape, g);
   let outlines = '';
-  for (const [k, list] of drawn) outlines += wrap(k, silhouette(look, t.shape === 'circle', pathData(list), ink));
+  // Every group's shadow goes beneath every group's border, as in the still picture.
+  const layers = [...drawn].map(
+    ([k, list]) => [k, silhouetteLayers(look, t.shape === 'circle', pathData(list), ink)] as const,
+  );
+  for (const layer of [0, 1]) for (const [k, both] of layers) outlines += wrap(k, both[layer] ?? '');
   let robot = outlines + paths(extras.under) + paths(groups.get('')) + paths(extras.over);
   robot += innerLines(look, t.shape, g, ink);
   for (const k of moving) robot += wrap(k, paths(groups.get(k)));
