@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Role } from '../src/core/types.js';
 import { botling } from '../src/styles/botling/index.js';
 import { drawGrid } from '../src/styles/noggin/grid/full.js';
 import {
@@ -143,6 +144,15 @@ describe('noggin', () => {
       expect(c.parts[7]?.[c.center + 2]).toBe('eyes');
       expect(c.parts[8]?.every((part) => part === null)).toBe(true);
       expect(c.parts[9]).toContain('mouth');
+    }
+  });
+
+  it('keeps the chin joined to the neck under every mouth', () => {
+    // n11 is a narrow head with a smile, whose chin row was all mouth.
+    for (const seed of ['n11', ...Array.from({ length: 300 }, (_, i) => `chin-${i}`)]) {
+      const c = drawGrid(resolveTraits(seed));
+      const chin = c.cells[10]?.filter((role, x) => role !== Role.Empty && c.parts[10]?.[x] !== 'mouth');
+      expect(chin?.length, seed).toBeGreaterThanOrEqual(2);
     }
   });
 });

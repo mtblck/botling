@@ -76,11 +76,13 @@ function eyes(c: Canvas, t: NogginTraits): void {
 
 function mouth(c: Canvas, t: NogginTraits, y: number, role: Role): void {
   switch (t.mouth) {
-    case 'smile':
-      c.mirror(0, y + 1, role);
-      c.mirror(1, y + 1, role);
-      c.mirror(2, y, role);
+    case 'smile': {
+      // On a narrow head the chin row is three cells; a narrower smile leaves its sides.
+      const corner = t.halfWidth - 2;
+      for (let dx = 0; dx < corner; dx++) c.mirror(dx, y + 1, role);
+      c.mirror(corner, y, role);
       return;
+    }
     case 'line':
       c.mirror(0, y, role);
       c.mirror(1, y, role);
