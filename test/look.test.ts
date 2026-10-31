@@ -105,6 +105,23 @@ describe('look geometry', () => {
     expect(softExtras('flat', 'square', eye).under.size).toBe(0);
   });
 
+  it('keeps corners square where three or more colours meet, so no pinwheel or seam shows', () => {
+    // Beastie brave-circuit-117: a spot, an eye white, the body and a pupil around one point.
+    // Each cell rounds only its outer corner.
+    const g = [
+      ['#f0f', '#fff'],
+      ['#0f0', '#000'],
+    ];
+    for (const [x, y] of [
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [1, 1],
+    ] as const)
+      expect(lookCell('soft', 'square', g, x, y, false).filter((p) => p.length === 3)).toHaveLength(1);
+    expect(softExtras('soft', 'square', g).under.size).toBe(0);
+  });
+
   it('draws one ink line per run of edges between colours', () => {
     const g = [
       ['#f00', '#f00'],

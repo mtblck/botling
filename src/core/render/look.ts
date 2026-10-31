@@ -26,16 +26,17 @@ const CORNERS = [
 ] as const;
 
 /**
- * Whether a corner of a soft cell is rounded. It is when neither neighbour
- * beside it shares its colour, unless exactly one of them is empty, where
- * rounding would open a notch between two colours on the silhouette's edge,
- * or the cell across the corner shares it, so a diagonal run stays joined.
+ * Whether a corner of a soft cell is rounded. It is when both neighbours
+ * beside it share one other colour (or are both empty, on the silhouette's
+ * edge), so whatever shows in the curve is that colour, unless the cell
+ * across the corner shares the cell's own, so a diagonal run stays joined.
+ * Where three or four colours meet, the corner stays square: rounding there
+ * left a pinwheel of backing colours and hairline seams.
  */
 function rounds(g: ColourGrid, x: number, y: number, sx: number, sy: number): boolean {
   const c = at(g, x, y);
   const h = at(g, x + sx, y);
-  const v = at(g, x, y + sy);
-  return h !== c && v !== c && (h === null) === (v === null) && at(g, x + sx, y + sy) !== c;
+  return h !== c && h === at(g, x, y + sy) && at(g, x + sx, y + sy) !== c;
 }
 
 /**
@@ -120,8 +121,9 @@ export function softExtras(
           // Traced so the arc turns clockwise.
           const [a, b] = sx === sy ? [down, along] : [along, down];
           add(over, h, [[ox, oy], a, [b[0], b[1], SOFT]]);
-        } else if (h !== null && v !== null && rounds(g, x, y, sx, sy)) {
-          const back = h === v ? h : (at(g, x + sx, y + sy) ?? h);
+        } else if (h !== null && rounds(g, x, y, sx, sy)) {
+          // Rounding needs both neighbours in one colour, so that colour backs the curve.
+          const back = h;
           const ix = cx - sx * (SOFT + BLEED);
           const iy = cy - sy * (SOFT + BLEED);
           add(under, back, [
