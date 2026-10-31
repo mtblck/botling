@@ -13,6 +13,7 @@ any change to the robot a seed draws is a major version.
 - The landing page gains calls to action, an at-a-glance strip with figures measured at build time, mock-ups of comments, a leaderboard and a team list drawn with real avatars, and a Why Seedkin grid.
 - New `/about/` page: the four promises, how Seedkin compares with similar libraries, and the Grid's backstory.
 - Every code sample has a Copy button, and install commands have npm, pnpm, yarn and bun tabs.
+- The playground is one shared page layout (`site/playground.js`) for every style: the options sit beside the avatar, which stays in view while they change (pinned in a compact bar on phones), with the code and downloads under it, tabs between styles, a Reset button, and a gallery that redraws with the options on screen. Snoot gains PNG, JPG and GIF downloads.
 
 ## [2.1.0] - 2026-10-31
 

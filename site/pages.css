@@ -648,3 +648,151 @@ ol.features > li::before {
 .lost .ctas {
   justify-content: center;
 }
+
+/* ---- the playground on every style page (playground.js) ---- */
+.play-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 32px;
+  padding: 40px 0 24px;
+}
+.play-head > div {
+  flex: 1 1 32rem;
+}
+.play-head h1 {
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  margin: 0 0 12px;
+}
+.play-head .lede {
+  margin: 0;
+}
+.style-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--rule);
+}
+.style-tabs a {
+  padding: 10px 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.style-tabs a:hover {
+  color: var(--ink);
+}
+.style-tabs a[aria-current="page"] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+.play {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 24px;
+  align-items: start;
+}
+.preview {
+  display: grid;
+  gap: 16px;
+}
+/* The avatar and its code stay in view while the options scroll, where the screen is tall
+   enough to hold them. */
+@media (min-width: 901px) and (min-height: 860px) {
+  .preview {
+    position: sticky;
+    top: 80px;
+  }
+}
+.stage {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+}
+.stage .seed {
+  justify-self: stretch;
+}
+.output .code {
+  margin-bottom: 14px;
+}
+.output .status:empty {
+  display: none;
+}
+.output .status {
+  margin-top: 10px;
+}
+.options-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+}
+.options-head h2 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+.options .group {
+  padding: 16px 0;
+  border-top: 1px solid var(--rule);
+}
+.options .group:last-child {
+  padding-bottom: 4px;
+}
+.options legend {
+  font: 700 0.8rem / 1.2 var(--sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 10px;
+}
+/* On a narrow screen: a compact avatar pinned under the header, the options, then the code. */
+@media (max-width: 900px) {
+  .play {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .preview {
+    display: contents;
+  }
+  .stage {
+    position: sticky;
+    top: 62px;
+    z-index: 5;
+    grid-template-columns: 88px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    box-shadow: 0 8px 16px -12px rgb(23 21 31 / 0.4);
+  }
+  .stage .big {
+    grid-row: 1;
+    grid-column: 1;
+  }
+  .stage .big svg,
+  .stage .big img {
+    width: 88px;
+  }
+  .stage .seed {
+    grid-column: 2;
+  }
+  .stage .seed label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .stage .sizes,
+  .stage .note {
+    display: none;
+  }
+  .options {
+    order: 1;
+  }
+  .output {
+    order: 2;
+  }
+}

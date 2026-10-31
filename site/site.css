@@ -361,14 +361,6 @@ input[type="text"]:focus-visible {
 }
 
 /* ---- controls ---- */
-.controls {
-  display: grid;
-  gap: 18px;
-  padding: 24px;
-  background: var(--card);
-  border: 1px solid var(--rule);
-  border-radius: 16px;
-}
 fieldset {
   border: 0;
   padding: 0;
