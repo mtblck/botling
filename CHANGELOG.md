@@ -7,7 +7,16 @@ any change to the robot a seed draws is a major version.
 
 ## [Unreleased]
 
+## [2.5.0] - 2026-10-31
+
+### Added
+
+- `seedkin/sprite`, the Sprites: seeded avatars of little elemental spirits. A seed picks one of five elements (fire, water, earth, wind and space), one of its two forms (flame or wisp, drop or blob, boulder or gem, puff or funnel, planet or star), one of 26 palettes kept to its element, one of six eye styles, a mouth, sometimes cheeks, and which way it faces. `sprite()` and `spriteDataUri()` take the same options as `snoot()` plus `element`, which picks the element and leaves the rest to the seed. Below 40px it draws a simpler 9x9 Sprite. With `animate: true` it flips through four frames: flames sway, drops wobble, and embers, bubbles and stars drift, at every size, still for anyone who prefers reduced motion. Sprite is a Preview style (ADR 0013): the Sprite a seed draws can change in a minor version until it's marked Stable. No other style changes.
+
 ### Site
+
+- A Sprite playground at `/styles/sprite/`, with an Element picker, and a Sprite page in the docs. The home page shows your seed in all five styles, three over two, and the family cards sit three over two, with Sprite marked Preview.
+- The About page has room between its last cards and the footer.
 
 - seedkin.dev has a `sitemap.xml`, a `robots.txt` and an `llms.txt` for AI assistants, all built from the pages themselves; JSON-LD on the home page; and its own link preview image for each style page.
 - The home page has an Animate button again, next to Random, which sets every style moving, and a shorter seed box. Each style card shows its Stable badge in its top right corner.
@@ -167,7 +176,8 @@ First release.
 
 The playground site (`site/`, not part of the npm package) lets you try seeds, shapes and palettes and copy the code.
 
-[Unreleased]: https://github.com/mtblck/seedkin/compare/v2.4.3...HEAD
+[Unreleased]: https://github.com/mtblck/seedkin/compare/v2.5.0...HEAD
+[2.5.0]: https://github.com/mtblck/seedkin/compare/v2.4.3...v2.5.0
 [2.4.3]: https://github.com/mtblck/seedkin/compare/v2.4.2...v2.4.3
 [2.4.2]: https://github.com/mtblck/seedkin/compare/v2.4.1...v2.4.2
 [2.4.1]: https://github.com/mtblck/seedkin/compare/v2.4.0...v2.4.1

@@ -7,6 +7,10 @@ export interface SiteStyle {
   kind: string;
   defaultTitle: string;
   moves: string;
+  /** How it moves below 40px, after "and"; default: it only blinks and hovers. */
+  smallMoves?: string;
+  /** The shape option's default, when the seed doesn't pick it. */
+  shapeDefault?: string;
   parts: [string, string][];
   palette: string;
   details?: [string, string][];

@@ -5,8 +5,9 @@ import * as beastie from '../src/styles/beastie/index.js';
 import * as botling from '../src/styles/botling/index.js';
 import * as noggin from '../src/styles/noggin/index.js';
 import * as snoot from '../src/styles/snoot/index.js';
+import * as sprite from '../src/styles/sprite/index.js';
 
-const LIBS: Record<string, Record<string, unknown>> = { botling, snoot, noggin, beastie };
+const LIBS: Record<string, Record<string, unknown>> = { botling, snoot, noggin, beastie, sprite };
 
 describe('style pages', () => {
   it('has a page and a package entry point for every style, and no page without one', () => {
@@ -45,6 +46,8 @@ describe('style pages', () => {
     expect(styleGuide('noggin', noggin, '1.0')).toContain('<code>skin</code>');
     expect(styleGuide('snoot', snoot, '1.0')).not.toContain('<code>skin</code>');
     expect(styleGuide('beastie', beastie, '1.0')).toContain("'Monster avatar'");
+    expect(styleGuide('sprite', sprite, '1.0')).toContain('<code>element</code>');
+    expect(styleGuide('sprite', sprite, '1.0')).toContain('<span class="badge">Preview</span>');
   });
 
   it('lists animate for every style, with what it does', () => {
@@ -61,6 +64,7 @@ describe('style pages', () => {
       snoot: snoot.snoot,
       noggin: noggin.noggin,
       beastie: beastie.beastie,
+      sprite: sprite.sprite,
     };
     for (const s of STYLES) expect(draw[s.name]?.('ada'), s.name).toContain(`aria-label="${s.defaultTitle}"`);
   });
@@ -68,6 +72,7 @@ describe('style pages', () => {
   it('links the next style, and no further than the last', () => {
     expect(styleGuide('botling', botling, '1.0')).not.toContain('rel="prev"');
     expect(styleGuide('botling', botling, '1.0')).toContain('href="/styles/snoot/" rel="next"');
-    expect(styleGuide('beastie', beastie, '1.0')).not.toContain('rel="next"');
+    expect(styleGuide('beastie', beastie, '1.0')).toContain('href="/styles/sprite/" rel="next"');
+    expect(styleGuide('sprite', sprite, '1.0')).not.toContain('rel="next"');
   });
 });

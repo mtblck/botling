@@ -16,3 +16,5 @@ The families are named Snoot (animals), Noggin (people) and Beastie (monsters); 
 are parked. Snoot has moved into the package (`src/styles/snoot/`, `seedkin/snoot`), and
 `kinds/animal.ts` now draws from there. `preview.ts` is what the site bundles to show
 the rest as previews.
+
+Sprite (elemental spirits) started here too and is now `src/styles/sprite/`.

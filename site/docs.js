@@ -13,6 +13,7 @@ const OLD = {
   snoot: 'snoot',
   noggin: 'noggin',
   beastie: 'beastie',
+  sprite: 'sprite',
 };
 const old = location.pathname === '/docs/' && OLD[location.hash.slice(1)];
 if (old) {
