@@ -4,7 +4,7 @@ public: true
 
 # 0011: Snoot, Noggin and Beastie are Stable, and every style can animate
 
-- **Status:** Accepted
+- **Status:** Accepted, amended by [0012](0012-fixing-broken-art-before-adoption.md)
 - **Date:** 2026-10-31
 - **PR:** [#71](https://github.com/mtblck/seedkin/pull/71)
 
